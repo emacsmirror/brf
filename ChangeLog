@@ -1,0 +1,15 @@
+2004-02-14  Mike Woolley  <mike@bulsara.com>
+
+	* b-marking.el (b-copy-region): Behaviour of `kill-ring-save' has
+	changed in 21.3.50, so code adjusted to emphasise region by hand.
+
+2004-02-04  Mike Woolley  <mike@arielcommunications.co.uk>
+
+	* b-compat.el: Disable use of margins in CVS Emacs, as there are
+	many display bugs.
+
+2003-04-10  Mike Woolley  <mike@bulsara.com>
+
+	* b-marking.el (b-yank): Only indent line mode yank if buffer is
+	in a programming mode.
+
