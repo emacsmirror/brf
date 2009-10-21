@@ -2,7 +2,7 @@
 
 ;; Copyright (C) 2002 Mike Woolley
 ;; Author: Mike Woolley <mike@bulsara.com>
-;; Version: $Header: /Users/mike/Dev/cvsrep/emacs/emacs/b/b.el,v 1.1 2009/09/25 16:35:19 Mike Exp $
+;; Version: $Header: /Users/mike/Dev/cvsrep/emacs/emacs/b/b.el,v 1.2 2009/10/21 16:07:11 Mike Exp $
 ;; Keywords: convenience emulations
 
 ;; This file is not part of Emacs
@@ -154,6 +154,7 @@ Set this to nil to conserve valuable mode line space."
     (define-key map [(kp-subtract)] 'b-kill-region)
     (define-key map [(kp-multiply)] 'undo)
     (define-key map [(delete)] 'b-delete)
+    (define-key map [(kp-delete)] 'b-delete)
     (define-key map [(meta up)] 'b-row-up)
     (define-key map [(meta down)] 'b-row-down)
     (define-key map [(home)] 'b-home)
