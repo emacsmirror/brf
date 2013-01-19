@@ -2,7 +2,7 @@
 
 ;; Copyright (C) 2000, 2001, 2002 Mike Woolley
 ;; Author: Mike Woolley <mike@bulsara.com>
-;; Version: $Header: /Users/mike/Dev/cvsrep/emacs/emacs/b/b-marking.el,v 1.1 2009/09/25 16:35:19 Mike Exp $
+;; Version: $Header: /Users/mike/Dev/cvsrep/emacs/emacs/b/b-marking.el,v 1.2 2013/01/19 17:13:05 mike Exp $
 
 ;; This file is not part of Emacs
 
@@ -41,7 +41,9 @@ This is restored after saving/killing the region.")
 (defun b-start-line-marking ()
   "Start line-marking mode."
   (setq b-line-mark-col (current-column))
-  (make-local-hook 'post-command-hook)
+  (when (and (fboundp 'make-local-hook)
+	     (or b-xemacs-flag (< emacs-major-version 21)))
+      (make-local-hook 'post-command-hook)) ;; Not needed since Emacs 21
   (add-hook 'post-command-hook 'b-mark-line-hook nil t))
 
 (defun b-stop-line-marking ()
