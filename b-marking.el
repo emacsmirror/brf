@@ -2,7 +2,7 @@
 
 ;; Copyright (C) 2000, 2001, 2002 Mike Woolley
 ;; Author: Mike Woolley <mike@bulsara.com>
-;; Version: $Header: /Users/mike/Dev/cvsrep/emacs/emacs/b/b-marking.el,v 1.2 2013/01/19 17:13:05 mike Exp $
+;; Version: $Header: /Users/mike/Dev/cvsrep/emacs/emacs/b/b-marking.el,v 1.3 2013/10/13 19:20:23 mike Exp $
 
 ;; This file is not part of Emacs
 
@@ -122,7 +122,7 @@ Normally this is the current line, but in lisp modes it is the containing sexp."
 (defun b-lisp-mode-p ()
   "Return non-nil if the current major mode is a lisp mode.
 This is determined heuristically by looking for `lisp' in the mode name."
-  (string-match "lisp" mode-name))
+  (string-match "lisp" (format-mode-line mode-name)))
 
 (defun b-emphasise-region (beg end)
   "Emphasise the region like `kill-ring-save' does."
