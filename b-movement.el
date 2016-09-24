@@ -2,7 +2,7 @@
 
 ;; Copyright (C) 2000, 2001, 2002 Mike Woolley
 ;; Author: Mike Woolley <mike@bulsara.com>
-;; Version: $Header: /Users/mike/Dev/cvsrep/emacs/emacs/b/b-movement.el,v 1.1 2009/09/25 16:35:19 Mike Exp $
+;; Version: $Header: /Users/mike/Dev/cvsrep/emacs/emacs/b/b-movement.el,v 1.2 2016/09/24 14:05:00 mike Exp $
 
 ;; This file is not part of Emacs
 
@@ -74,10 +74,10 @@ It should still work in the presence of hidden lines."
     (setq b-temporary-goal-column (current-column)))
   (let ((point (point)))
     (goto-char (window-start))
-    (next-line lines)
+    (forward-line lines)
     (set-window-start (selected-window) (point))
     (goto-char point))
-  (next-line lines)
+  (forward-line lines)
   (move-to-column b-temporary-goal-column))
 
 (defun b-row-up (&optional arg)
