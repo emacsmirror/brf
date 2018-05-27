@@ -2,7 +2,7 @@
 
 ;; Copyright (C) 2000, 2001, 2002 Mike Woolley
 ;; Author: Mike Woolley <mike@bulsara.com>
-;; Version: $Header: /Users/mike/Dev/cvsrep/emacs/emacs/b/b-movement.el,v 1.2 2016/09/24 14:05:00 mike Exp $
+;; Version: $Id$
 
 ;; This file is not part of Emacs
 

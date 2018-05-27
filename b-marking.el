@@ -2,7 +2,7 @@
 
 ;; Copyright (C) 2000, 2001, 2002 Mike Woolley
 ;; Author: Mike Woolley <mike@bulsara.com>
-;; Version: $Header: /Users/mike/Dev/cvsrep/emacs/emacs/b/b-marking.el,v 1.3 2013/10/13 19:20:23 mike Exp $
+;; Version: $Id$
 
 ;; This file is not part of Emacs
 

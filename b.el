@@ -2,7 +2,7 @@
 
 ;; Copyright (C) 2002 Mike Woolley
 ;; Author: Mike Woolley <mike@bulsara.com>
-;; Version: $Header: /Users/mike/Dev/cvsrep/emacs/emacs/b/b.el,v 1.2 2009/10/21 16:07:11 Mike Exp $
+;; Version: $Id$
 ;; Keywords: convenience emulations
 
 ;; This file is not part of Emacs

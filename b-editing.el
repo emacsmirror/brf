@@ -2,7 +2,7 @@
 
 ;; Copyright (C) 2000, 2001, 2002 Mike Woolley
 ;; Author: Mike Woolley <mike@bulsara.com>
-;; Version: $Header: /Users/mike/Dev/cvsrep/emacs/emacs/b/b-editing.el,v 1.1 2009/09/25 16:35:19 Mike Exp $
+;; Version: $Id$
 
 ;; This file is not part of Emacs
 
