@@ -1,3 +1,11 @@
+2019-02-01  Mike Woolley  <mike@bulsara.com>
+
+	* b-compat.el (b-margin-support-flag): Fix bug preventing the
+	bookmark number from showing in the margin.
+
+	* b-movement.el (b-window-height): Fixed bug causing paging to
+	move too far when line-spacing was set to something.
+
 2004-02-14  Mike Woolley  <mike@bulsara.com>
 
 	* b-marking.el (b-copy-region): Behaviour of `kill-ring-save' has
