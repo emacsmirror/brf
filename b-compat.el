@@ -33,10 +33,7 @@
   (defconst b-xemacs-flag (featurep 'xemacs)
     "Non-nil means this version of Emacs is XEmacs."))
 
-(defconst b-emacs-CVS (and (not b-xemacs-flag) (string< "21.3.50.0" emacs-version))
-  "Non-nil if this is the CVS version of GNU Emacs") ; *** FIX ME ***: Use better method
-
-(defconst b-margin-support-flag (and (fboundp 'set-window-margins) (not b-emacs-CVS))
+(defconst b-margin-support-flag (fboundp 'set-window-margins)
   "Non-nil if this Emacs version has programmable margins.")
 
 ;; Load XEmacs overlay compatibility
