@@ -35,6 +35,11 @@
 (defvar b-temporary-goal-column 0
   "Original column of the start of a sequence B scrolling commands.")
 
+(defun b-window-height ()
+    "Return the window height, respecting the current line spacing."
+  (let ((height (window-body-height)))
+    (if line-spacing (round (/ height (1+ line-spacing))) height)))
+
 (defun b-page-down (&optional arg)
   "Scroll the current window up by one page, respecting `next-screen-context-lines'.
 Paging up afterwards should return point to the same position.
@@ -45,7 +50,7 @@ The optional argument specifies the number of pages to scroll."
     (if (< pages 0)
 	(b-page-up (- pages))
       (while (and (> pages 0) (not (pos-visible-in-window-p (point-max))))
-	(b-scroll-screen (- (1- (window-height))
+	(b-scroll-screen (- (1- (b-window-height))
 			    next-screen-context-lines))
 	(decf pages)))))
 (put 'b-page-down 'b-scroll-command t)
@@ -61,7 +66,7 @@ The optional argument specifies the number of pages to scroll."
 	(b-page-down (- pages))
       (while (and (> pages 0) (not (pos-visible-in-window-p (point-min))))
 	(b-scroll-screen (- next-screen-context-lines
-			    (1- (window-height))))
+			    (1- (b-window-height))))
 	(decf pages)))))
 (put 'b-page-up 'b-scroll-command t)
 
