@@ -1,5 +1,8 @@
 2019-02-02  Mike Woolley  <mike@bulsara.com>
 
+	* b-compat.el: The code to silence the byte-compiler warnings
+	wasn't working in Emacs 26.
+
 	* b-bookmark.el (b-read-bookmark-number): Fixed bug with invalid
 	input reading bookmark number.
 	Fixed compile warning for (labels).

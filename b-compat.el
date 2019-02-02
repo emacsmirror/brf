@@ -41,18 +41,14 @@
   (require 'overlay))
 
 ;; Silence the byte compiler
-;; Use CL-style `eval-when' so that it is NOT evaluated if the file is interpreted
-(eval-when (compile)
+(eval-when-compile
   (cond (b-xemacs-flag
 	 (defvar mark-active nil)
 	 (defvar transient-mark-mode nil))
-	(t				; GNU Emacs
-	 (defvar zmacs-region-active-p nil)
-	 (defvar zmacs-regions nil)
-	 (defvar zmacs-region-stays nil)
-	 (fset 'zmacs-update-region nil)
-	 (fset 'zmacs-activate-region nil)
-	 (fset 'zmacs-deactivate-region nil))))
+	(t ; GNU Emacs
+	 (defun zmacs-update-region ())
+	 (defun zmacs-activate-region ())
+	 (defun zmacs-deactivate-region ()))))
 
 ;; Function to get the position of the beginning of the line
 (cond ((fboundp 'line-beginning-position)
