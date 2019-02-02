@@ -32,14 +32,14 @@
   "Face used to show bookmark."
   :group 'b)
 
-(defface b-bookmark-number-face '((t (:foreground "red" :weight bold :box t)))
+(defface b-bookmark-number-face '((t (:foreground "red" :weight bold :box t :height 0.7)))
   "Face used for bookmark number."
   :group 'b)
 
 (when b-margin-support-flag
   (defcustom b-bookmark-margin 1
     "Width of margin (in characters) used to display bookmark number."
-    :type 'integer'
+    :type 'integer
     :group 'b))
 
 (defstruct b-bookmark
@@ -70,18 +70,19 @@ This is used as the start point for the next/prev bookmark commands.")
   "Read the bookmark number from the minibuffer as a single character digit.
 The user is prompted with PROMPT, which can be `nil' for no prompt.
 This function is meant to be called from a command's interactive form."
-  (labels ((digitp (char)
-		   (and (>= char ?0) (<= char ?9)))
-	   (read-digit (prompt)
-		       (do* ((cursor-in-echo-area t)
-			     (char (ignore-errors (read-char prompt))
-				   (ignore-errors (read-char
-						   (format "%s(single digit) " prompt)))))
-			   ((and char (digitp char)) char)
-			 ;; Swallow the offending non-character event which is still pending
-			 (read-event)
-			 ;; Tell user they've made a mistake
-			 (beep))))
+  (cl-labels ((digitp (char)
+		      (and (>= char ?0) (<= char ?9)))
+	      (read-digit (prompt)
+			  (do* ((cursor-in-echo-area t)
+				(char (ignore-errors (read-char prompt))
+				      (ignore-errors (read-char
+						      (format "%s(single digit) " prompt)))))
+			      ((and char (digitp char)) char)
+			    (unless (characterp char)
+			      ;; Swallow the offending non-character event which is still pending
+			      (read-event))
+			    ;; Tell user they've made a mistake
+			    (beep))))
 
     (let ((number (or current-prefix-arg
 		      (- (read-digit prompt) ?0))))

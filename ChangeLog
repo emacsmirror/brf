@@ -1,3 +1,11 @@
+2019-02-02  Mike Woolley  <mike@bulsara.com>
+
+	* b-bookmark.el (b-read-bookmark-number): Fixed bug with invalid
+	input reading bookmark number.
+	Fixed compile warning for (labels).
+	(b-margin-support-flag): Fixed compile warning.
+	(b-bookmark-number-face): Scaled down font size of bookmark number face.
+
 2019-02-01  Mike Woolley  <mike@bulsara.com>
 
 	* b-compat.el (b-margin-support-flag): Fix bug preventing the
