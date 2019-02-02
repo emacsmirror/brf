@@ -37,10 +37,14 @@
 ;;  way, respond to prefix args and where they override Emacs
 ;;  functions live on the Emacs key bindings etc.
 ;;
-;;  The code has been tested on Emacs 20, Emacs 21 pretest
+;;  The code was originally tested on Emacs 20, Emacs 21 pretest
 ;;  and XEmacs 21.1 & 21.2.
 
 ;;; Change Log:
+;;
+;;  Version 1.09 2019-02-02 Mike Woolley <mike@bulsara.com>
+;;  * Fixed some minor problems that had crept in and made sure it
+;;  works & compiles clean on Emacs 26.
 ;;
 ;;  Version 1.08 2002-01-08 Mike Woolley <mike@bulsara.com>
 ;;  * Split into separate files for ease of working.
@@ -122,7 +126,7 @@ Set this to nil to conserve valuable mode line space."
 ;;;
 ;;; Version number
 ;;;
-(defconst b-version "1.08"
+(defconst b-version "1.09"
   "Version number of B mode.")
 
 (defun b-version ()

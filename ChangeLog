@@ -1,5 +1,8 @@
 2019-02-02  Mike Woolley  <mike@bulsara.com>
 
+	* b.el (b-version): Increased B package version to 1.09, to
+	reflect all the recent fixes.
+
 	* b-compat.el: The code to silence the byte-compiler warnings
 	wasn't working in Emacs 26.
 
