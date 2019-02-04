@@ -1,3 +1,7 @@
+2019-02-04    <mike@bulsara.com>
+
+	* b-compat.el: Correction to fix to silence the byte-compiler.
+
 2019-02-02  Mike Woolley  <mike@bulsara.com>
 
 	* b.el (b-version): Increased B package version to 1.09, to

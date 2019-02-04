@@ -46,6 +46,9 @@
 	 (defvar mark-active nil)
 	 (defvar transient-mark-mode nil))
 	(t ; GNU Emacs
+	 (defvar zmacs-region-active-p nil)
+	 (defvar zmacs-regions nil)
+	 (defvar zmacs-region-stays nil)
 	 (defun zmacs-update-region ())
 	 (defun zmacs-activate-region ())
 	 (defun zmacs-deactivate-region ()))))
