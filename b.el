@@ -182,6 +182,7 @@ Set this to nil to conserve valuable mode line space."
     (define-key map "\C-c\C-b\C-p" 'b-prev-bookmark)
     (define-key map "\C-c\C-b\C-k" 'b-kill-all-bookmarks)
     (define-key map "\C-c\C-b\C-l" 'b-list-bookmarks)
+    (define-key map "\C-c\C-b=" 'b-allocate-next-available-bookmark)
 
     ;; Try and find the existing commands for scrolling up/down,
     ;; as these are different in Emacs & XEmacs

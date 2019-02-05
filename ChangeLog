@@ -1,5 +1,11 @@
 2019-02-04    <mike@bulsara.com>
 
+	* b.el (b-mode-map): Added key mapping for the new function.
+
+	* b-bookmark.el (b-allocate-next-available-bookmark): Added new
+	command to allocate the next available free bookmark, regardless
+	of number.
+
 	* b-compat.el: Correction to fix to silence the byte-compiler.
 
 2019-02-02  Mike Woolley  <mike@bulsara.com>

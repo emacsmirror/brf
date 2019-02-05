@@ -155,6 +155,16 @@ With ARG, remove the bookmark instead." number)
       (setf (aref b-bookmarks number)
 	    (make-b-bookmark :number number :marker marker :overlay overlay)))))
 
+(defun b-allocate-next-available-bookmark ()
+  "Allocate the next available bookmark."
+  (interactive)
+  (let ((number 0))
+    (while (and (b-valid-bookmark-number-p number) (b-valid-bookmark-p (aref b-bookmarks number)))
+      (incf number))
+    (if (b-valid-bookmark-number-p number)
+	(b-set-bookmark number)
+      (error "All bookmarks allocated"))))
+
 (defun b-move-bookmark (bookmark)
   "Move BOOKMARK to point."
   (let ((buffer (current-buffer))
