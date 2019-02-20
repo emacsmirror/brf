@@ -41,9 +41,9 @@
     (if line-spacing (round (/ height (1+ line-spacing))) height)))
 
 (defun b-page-down (&optional arg)
-  "Scroll the current window up by one page, respecting `next-screen-context-lines'.
+  "Page the current window down, respecting `next-screen-context-lines'.
 Paging up afterwards should return point to the same position.
-The optional argument specifies the number of pages to scroll."
+The optional ARG specifies the number of pages to scroll."
   (interactive "P")
   (b-keep-region)
   (let ((pages (prefix-numeric-value arg)))
@@ -56,9 +56,9 @@ The optional argument specifies the number of pages to scroll."
 (put 'b-page-down 'b-scroll-command t)
 
 (defun b-page-up (&optional arg)
-  "Scroll the current window down by one page, respecting `next-screen-context-lines'.
+  "Page the current window up, respecting `next-screen-context-lines'.
 Paging down afterwards should return point to the same position.
-The optional argument specifies the number of pages to scroll."
+The optional ARG specifies the number of pages to scroll."
   (interactive "P")
   (b-keep-region)
   (let ((pages (prefix-numeric-value arg)))
@@ -71,8 +71,7 @@ The optional argument specifies the number of pages to scroll."
 (put 'b-page-up 'b-scroll-command t)
 
 (defun b-scroll-screen (lines)
-  "Scroll current window by LINES, but keep the cursor's relative
-position in the window.
+  "Scroll current window by LINES, saving the cursor's relative window position.
 This is a helper function used by `b-page-up' and `b-page-down'.
 It should still work in the presence of hidden lines."
   (unless (b-scroll-command-p last-command)

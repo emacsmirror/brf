@@ -25,7 +25,7 @@
 ;;; Commentary:
 ;;
 ;;  This package provides an implementation of the some features that
-;;  I miss from the old DOS editor `Brief'. Principally, these are:
+;;  I miss from the old DOS editor `Brief'.  Principally, these are:
 ;;
 ;;  * Line-mode cut and paste.
 ;;  * Column-mode cut and paste (not implemented yet).
@@ -119,7 +119,7 @@ Set this to nil to conserve valuable mode line space."
   :group 'b)
 
 (defcustom b-mode-hook nil
-  "Hook run on entering B mode"
+  "Hook run on entering B mode."
   :type 'hook
   :group 'b)
 

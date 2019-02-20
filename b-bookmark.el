@@ -63,12 +63,12 @@ This is used as the start point for the next/prev bookmark commands.")
   (and (>= number 0) (< number b-max-bookmarks)))
 
 (defun b-valid-bookmark-p (bookmark)
-  "Return non-nil if the given bookmark is set, nil otherwise."
+  "Return non-nil if BOOKMARK is set, nil otherwise."
   (and bookmark (marker-buffer (b-bookmark-marker bookmark))))
 
 (defun b-read-bookmark-number (prompt)
   "Read the bookmark number from the minibuffer as a single character digit.
-The user is prompted with PROMPT, which can be `nil' for no prompt.
+The user is prompted with PROMPT, which can be nil for no prompt.
 This function is meant to be called from a command's interactive form."
   (cl-labels ((digitp (char)
 		      (and (>= char ?0) (<= char ?9)))
@@ -91,7 +91,7 @@ This function is meant to be called from a command's interactive form."
       (list number))))
 
 (defun b-make-set-bookmark (number)
-  "Generate a command which sets bookmark NUMBER at point.
+  "Generate a command to set bookmark NUMBER at point.
 If the command is given a prefix argument, then the bookmark is removed."
   `(lambda (&optional arg)
      ,(format "Set bookmark %d at point.
@@ -219,7 +219,7 @@ With ARG, remove the bookmark instead." number)
 
 (defun b-next-bookmark (&optional arg)
   "Jump to the next bookmark.
-  With ARG jump to the previous one."
+With ARG jump to the previous one."
   (interactive "P")
   (when (null b-current-bookmark)
     (error "No bookmarks have been set"))
@@ -241,6 +241,7 @@ With ARG jump to the next one."
   (b-next-bookmark (null arg)))
 
 (defun b-list-bookmarks ()
+  "Show list of all bookmarks."
   (interactive)
   (when (null b-current-bookmark)
     (error "No bookmarks have been set"))

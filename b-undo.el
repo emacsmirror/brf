@@ -52,6 +52,7 @@
 (defvar b-undo-debug-enabled nil)
 
 (defun b-undo-post-command-hook ()
+  "Post-command hook to remember what to undo."
   (when (listp buffer-undo-list)
     (let ((point (point))
 	  (head (car buffer-undo-list)))
@@ -75,6 +76,7 @@
       (b-undo-debug))))
 
 (defun b-undo-debug ()
+  "Show Undo state in a buffer for debugging."
   (unless (active-minibuffer-window)
     (let ((undo-list buffer-undo-list)
 	  (pending pending-undo-list)
@@ -87,6 +89,7 @@
 	(goto-char 1)))))
 
 (defun b-undo-toggle-debug (&optional arg)
+  "Turn Undo debugging on or off with ARG."
   (interactive "P")
   (setq b-undo-debug-enabled
 	(if (null arg)

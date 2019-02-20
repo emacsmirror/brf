@@ -34,7 +34,7 @@
     "Non-nil means this version of Emacs is XEmacs."))
 
 (defconst b-margin-support-flag (fboundp 'set-window-margins)
-  "Non-nil if this Emacs version has programmable margins.")
+  "Non-nil means this Emacs version has programmable margins.")
 
 ;; Load XEmacs overlay compatibility
 (when b-xemacs-flag
@@ -76,7 +76,7 @@
     mark-active))
 
 (defun b-transient-mark-mode (arg)
-  "Emacs/XEmacs compatibility function to set transient mark mode.
+  "Emacs/XEmacs compatibility function to set transient mark mode with ARG.
 Returns the previous setting."
   (if b-xemacs-flag
       (prog1 zmacs-regions
@@ -104,7 +104,7 @@ unless the optional arg FORCE is set."
 	   (deactivate-mark)))))
 
 (defun b-keep-region ()
-  "Ensure that the current command keeps the region in XEmacs.
+  "Make the current command keep the region in XEmacs.
 This function does nothing in GNU Emacs."
   (when b-xemacs-flag
     (setq zmacs-region-stays t)))

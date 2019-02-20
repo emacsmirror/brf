@@ -52,12 +52,11 @@ This is restored after saving/killing the region.")
   (move-to-column b-line-mark-col))
 
 (defun b-line-marking-p ()
-  "Return true if the buffer is in line marking mode."
+  "Return non-nil if the buffer is in line marking mode."
   (memq 'b-mark-line-hook post-command-hook))
 
 (defun b-mark-line-hook ()
-  "Ensure that the point and mark are correctly positioned for
-line-marking after cursor motion commands."
+  "Ensure point and mark are correctly positioned for line-marking after cursor motion commands."
   (cond ((b-region-active-p)
 	 ;; Marking - emulate Brief "line mode"
 	 (let ((point (point))
@@ -108,7 +107,7 @@ With ARG, do it that many times."
 
 (defun b-mark-default ()
   "Mark the default unit in the buffer.
-Normally this is the current line, but in lisp modes it is the containing sexp."
+Normally this is the current line, but in Lisp modes it is the containing sexp."
   (cond ((b-lisp-mode-p)
 	 (condition-case nil
 	     (progn
@@ -120,13 +119,13 @@ Normally this is the current line, but in lisp modes it is the containing sexp."
 	 (b-mark-line))))
 
 (defun b-lisp-mode-p ()
-  "Return non-nil if the current major mode is a lisp mode.
+  "Return non-nil if the current major mode is a Lisp mode.
 This is determined heuristically by looking for `lisp' in the mode name."
   (string-match "lisp" (format-mode-line mode-name)))
 
 (defun b-emphasise-region (beg end)
-  "Emphasise the region like `kill-ring-save' does."
-;; This code is based on code in `kill-ring-save' from simple.el in GNU Emacs
+  "Emphasise the region BEG END, like `kill-ring-save' does."
+  ;; This code is based on code in `kill-ring-save' from simple.el in GNU Emacs
   (let ((other-end (if (= (point) beg) end beg))
 	(opoint (point))
 	(inhibit-quit t))		; Inhibit quitting
@@ -162,7 +161,7 @@ Emulates the Brief copy function."
   (b-deactivate-region))
 
 (defun b-copy-to-register (register)
-  "Copy the current active region to a register.
+  "Copy the current active region to REGISTER.
 If there is no active region then the current line is copied."
   (interactive "cCopy-to-register:")
   (unless (b-region-active-p)
@@ -195,7 +194,7 @@ Emulates the Brief cut function."
     (b-stop-line-marking)))
 
 (defun b-kill-to-register (register)
-  "Kill the current active region to a register.
+  "Kill the current active region to REGISTER.
 If there is no active region then the current line is killed."
   (interactive "*cCopy-to-register:")
   (unless (b-region-active-p)
@@ -256,12 +255,12 @@ line is terminated with a newline."
 This is restored after the yank.")
 
 (defvar b-last-yank-was-line nil
-  "True if the last yank was from a line-mode kill.")
+  "Non-nil if the last yank was from a line-mode kill.")
 
 (defun b-yank (&optional arg)
-  "Identical to the normal `yank' command, but correctly insert
-text that was killed in line-mode and also indent it (if the
-buffer is in a programming mode)."
+  "Similar to the normal `yank' ARG command.
+However, correctly insert text that was killed in line-mode and
+also indent it (if the buffer is in a programming mode)."
   (interactive "*P")
   (setq this-command 'yank)
   (setq b-yank-col (current-column))
@@ -283,8 +282,9 @@ buffer is in a programming mode)."
 	 (setq b-last-yank-was-line nil))))
 
 (defun b-yank-pop (arg)
-  "Identical to the normal `yank-pop' command, but correctly insert text that
-was killed in line-mode and also indent it."
+  "Similar to the normal `yank-pop' ARG command.
+However, correctly insert text that was killed in line-mode and
+also indent it."
   (interactive "*p")
   (unless (eq last-command 'yank)
     (error "Previous command was not a yank"))
@@ -315,17 +315,18 @@ was killed in line-mode and also indent it."
 	 (yank-pop arg))))
 
 (defun b-insert-register (register)
+  "Similar to the normal `insert-register' REGISTER command.
+However, correctly insert text that was killed in line-mode and
+also indent it."
   (interactive "*cInsert Register:")
-  ;; *** TBD ***
+  ;; *** Mike: Fix Me *** TBD
   )
 
 ;;
 ;; Utilities
 ;;
 (defun b-buffer-in-programming-mode-p ()
-  "Return true if the current buffer is in a programming major mode."
-;;   (require 'derived)
-;;   (not (derived-mode-p 'fundamental-mode 'text-mode)))
+  "Return non-nil if the current buffer is in a programming major mode."
   (not (or (eq indent-line-function 'indent-to-left-margin)
 	   (eq indent-line-function 'indent-relative))))
 

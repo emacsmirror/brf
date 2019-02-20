@@ -80,8 +80,9 @@ With ARG, do it that many times."
 ;; Tab key handling
 ;;
 (defun b-tab (&optional arg)
-  "Indent the region if the region is active, otherwise indent the
-current line using the function which would ordinarily be bound to the tab key."
+  "Indent the region if the region is active.
+Otherwise call the function which would ordinarily be bound to
+the tab key with ARG."
   (interactive "P")
   (let ((tab-fn (or (local-key-binding "\t")
 		    (global-key-binding "\t"))))

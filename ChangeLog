@@ -1,3 +1,8 @@
+2019-02-20  Mike Woolley  <mike@bulsara.com>
+
+	* b.el: Changed all the elisp files to remove the byte-compiler
+	warnings, which were mostly to do with DocString formats.
+
 2019-02-04    <mike@bulsara.com>
 
 	* b.el (b-mode-map): Added key mapping for the new function.
