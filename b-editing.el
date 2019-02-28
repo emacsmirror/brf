@@ -39,7 +39,7 @@ With ARG, do not indent."
   (end-of-line)
   (if arg
       (newline)
-    (newline-and-indent)))
+    (call-interactively (key-binding "\C-m"))))
 
 ;;
 ;; Brief delete-line command

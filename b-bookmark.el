@@ -279,8 +279,8 @@ With ARG jump to the next one."
 	      :truncate-lines t
 	      :regexp-start-position (format "^[* ][ \t]+%d" b-current-bookmark)
 
-	      :elements (loop for idx from 0 to (1- b-max-bookmarks)
-			      collect idx)
+	      :elements (cl-loop for idx from 0 to (1- b-max-bookmarks)
+				 collect idx)
 
 	      :select-callback select-bookmark
 	      :display-string-function display-bookmark)))
@@ -291,7 +291,7 @@ With ARG jump to the next one."
      (if (= (current-column) 0) 1 0)))
 
 (defun b-current-column ()
-  "Return current line number of point (starting at 1)."
+  "Return current column of point (starting at 1)."
   (1+ (current-column)))
 
 (provide 'b-bookmark)

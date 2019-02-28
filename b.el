@@ -42,6 +42,10 @@
 
 ;;; Change Log:
 ;;
+;;  Version 1.10 2019-02-28 Mike Woolley <mike@bulsara.com>
+;;  * Added new command to allocate the next available free bookmark.
+;;  * Fixes to doc strings and compiler warnings.
+;;
 ;;  Version 1.09 2019-02-02 Mike Woolley <mike@bulsara.com>
 ;;  * Fixed some minor problems that had crept in and made sure it
 ;;  works & compiles clean on Emacs 26.
@@ -126,7 +130,7 @@ Set this to nil to conserve valuable mode line space."
 ;;;
 ;;; Version number
 ;;;
-(defconst b-version "1.09"
+(defconst b-version "1.10"
   "Version number of B mode.")
 
 (defun b-version ()
