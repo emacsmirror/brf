@@ -38,6 +38,37 @@ The mark is positioned here if point is above or on this line.")
   "The original column where line marking was initiated.
 This is restored after saving/killing the region.")
 
+;;
+;; Line kill helper functions
+;;
+(defmacro b-set-line-kill (place)
+  "Make the string at PLACE a line-mode kill.
+This is done by adding a text property and ensuring that the (last)
+line is terminated with a newline."
+  ;; Ensure the line is terminated with a newline
+  `(let ((line (b-terminate-line ,place)))
+     ;; Indicate that this is a line-mode kill with a text property
+     (put-text-property 0 1 'b-line-kill t line)
+     (setf ,place line)))
+
+(defun b-terminate-line (line)
+  "Ensure LINE is terminated with a newline."
+  (let ((len (length line)))
+    (if (and (> len 0) (= (aref line (1- len)) ?\n))
+	line
+      (concat line "\n"))))
+
+(defun b-clear-line-kill (pos)
+  "Remove the line-mode kill property from text at position POS in the buffer."
+  (remove-text-properties pos (1+ pos) '(b-line-kill t)))
+
+(defun b-line-kill-p (string)
+  "Test if STRING is a line-mode kill."
+  (get-text-property 0 'b-line-kill string))
+
+;;
+;; Line Marking Mode
+;;
 (defun b-start-line-marking ()
   "Start line-marking mode."
   (setq b-line-mark-col (current-column))
@@ -218,34 +249,6 @@ Emulates the Brief delete function."
 	   (b-stop-line-marking)))
 	(t				; No active region
 	 (delete-char (prefix-numeric-value arg)))))
-
-;;
-;; Line kill helper functions
-;;
-(defmacro b-set-line-kill (place)
-  "Make the string at PLACE a line-mode kill.
-This is done by adding a text property and ensuring that the (last)
-line is terminated with a newline."
-  ;; Ensure the line is terminated with a newline
-  `(let ((line (b-terminate-line ,place)))
-     ;; Indicate that this is a line-mode kill with a text property
-     (put-text-property 0 1 'b-line-kill t line)
-     (setf ,place line)))
-
-(defun b-terminate-line (line)
-  "Ensure LINE is terminated with a newline."
-  (let ((len (length line)))
-    (if (and (> len 0) (= (aref line (1- len)) ?\n))
-	line
-      (concat line "\n"))))
-
-(defun b-clear-line-kill (pos)
-  "Remove the line-mode kill property from text at position POS in the buffer."
-  (remove-text-properties pos (1+ pos) '(b-line-kill t)))
-
-(defun b-line-kill-p (string)
-  "Test if STRING is a line-mode kill."
-  (get-text-property 0 'b-line-kill string))
 
 ;;
 ;; Brief Yank & Yank-pop commands

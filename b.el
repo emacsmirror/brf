@@ -42,6 +42,10 @@
 
 ;;; Change Log:
 ;;
+;;  Version 1.11 2019-05-05 Mike Woolley <mike@bulsara.com>
+;;  * Now use the Fringe to show bookmark numbers rather than the Margin.
+;;  * Cleaned up remaining compiler warnings.
+;;
 ;;  Version 1.10 2019-02-28 Mike Woolley <mike@bulsara.com>
 ;;  * Added new command to allocate the next available free bookmark.
 ;;  * Fixes to doc strings and compiler warnings.
@@ -130,7 +134,7 @@ Set this to nil to conserve valuable mode line space."
 ;;;
 ;;; Version number
 ;;;
-(defconst b-version "1.10"
+(defconst b-version "1.11"
   "Version number of B mode.")
 
 (defun b-version ()
@@ -211,9 +215,9 @@ Set this to nil to conserve valuable mode line space."
 (defvar b-prev-mark-mode nil
   "Previous value of transient mark mode.")
 (defvar b-prev-c-m nil
-  "Previous global binding of C-m.")
+  "Previous global binding of CR.")
 (defvar b-prev-c-j nil
-  "Previous global binding of C-j.")
+  "Previous global binding of LF.")
 
 ;;;###autoload
 (defun b-mode (&optional arg)

@@ -1,3 +1,18 @@
+2019-05-05  Mike Woolley  <mike@bulsara.com>
+
+	* b-bookmark.el: Use the Fringe to show bookmark numbers rather
+	than the Margin. The Margin is more flexible, but I think it looks
+	odd with the Margin on the outside of the Fringe. It also looks
+	weird when the margin is suddenly added.
+
+	* b-compat.el: Removed the Margin flag.
+
+	* b-editing.el:
+	* b-marking.el:
+	* b-movement.el: Cleaned up remaining compiler warnings.
+
+	* b.el (b-version): Increased B package version to 1.11.
+
 2019-02-28  Mike Woolley  <mike@bulsara.com>
 
 	* b.el (b-version): Increased B package version to 1.10.

@@ -52,7 +52,7 @@ The optional ARG specifies the number of pages to scroll."
       (while (and (> pages 0) (not (pos-visible-in-window-p (point-max))))
 	(b-scroll-screen (- (1- (b-window-height))
 			    next-screen-context-lines))
-	(decf pages)))))
+	(cl-decf pages)))))
 (put 'b-page-down 'b-scroll-command t)
 
 (defun b-page-up (&optional arg)
@@ -67,7 +67,7 @@ The optional ARG specifies the number of pages to scroll."
       (while (and (> pages 0) (not (pos-visible-in-window-p (point-min))))
 	(b-scroll-screen (- next-screen-context-lines
 			    (1- (b-window-height))))
-	(decf pages)))))
+	(cl-decf pages)))))
 (put 'b-page-up 'b-scroll-command t)
 
 (defun b-scroll-screen (lines)

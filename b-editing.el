@@ -27,6 +27,7 @@
 ;;; Code:
 
 (require 'b-compat)
+(require 'b-marking)
 
 ;;
 ;; Brief insert-line command

@@ -33,9 +33,6 @@
   (defconst b-xemacs-flag (featurep 'xemacs)
     "Non-nil means this version of Emacs is XEmacs."))
 
-(defconst b-margin-support-flag (fboundp 'set-window-margins)
-  "Non-nil means this Emacs version has programmable margins.")
-
 ;; Load XEmacs overlay compatibility
 (when b-xemacs-flag
   (require 'overlay))

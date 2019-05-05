@@ -27,22 +27,128 @@
 ;;; Code:
 
 (require 'b-compat)
+(eval-when-compile (require 'cl)) ; lexical-let
 
 (defface b-bookmark-face '((t (:background "khaki")))
   "Face used to show bookmark."
   :group 'b)
 
-(defface b-bookmark-number-face '((t (:foreground "red" :weight bold :box t :height 0.7)))
-  "Face used for bookmark number."
+(defface b-bookmark-number-face '((t (:foreground "red")))
+  "Face used (to set color) of bookmark number."
   :group 'b)
 
-(when b-margin-support-flag
-  (defcustom b-bookmark-margin 1
-    "Width of margin (in characters) used to display bookmark number."
-    :type 'integer
-    :group 'b))
+;;
+;; Fringe bitmaps
+;;
+(when (defconst b-fringe-support-flag
+	(and (fboundp 'fringe-mode)
+	     (eval-when-compile (require 'fringe-helper "fringe-helper" t)))
+	"Non-nil means this Emacs version has support for programmable fringes.")
 
-(defstruct b-bookmark
+  (fringe-helper-define 'b-bookmark-bitmap-0 nil
+    "..XXXX.."
+    ".XX..XX."
+    "XX....XX"
+    "XX..X.XX"
+    "XX.X..XX"
+    "XX....XX"
+    ".XX..XX."
+    "..XXXX..")
+
+  (fringe-helper-define 'b-bookmark-bitmap-1 nil
+    "...XX..."
+    "..XXX..."
+    ".X.XX..."
+    "...XX..."
+    "...XX..."
+    "...XX..."
+    "...XX..."
+    ".XXXXXX.")
+
+  (fringe-helper-define 'b-bookmark-bitmap-2 nil
+    "..XXXX.."
+    "XX....XX"
+    "......XX"
+    "......XX"
+    "....XX.."
+    "..XX...."
+    "XX.....X"
+    "XXXXXXXX")
+
+  (fringe-helper-define 'b-bookmark-bitmap-3 nil
+    "..XXXX.."
+    "XX....XX"
+    "......XX"
+    "....XX.."
+    "....XX.."
+    "......XX"
+    "XX....XX"
+    "..XXXX..")
+
+  (fringe-helper-define 'b-bookmark-bitmap-4 nil
+    "...XXXX."
+    "..XX.XX."
+    ".XX..XX."
+    "XX...XX."
+    "XXXXXXXX"
+    ".....XX."
+    ".....XX."
+    ".....XX.")
+
+  (fringe-helper-define 'b-bookmark-bitmap-5 nil
+    "XXXXXXXX"
+    "XX......"
+    "XX......"
+    ".XXXXX.."
+    "......X."
+    "......XX"
+    "X.....X."
+    ".XXXXX..")
+
+  (fringe-helper-define 'b-bookmark-bitmap-6 nil
+    "..XXXX.."
+    "XX....XX"
+    "XX......"
+    "XXXXXX.."
+    "XX....XX"
+    "XX....XX"
+    "XX....XX"
+    "..XXXX..")
+
+  (fringe-helper-define 'b-bookmark-bitmap-7 nil
+    "XXXXXXXX"
+    "X.....XX"
+    "......XX"
+    ".....XX."
+    "....XX.."
+    "...XX..."
+    "..XX...."
+    ".XX.....")
+
+  (fringe-helper-define 'b-bookmark-bitmap-8 nil
+    ".XXXXXX."
+    "XX....XX"
+    "XX....XX"
+    ".XXXXXX."
+    ".XXXXXX."
+    "XX....XX"
+    "XX....XX"
+    ".XXXXXX.")
+
+  (fringe-helper-define 'b-bookmark-bitmap-9 nil
+    "..XXXX.."
+    "XX....XX"
+    "XX....XX"
+    "XX....XX"
+    "..XXX.XX"
+    "......XX"
+    "XX....XX"
+    "..XXXX.."))
+
+;; Remove fringe bitmap with:
+;; (destroy-fringe-bitmap 'b-bookmark-bitmap-n)
+
+(cl-defstruct b-bookmark
   "Bookmark."
   (number :read-only t)
   (marker :read-only t)
@@ -73,10 +179,10 @@ This function is meant to be called from a command's interactive form."
   (cl-labels ((digitp (char)
 		      (and (>= char ?0) (<= char ?9)))
 	      (read-digit (prompt)
-			  (do* ((cursor-in-echo-area t)
-				(char (ignore-errors (read-char prompt))
-				      (ignore-errors (read-char
-						      (format "%s(single digit) " prompt)))))
+			  (cl-do* ((cursor-in-echo-area t)
+				   (char (ignore-errors (read-char prompt))
+					 (ignore-errors (read-char
+							 (format "%s(single digit) " prompt)))))
 			      ((and char (digitp char)) char)
 			    (unless (characterp char)
 			      ;; Swallow the offending non-character event which is still pending
@@ -128,14 +234,13 @@ With ARG, remove the bookmark instead." number)
       (set-marker-insertion-type marker t) ; Insert before the marker
       (overlay-put overlay 'face 'b-bookmark-face)
       (overlay-put overlay 'help-echo (format "Bookmark %d" number))
-      (let ((overlay-string (format "%d>" number))
-	    (margin-string (format "%d" number)))
-	(put-text-property 0 (length overlay-string)
-			   'display (list '(margin left-margin) margin-string) overlay-string)
-	(put-text-property 0 (length margin-string)
-			   'face 'b-bookmark-number-face margin-string)
-	(overlay-put overlay 'before-string overlay-string)
-	(b-set-bookmark-margin buffer))
+      (when b-fringe-support-flag
+	(let ((overlay-string (format "%d>" number))
+	      (bitmap (intern (format "b-bookmark-bitmap-%d" number))))
+	  (put-text-property 0 (length overlay-string)
+			     'display `(left-fringe ,bitmap b-bookmark-number-face)
+			     overlay-string)
+	  (overlay-put overlay 'before-string overlay-string)))
 
       ;; Ensure the bookmark overlay is on the line containing the bookmark
       ;; XEmacs overlay compatibility doesn't support modification hook and barfs
@@ -172,19 +277,7 @@ With ARG, remove the bookmark instead." number)
 	(start-line (b-bol-position 1))
  	(end-line (b-bol-position 2)))
     (move-marker (b-bookmark-marker bookmark) (point) buffer)
-    (move-overlay overlay start-line end-line buffer)
-    (b-set-bookmark-margin buffer)))
-
-(defun b-set-bookmark-margin (buffer)
-  "Add bookmark margin to BUFFER."
-  (when b-margin-support-flag
-    ;; Put the number string into the margin
-    ;; TODO: Figure out how to do this in XEmacs
-    (let ((margin b-bookmark-margin))
-      (unless (and left-margin-width (>= left-margin-width margin))
-	(setq left-margin-width margin)
-	(dolist (win (get-buffer-window-list buffer nil t))
-	  (set-window-margins win margin))))))
+    (move-overlay overlay start-line end-line buffer)))
 
 (defun b-kill-bookmark (number)
   "Kill bookmark NUMBER."
