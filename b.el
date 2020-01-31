@@ -33,8 +33,8 @@
 ;;  * Temporary bookmarks.
 ;;  * Cursor motion undo (not fully working yet).
 ;;
-;;  However, the functions have been implemented in an Emacs-style
-;;  way, respond to prefix args and where they override Emacs
+;;  However, the functions have been implemented in an Emacs-style,
+;;  respond to prefix args and where they override Emacs
 ;;  functions live on the Emacs key bindings etc.
 ;;
 ;;  The code was originally tested on Emacs 20, Emacs 21 pretest and
@@ -42,6 +42,10 @@
 ;;  targetting Emacs 24+, as XEmacs is effectively dead.
 
 ;;; Change Log:
+;;
+;;  Version 1.12 2020-01-31 Mike Woolley <mike@bulsara.com>
+;;  * Use the new Gnu Emacs `rectangle-mark-mode' to implement Brief Column Marking.
+;;  * Also finished implementing the existing register functions.
 ;;
 ;;  Version 1.11 2019-05-05 Mike Woolley <mike@bulsara.com>
 ;;  * Now use the Fringe to show bookmark numbers rather than the Margin.
