@@ -28,7 +28,7 @@
 ;;  I miss from the old DOS editor `Brief'.  Principally, these are:
 ;;
 ;;  * Line-mode cut and paste.
-;;  * Column-mode cut and paste (not implemented yet).
+;;  * Column-mode cut and paste.
 ;;  * Decent paging and scrolling.
 ;;  * Temporary bookmarks.
 ;;  * Cursor motion undo (not fully working yet).
@@ -37,8 +37,9 @@
 ;;  way, respond to prefix args and where they override Emacs
 ;;  functions live on the Emacs key bindings etc.
 ;;
-;;  The code was originally tested on Emacs 20, Emacs 21 pretest
-;;  and XEmacs 21.1 & 21.2.
+;;  The code was originally tested on Emacs 20, Emacs 21 pretest and
+;;  XEmacs 21.1 & 21.2.  However as of version 1.09, I'm only
+;;  targetting Emacs 24+, as XEmacs is effectively dead.
 
 ;;; Change Log:
 ;;
@@ -134,7 +135,7 @@ Set this to nil to conserve valuable mode line space."
 ;;;
 ;;; Version number
 ;;;
-(defconst b-version "1.11"
+(defconst b-version "1.12"
   "Version number of B mode.")
 
 (defun b-version ()
@@ -161,7 +162,10 @@ Set this to nil to conserve valuable mode line space."
     ;; Put our definitions on the same keys as Brief
     (define-key map [(control return)] 'b-insert-line)
     (define-key map "\M-d" 'b-delete-line)
+    (define-key map "\M-m" 'set-mark-command)
     (define-key map "\M-l" 'b-mark-line)
+    (when (fboundp 'rectangle-mark-mode)
+      (define-key map "\M-c" 'rectangle-mark-mode))
     (define-key map [(kp-add)] 'b-copy-region)
     (define-key map [(kp-subtract)] 'b-kill-region)
     (define-key map [(kp-multiply)] 'undo)
@@ -191,6 +195,8 @@ Set this to nil to conserve valuable mode line space."
     (define-key map "\C-c\C-b\C-k" 'b-kill-all-bookmarks)
     (define-key map "\C-c\C-b\C-l" 'b-list-bookmarks)
     (define-key map "\C-c\C-b=" 'b-allocate-next-available-bookmark)
+    (define-key map "\C-c\C-b\C-w" 'b-copy-to-register)
+    (define-key map "\C-c\C-b\C-y" 'b-insert-register)
 
     ;; Try and find the existing commands for scrolling up/down,
     ;; as these are different in Emacs & XEmacs
@@ -238,14 +244,17 @@ Key bindings:
   (cond (b-mode
 	 ;; Force transient-mark-mode, remember old setting
 	 (setq b-prev-mark-mode (b-transient-mark-mode t))
+
 	 ;; Setup return (in the global map) to always indent
 	 (setq b-prev-c-m (global-key-binding "\C-m"))
 	 (setq b-prev-c-j (global-key-binding "\C-j"))
 	 (global-set-key "\C-m" 'newline-and-indent)
 	 (global-set-key "\C-j" 'newline)
+
 	 ;; Run mode hook
 	 (run-hooks 'b-mode-hook))
-	(t				; b-mode off
+
+	(t ; b-mode off
 	 ;; Restore old settings
 	 (global-set-key "\C-m" b-prev-c-m)
 	 (global-set-key "\C-j" b-prev-c-j)

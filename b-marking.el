@@ -64,13 +64,16 @@ line is terminated with a newline."
 
 (defun b-line-kill-p (string)
   "Test if STRING is a line-mode kill."
-  (get-text-property 0 'b-line-kill string))
+  (when (stringp string)
+      (get-text-property 0 'b-line-kill string)))
 
 ;;
 ;; Line Marking Mode
 ;;
 (defun b-start-line-marking ()
   "Start line-marking mode."
+  (when (b-column-marking-p)
+    (b-stop-column-marking))
   (setq b-line-mark-col (current-column))
   (when (and (fboundp 'make-local-hook)
 	     (or b-xemacs-flag (< emacs-major-version 21)))
@@ -88,7 +91,7 @@ line is terminated with a newline."
 
 (defun b-mark-line-hook ()
   "Ensure point and mark are correctly positioned for line-marking after cursor motion commands."
-  (cond ((b-region-active-p)
+  (cond ((and (b-region-active-p) (not (b-column-marking-p)))
 	 ;; Marking - emulate Brief "line mode"
 	 (let ((point (point))
 	       (mark (mark)))
@@ -143,7 +146,7 @@ Normally this is the current line, but in Lisp modes it is the containing sexp."
 	 (condition-case nil
 	     (progn
 	       (unless (= (following-char) ?\()
-		 (backward-up-list))
+		 (backward-up-list 1 t t))
 	       (mark-sexp))
 	   (error (b-mark-line))))
 	(t				; Non-lisp mode
@@ -164,10 +167,24 @@ This is determined heuristically by looking for `lisp' in the mode name."
       ;; Swap point and mark.
       (set-marker (mark-marker) (point) (current-buffer))
       (goto-char other-end)
-      (sit-for 1)
+      (sit-for blink-matching-delay)
       ;; Swap back.
       (set-marker (mark-marker) other-end (current-buffer))
       (goto-char opoint))))
+
+;;
+;; Column Marking Mode
+;;
+;; Now `rectangle-mark-mode' has been added to Gnu Emacs, I'm just using that for column marking :-)
+;;
+(defun b-column-marking-p ()
+  "Return non-nil if the buffer is in column marking mode."
+  (and (boundp 'rectangle-mark-mode) rectangle-mark-mode))
+
+(defun b-stop-column-marking ()
+  "Stops column-marking mode."
+  (when (fboundp 'rectangle-mark-mode)
+      (rectangle-mark-mode -1)))
 
 ;;
 ;; Brief copy-region command
@@ -181,8 +198,8 @@ Emulates the Brief copy function."
     (b-mark-default))
   (let ((beg (region-beginning))
 	(end (region-end)))
-    (copy-region-as-kill beg end)
-    (b-emphasise-region beg end) ; Emphasise the region like `kill-ring-save' does
+    (copy-region-as-kill beg end t)	; It seems rectangle-mode needs the t arg, to process the regiona as a rectangle
+    (b-emphasise-region beg end)	; Emphasise the region like `kill-ring-save' does
     (when (b-line-marking-p)
       (b-set-line-kill (car kill-ring))
       (b-stop-line-marking)
@@ -191,15 +208,19 @@ Emulates the Brief copy function."
 	(move-to-column b-line-mark-col))))
   (b-deactivate-region))
 
-(defun b-copy-to-register (register)
+(defun b-copy-to-register (register &optional delete-flag)
   "Copy the current active region to REGISTER.
+With prefix arg DELETE-FLAG, delete as well.
 If there is no active region then the current line is copied."
-  (interactive "cCopy-to-register:")
+  (interactive (list (register-read-with-preview "Copy to register: ")
+		     current-prefix-arg))
   (unless (b-region-active-p)
     (b-mark-default))
   (let ((beg (region-beginning))
 	(end (region-end)))
-    (copy-to-register register beg end)
+    (if (b-column-marking-p)
+	(copy-rectangle-to-register register beg end delete-flag)
+      (copy-to-register register beg end delete-flag))
     (b-emphasise-region beg end)
     (when (b-line-marking-p)
       (b-set-line-kill (get-register register))
@@ -219,20 +240,9 @@ Emulates the Brief cut function."
   (interactive "*")
   (unless (b-region-active-p)
     (b-mark-default))
-  (kill-region (region-beginning) (region-end))
+  (kill-region (region-beginning) (region-end) t) ; Again rectangle-mode needs the t arg
   (when (b-line-marking-p)
     (b-set-line-kill (car kill-ring))
-    (b-stop-line-marking)))
-
-(defun b-kill-to-register (register)
-  "Kill the current active region to REGISTER.
-If there is no active region then the current line is killed."
-  (interactive "*cCopy-to-register:")
-  (unless (b-region-active-p)
-    (b-mark-default))
-  (copy-to-register register (region-beginning) (region-end) t)
-  (when (b-line-marking-p)
-    (b-set-line-kill (get-register register))
     (b-stop-line-marking)))
 
 ;;
@@ -244,9 +254,13 @@ If there is no active region then ARG characters following point are deleted.
 Emulates the Brief delete function."
   (interactive "*P")
   (cond ((b-region-active-p)
-	 (delete-region (region-beginning) (region-end))
-	 (when (b-line-marking-p)
-	   (b-stop-line-marking)))
+	 ;; Delete the rectangle if one is active
+	 (if (b-column-marking-p)
+	     (delete-rectangle (region-beginning) (region-end))
+	   ;; Otherwise delete the current region
+	   (delete-region (region-beginning) (region-end))
+	   (when (b-line-marking-p)
+	     (b-stop-line-marking))))
 	(t				; No active region
 	 (delete-char (prefix-numeric-value arg)))))
 
@@ -322,8 +336,20 @@ also indent it."
 However, correctly insert text that was killed in line-mode and
 also indent it."
   (interactive "*cInsert Register:")
-  ;; *** Mike: Fix Me *** TBD
-  )
+  (let ((line-kill (b-line-kill-p (get-register register))))
+    (when line-kill
+      (setq b-yank-col (current-column))
+      (beginning-of-line))
+
+    (insert-register register)
+
+    (when line-kill
+      (let ((point (point))
+	    (mark (mark t)))
+	(b-clear-line-kill (min mark point))
+	(when (b-buffer-in-programming-mode-p)
+	  (indent-region (min mark point) (max mark point) nil)))
+      (move-to-column b-yank-col))))
 
 ;;
 ;; Utilities

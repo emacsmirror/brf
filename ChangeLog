@@ -1,3 +1,12 @@
+2020-01-31  Mike Woolley  <mike@bulsara.com>
+
+	* b-marking.el:
+	* b.el: Use the new Gnu Emacs `rectangle-mark-mode' to
+	implement Brief Column Marking.
+	Also finished implementing the existing register functions.
+
+	* b.el (b-version): Increased B package version to 1.12.
+
 2019-05-05  Mike Woolley  <mike@bulsara.com>
 
 	* b-bookmark.el: Use the Fringe to show bookmark numbers rather
