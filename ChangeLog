@@ -1,5 +1,8 @@
 2020-02-02  Mike Woolley  <mike@bulsara.com>
 
+	* b.el (b-mode-map): I had forgotten to put undo on M-u, in
+	addition to kp-*.
+
 	* b-marking.el (b-emphasise-region): Changed to display a message
 	if the region was not emphasised (because the other end of the
 	region is not visible), rather than do nothing as happened

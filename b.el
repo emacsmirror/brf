@@ -173,6 +173,7 @@ Set this to nil to conserve valuable mode line space."
     (define-key map [(kp-add)] 'b-copy-region)
     (define-key map [(kp-subtract)] 'b-kill-region)
     (define-key map [(kp-multiply)] 'undo)
+    (define-key map "\M-u" 'undo)
     (define-key map [(delete)] 'b-delete)
     (define-key map [(kp-delete)] 'b-delete)
     (define-key map [(meta up)] 'b-row-up)
