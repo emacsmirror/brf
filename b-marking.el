@@ -157,20 +157,33 @@ Normally this is the current line, but in Lisp modes it is the containing sexp."
 This is determined heuristically by looking for `lisp' in the mode name."
   (string-match "lisp" (format-mode-line mode-name)))
 
-(defun b-emphasise-region (beg end)
-  "Emphasise the region BEG END, like `kill-ring-save' does."
-  ;; This code is based on code in `kill-ring-save' from simple.el in GNU Emacs
+(defun b-emphasise-region (beg end &optional message-len)
+  "Emphasise the region BEG END, like `kill-ring-save' does.
+
+If the mark lies outside the selected window, display an
+informative message containing a sample of the copied text.  The
+optional argument MESSAGE-LEN, if non-nil, specifies the length
+of this sample text; it defaults to 40."
+  ;; This is loosely based on code in `kill-ring-save' from simple.el in GNU Emacs
   (let ((other-end (if (= (point) beg) end beg))
 	(opoint (point))
 	(inhibit-quit t))		; Inhibit quitting
-    (when (pos-visible-in-window-p other-end (selected-window))
-      ;; Swap point and mark.
-      (set-marker (mark-marker) (point) (current-buffer))
-      (goto-char other-end)
-      (sit-for blink-matching-delay)
-      ;; Swap back.
-      (set-marker (mark-marker) other-end (current-buffer))
-      (goto-char opoint))))
+    (cond ((pos-visible-in-window-p other-end (selected-window))
+	   ;; Swap point and mark.
+	   (set-marker (mark-marker) (point) (current-buffer))
+	   (goto-char other-end)
+	   (sit-for blink-matching-delay)
+	   ;; Swap back.
+	   (set-marker (mark-marker) other-end (current-buffer))
+	   (goto-char opoint))
+	  (t ; Other end of region not visible
+	   (let ((len (min (abs (- other-end opoint))
+			   (or message-len 40))))
+	     (if (< opoint other-end)
+		 (message "Saved text until \"%s\""
+			  (buffer-substring-no-properties (- other-end len) other-end))
+	       (message "Saved text from \"%s\""
+			(buffer-substring-no-properties other-end (+ other-end len)))))))))
 
 ;;
 ;; Column Marking Mode

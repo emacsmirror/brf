@@ -1,3 +1,10 @@
+2020-02-02  Mike Woolley  <mike@bulsara.com>
+
+	* b-marking.el (b-emphasise-region): Changed to display a message
+	if the region was not emphasised (because the other end of the
+	region is not visible), rather than do nothing as happened
+	before. This was based on the behaviour of `indicate-copied-region'.
+
 2020-01-31  Mike Woolley  <mike@bulsara.com>
 
 	* b-marking.el:
