@@ -1,6 +1,6 @@
 ;;; b.el --- Brief editor emulator
 
-;; Copyright (C) 2002 Mike Woolley
+;; Copyright (C) 2000-2020 Mike Woolley
 ;; Author: Mike Woolley <mike@bulsara.com>
 ;; Version: $Id$
 ;; Keywords: convenience emulations
@@ -29,19 +29,23 @@
 ;;
 ;;  * Line-mode cut and paste.
 ;;  * Column-mode cut and paste.
-;;  * Decent paging and scrolling.
+;;  * Fully reversible paging and scrolling.
 ;;  * Temporary bookmarks.
-;;  * Cursor motion undo (not fully working yet).
+;;  * Cursor motion undo.
 ;;
 ;;  However, the functions have been implemented in an Emacs-style,
 ;;  respond to prefix args and where they override Emacs
 ;;  functions live on the Emacs key bindings etc.
 ;;
 ;;  The code was originally tested on Emacs 20, Emacs 21 pretest and
-;;  XEmacs 21.1 & 21.2.  However as of version 1.09, I'm only
-;;  targetting Emacs 24+, as XEmacs is effectively dead.
+;;  XEmacs 21.1 & 21.2.  However as of version 1.09 I'm only
+;;  targetting Emacs 24+, as XEmacs is dead...
 
 ;;; Change Log:
+;;
+;;  Version 1.13 2020-02-11 Mike Woolley <mike@bulsara.com>
+;;  * Finally finished implementing Cursor Motion Undo (20 years after I started it!)
+;;  * Brought the Copyright statements up-to-date.
 ;;
 ;;  Version 1.12 2020-01-31 Mike Woolley <mike@bulsara.com>
 ;;  * Use the new Gnu Emacs `rectangle-mark-mode' to implement Brief Column Marking.
@@ -139,7 +143,7 @@ Set this to nil to conserve valuable mode line space."
 ;;;
 ;;; Version number
 ;;;
-(defconst b-version "1.12"
+(defconst b-version "1.13"
   "Version number of B mode.")
 
 (defun b-version ()

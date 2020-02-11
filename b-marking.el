@@ -1,6 +1,6 @@
 ;;; b-marking.el --- Marking / Cut & Paste commands  of b-mode
 
-;; Copyright (C) 2000, 2001, 2002 Mike Woolley
+;; Copyright (C) 2000-2020 Mike Woolley
 ;; Author: Mike Woolley <mike@bulsara.com>
 ;; Version: $Id$
 

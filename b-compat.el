@@ -1,6 +1,6 @@
 ;;; b-compat.el --- XEmacs compatibility code for b-mode
 
-;; Copyright (C) 2002 Mike Woolley
+;; Copyright (C) 2000-2020 Mike Woolley
 ;; Author: Mike Woolley <mike@bulsara.com>
 ;; Version: $Id$
 

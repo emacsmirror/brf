@@ -1,6 +1,6 @@
 ;;; b-undo.el --- Brief Cursor Motion Undo
 
-;; Copyright (C) 2000, 2001, 2002 Mike Woolley
+;; Copyright (C) 2000-2020 Mike Woolley
 ;; Author: Mike Woolley <mike@bulsara.com>
 ;; Version: $Id$
 
@@ -22,7 +22,9 @@
 ;; Boston, MA 02111-1307, USA.
 
 ;;; Commentary:
-;;  See b.el
+;;  Implements Cursor Motion Undo just like in Brief.
+;;  This works with both default Emacs Undo and Redo(+).el.
+;;  Finally finished this off 20 years after I started it...
 
 ;;; Code:
 
@@ -43,50 +45,78 @@
   "The location of point after a command is executed.")
 (make-variable-buffer-local 'b-undo-point)
 (defvar b-undo-list-head nil
-  "The head of the undo list after a command is executed.")
+  "The first non-boundary item on the undo list after a command is executed.")
 (make-variable-buffer-local 'b-undo-list-head)
-;; (defvar b-undo-list-second nil
-;;   "The second element of the undo list after a command is executed.")
-;; (make-variable-buffer-local 'b-undo-list-second)
 
-(defvar b-undo-debug-enabled nil)
+(defvar b-undo-debug-enabled nil
+  "Undo debug is enabled.")
+
+(defconst b-undo-debug-buffer-name "*B Debug*"
+  "Name of undo debug buffer.")
 
 (defun b-undo-post-command-hook ()
-  "Post-command hook to remember what to undo."
+  "Post-command hook to implement cursor-motion undo."
+  ;; Put point on the undo list if necessary
   (when (listp buffer-undo-list)
     (let ((point (point))
 	  (head (car buffer-undo-list)))
-      ;; Put point on the undo list if necessary
-      (unless (or (eq this-command 'undo) (eq this-command 'redo))
-	(when (and (/= b-undo-point 0)
-		   (/= point b-undo-point)
-		   (equal head b-undo-list-head))
-	  (when head
-	    (undo-boundary))
-	  (setq buffer-undo-list (cons b-undo-point buffer-undo-list))))
+      ;; When head is not an undo boundary, Emacs is still amalgamating the undo group
+      ;; So it's definitely not cursor motion
+      (unless head
+	(setq head (cadr buffer-undo-list))		; Real head is the second item
+	(unless (eq this-command 'redo)			; ie (redo) from Redo(+).el
+	  ;; Check if there was cursor motion with no other changes
+	  (when (and (/= b-undo-point 0)
+		     (/= point b-undo-point) 		; Point has moved
+		     (or (eq head b-undo-list-head) 	; and a change has not been made
+			 (and (integerp head)		; or previous change was cursor motion
+			      (null (caddr buffer-undo-list)))))
+	    (setq buffer-undo-list (cons b-undo-point buffer-undo-list))
+	    ;; If we're undoing then the cursor motion was a redo, so mark it as such
+	    (when (eq this-command 'undo)
+	      (puthash buffer-undo-list
+		       (if (or undo-in-region (eq buffer-undo-list pending-undo-list))
+			   t
+			 pending-undo-list)
+		       undo-equiv-table))
+	    ;; Add the terminal undo boundary
+	    (undo-boundary))))
 
       ;; Save point and the undo-list head for next time
       (setq b-undo-point point)
-      (setq head (car buffer-undo-list))
-      (setq b-undo-list-head (if (and (consp head) (integerp (car head)))
-				 (cons (car head) (cdr head))
-			       head)))
+      (setq b-undo-list-head head))
+
     ;; Debug output
     (when b-undo-debug-enabled
       (b-undo-debug))))
 
 (defun b-undo-debug ()
   "Show Undo state in a buffer for debugging."
-  (unless (active-minibuffer-window)
+  (unless (or (active-minibuffer-window)
+	      (not (listp buffer-undo-list)))
     (let ((undo-list buffer-undo-list)
 	  (pending pending-undo-list)
-	  (point (point)))
-      (save-current-buffer
-	(set-buffer (get-buffer-create "*B Debug*"))
-	(insert "(" (number-to-string point) ") List: " (prin1-to-string undo-list) ?\n)
-	(when (or (eq this-command 'undo) (eq this-command 'redo))
-	  (insert "Pending: " (prin1-to-string (car pending)) ?\n))
-	(goto-char 1)))))
+	  (point (point))
+	  (buffer-name (buffer-name)))
+      (let* ((buffer (get-buffer b-undo-debug-buffer-name))
+	     (window (get-buffer-window buffer t)))
+	(when buffer
+	  (save-current-buffer
+	    (set-buffer buffer)
+	    (goto-char (point-max))
+	    (let ((log-point (point))	; Current point in the debug buffer
+		  (print-length 15)	; Only show this many undo elements
+		  (print-level 2))	; and only 2 deep
+	      ;; Show point and the current undo-list
+	      (insert buffer-name " (" (number-to-string point) "): " (prin1-to-string undo-list) ?\n)
+	      ;; Also show what's on the pending list when we're undoing/redoing
+	      (when (or (eq this-command 'undo)
+			(eq this-command 'redo))
+		(insert (prin1-to-string this-command) " pending: " (prin1-to-string pending) ?\n))
+	      ;; Make sure the latest debug line is visible
+	      (when (and (window-live-p window)
+			 (not (pos-visible-in-window-p log-point window)))
+		(set-window-start window log-point)))))))))
 
 (defun b-undo-toggle-debug (&optional arg)
   "Turn Undo debugging on or off with ARG."
@@ -98,11 +128,11 @@
 
   (when b-undo-debug-enabled
     (save-current-buffer
-      (let ((buffer (get-buffer-create "*B Debug*")))
+      (let ((buffer (get-buffer-create b-undo-debug-buffer-name)))
 	(set-buffer buffer)
 	(buffer-disable-undo buffer)
 	(erase-buffer)
-	(display-buffer buffer t)))))
+	(display-buffer-at-bottom buffer nil)))))
 
 (provide 'b-undo)
 
