@@ -1,3 +1,11 @@
+2020-02-12  Mike Woolley  <mike@bulsara.com>
+
+	* b-window.el: New file to implement Brief-style window
+	management.
+
+	* b.el (b-version): Increased B package version to 1.14.
+	(b-mode-map): Added key bindings for Brief-style window management.
+
 2020-02-11  Mike Woolley  <mike@bulsara.com>
 
 	* b-undo.el: Finished implementing Cursor Motion Undo (finally!).

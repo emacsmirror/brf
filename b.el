@@ -32,6 +32,7 @@
 ;;  * Fully reversible paging and scrolling.
 ;;  * Temporary bookmarks.
 ;;  * Cursor motion undo.
+;;  * Easy window management.
 ;;
 ;;  However, the functions have been implemented in an Emacs-style,
 ;;  respond to prefix args and where they override Emacs
@@ -42,6 +43,9 @@
 ;;  targetting Emacs 24+, as XEmacs is dead...
 
 ;;; Change Log:
+;;
+;;  Version 1.14 2020-02-12 Mike Woolley <mike@bulsara.com>
+;;  * Implemented Brief-style Window Management.
 ;;
 ;;  Version 1.13 2020-02-11 Mike Woolley <mike@bulsara.com>
 ;;  * Finally finished implementing Cursor Motion Undo (20 years after I started it!)
@@ -143,7 +147,7 @@ Set this to nil to conserve valuable mode line space."
 ;;;
 ;;; Version number
 ;;;
-(defconst b-version "1.13"
+(defconst b-version "1.14"
   "Version number of B mode.")
 
 (defun b-version ()
@@ -159,6 +163,7 @@ Set this to nil to conserve valuable mode line space."
 (require 'b-marking)
 (require 'b-movement)
 (require 'b-undo)
+(require 'b-window)
 
 ;;;
 ;;; Keymap
@@ -189,6 +194,10 @@ Set this to nil to conserve valuable mode line space."
     (define-key map [(meta kp-add)] 'b-next-bookmark)
     (define-key map "\M--" 'b-prev-bookmark)
     (define-key map [(meta kp-subtract)] 'b-prev-bookmark)
+    (define-key map [(shift up)] 'b-change-window-up)
+    (define-key map [(shift down)] 'b-change-window-down)
+    (define-key map [(shift left)] 'b-change-window-left)
+    (define-key map [(shift right)] 'b-change-window-right)
 
     ;; Also put them on the Emacs keys
     (substitute-key-definition 'kill-ring-save 'b-copy-region map (current-global-map))
@@ -198,12 +207,42 @@ Set this to nil to conserve valuable mode line space."
     (substitute-key-definition 'beginning-of-line 'b-home map (current-global-map))
     (substitute-key-definition 'end-of-line 'b-end map (current-global-map))
 
+    ;; Function keys
+    ;; F1 - Change window
+    (let ((f1-prefix (make-sparse-keymap "Point to destination (use cursor keys)")))
+      (define-key f1-prefix [(up)] 'b-change-window-up)
+      (define-key f1-prefix [(down)] 'b-change-window-down)
+      (define-key f1-prefix [(left)] 'b-change-window-left)
+      (define-key f1-prefix [(right)] 'b-change-window-right)
+      (define-key map [(f1)] f1-prefix))
+    ;; F2 - Resize window
+    (let ((f2-prefix (make-sparse-keymap "Choose direction to resize (use cursor keys)")))
+      (define-key f2-prefix [(up)] 'b-resize-window-up)
+      (define-key f2-prefix [(down)] 'b-resize-window-down)
+      (define-key f2-prefix [(left)] 'b-resize-window-left)
+      (define-key f2-prefix [(right)] 'b-resize-window-right)
+      (define-key map [(f2)] f2-prefix))
+    ;; F3 - Create window
+    (let ((f3-prefix (make-sparse-keymap "Select side for new window (use cursor keys)")))
+      (define-key f3-prefix [(up)] 'b-create-window-up)
+      (define-key f3-prefix [(down)] 'b-create-window-down)
+      (define-key f3-prefix [(left)] 'b-create-window-left)
+      (define-key f3-prefix [(right)] 'b-create-window-right)
+      (define-key map [(f3)] f3-prefix))
+    ;; F4 - Delete window
+    (let ((f4-prefix (make-sparse-keymap "Select window to delete (use cursor keys)")))
+      (define-key f4-prefix [(up)] 'b-delete-window-up)
+      (define-key f4-prefix [(down)] 'b-delete-window-down)
+      (define-key f4-prefix [(left)] 'b-delete-window-left)
+      (define-key f4-prefix [(right)] 'b-delete-window-right)
+      (define-key map [(f4)] f4-prefix))
+
     ;; Create new key bindings for my new functions that weren't part of Brief
     (define-key map "\C-c\C-b\C-n" 'b-next-bookmark)
     (define-key map "\C-c\C-b\C-p" 'b-prev-bookmark)
     (define-key map "\C-c\C-b\C-k" 'b-kill-all-bookmarks)
     (define-key map "\C-c\C-b\C-l" 'b-list-bookmarks)
-    (define-key map "\C-c\C-b=" 'b-allocate-next-available-bookmark)
+    (define-key map "\C-c\C-b="	   'b-allocate-next-available-bookmark)
     (define-key map "\C-c\C-b\C-w" 'b-copy-to-register)
     (define-key map "\C-c\C-b\C-y" 'b-insert-register)
 
