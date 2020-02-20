@@ -1,3 +1,15 @@
+2020-02-20  Mike Woolley  <mike@bulsara.com>
+
+	* b-window.el (b-delete-current-window): Added function (& f4
+	key-mapping) to delete the current window.
+
+	* b.el (b-mode): Force conservative scrolling in B mode.
+	(b-version): Increased B package version to 1.15.
+
+	* b-marking.el (b-insert-register): Handle prefix arg the same as
+	`insert-register'. In particular, with no prefix arg set point
+	after the inserted text.
+
 2020-02-12  Mike Woolley  <mike@bulsara.com>
 
 	* b-window.el: New file to implement Brief-style window

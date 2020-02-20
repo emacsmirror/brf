@@ -44,6 +44,10 @@
 
 ;;; Change Log:
 ;;
+;;  Version 1.15 2020-02-19 Mike Woolley <mike@bulsara.com>
+;;  * Force conservative scrolling in B mode.
+;;  * Minor fixes.
+;;
 ;;  Version 1.14 2020-02-12 Mike Woolley <mike@bulsara.com>
 ;;  * Implemented Brief-style Window Management.
 ;;
@@ -147,7 +151,7 @@ Set this to nil to conserve valuable mode line space."
 ;;;
 ;;; Version number
 ;;;
-(defconst b-version "1.14"
+(defconst b-version "1.15"
   "Version number of B mode.")
 
 (defun b-version ()
@@ -236,6 +240,7 @@ Set this to nil to conserve valuable mode line space."
       (define-key f4-prefix [(left)] 'b-delete-window-left)
       (define-key f4-prefix [(right)] 'b-delete-window-right)
       (define-key map [(f4)] f4-prefix))
+    (define-key map [(control f4)] 'b-delete-current-window) ; Not an original Brief key-sequence, but does seem useful
 
     ;; Create new key bindings for my new functions that weren't part of Brief
     (define-key map "\C-c\C-b\C-n" 'b-next-bookmark)
@@ -268,6 +273,14 @@ Set this to nil to conserve valuable mode line space."
 ;;;
 (defvar b-prev-mark-mode nil
   "Previous value of transient mark mode.")
+(defvar b-prev-truncate-lines nil
+  "Previous value of `truncate-lines'.")
+(defvar b-prev-scroll-step nil
+  "Previous value of `scroll-step'.")
+(defvar b-prev-hscroll-margin nil
+  "Previous value of `hscroll-margin'.")
+(defvar b-prev-hscroll-step nil
+  "Previous value of `hscroll-step'.")
 (defvar b-prev-c-m nil
   "Previous global binding of CR.")
 (defvar b-prev-c-j nil
@@ -290,8 +303,17 @@ Key bindings:
 
   ;; Processing that needs to be done when the mode is started or stopped
   (cond (b-mode
-	 ;; Force transient-mark-mode, remember old setting
+	 ;; Force transient-mark-mode and conservative scrolling
+	 ;; Remember old settings
 	 (setq b-prev-mark-mode (b-transient-mark-mode t))
+	 (setq b-prev-truncate-lines (default-value truncate-lines))
+	 (setq b-prev-scroll-step scroll-step)
+	 (setq b-prev-hscroll-margin hscroll-margin)
+	 (setq b-prev-hscroll-step hscroll-step)
+	 (setq-default truncate-lines t)
+	 (setq scroll-step 1)		  ; Scroll line at a time
+	 (setq hscroll-margin 1)	  ; Scroll when we get to the end of the line
+	 (setq hscroll-step 1)		  ; Scroll one column at a time
 
 	 ;; Setup return (in the global map) to always indent
 	 (setq b-prev-c-m (global-key-binding "\C-m"))
@@ -304,8 +326,12 @@ Key bindings:
 
 	(t ; b-mode off
 	 ;; Restore old settings
-	 (global-set-key "\C-m" b-prev-c-m)
 	 (global-set-key "\C-j" b-prev-c-j)
+	 (global-set-key "\C-m" b-prev-c-m)
+	 (setq hscroll-step b-prev-hscroll-step)
+	 (setq hscroll-margin b-prev-hscroll-margin)
+	 (setq scroll-step b-prev-scroll-step)
+	 (setq-default truncate-lines b-prev-truncate-lines)
 	 (b-transient-mark-mode b-prev-mark-mode))))
 
 ;; Add B mode as a minor mode

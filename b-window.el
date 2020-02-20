@@ -137,6 +137,12 @@
   (interactive)
   (b-delete-window 'right))
 
+(defun b-delete-current-window ()
+  "Delete the current window."
+  (interactive)
+  (delete-window)
+  (other-window -1))
+
 (provide 'b-window)
 
 ;;; b-window.el ends here

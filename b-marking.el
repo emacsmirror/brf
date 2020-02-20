@@ -354,7 +354,7 @@ also indent it."
       (setq b-yank-col (current-column))
       (beginning-of-line))
 
-    (insert-register register)
+    (insert-register register (not current-prefix-arg))
 
     (when line-kill
       (let ((point (point))
