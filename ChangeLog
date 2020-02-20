@@ -1,5 +1,16 @@
 2020-02-20  Mike Woolley  <mike@bulsara.com>
 
+	* b-bookmark.el (b-make-set-bookmark): Changed to return a named
+	function rather than a lambda, so that the functions show up in the
+	mode / keymap help etc.
+
+	* b.el (b-mode-map): Added new command to delete all windows other
+	than the current one.  I also realised the way I was defining the
+	key map made it difficult to modify it interactively when writing
+	new code, so I've changed this now.
+
+2020-02-19  Mike Woolley  <mike@bulsara.com>
+
 	* b-window.el (b-delete-current-window): Added function (& f4
 	key-mapping) to delete the current window.
 

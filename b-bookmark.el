@@ -199,13 +199,13 @@ This function is meant to be called from a command's interactive form."
 (defun b-make-set-bookmark (number)
   "Generate a command to set bookmark NUMBER at point.
 If the command is given a prefix argument, then the bookmark is removed."
-  `(lambda (&optional arg)
-     ,(format "Set bookmark %d at point.
-With ARG, remove the bookmark instead." number)
-     (interactive "P")
-     (if arg
-	 (b-kill-bookmark ,number)
-       (b-set-bookmark ,number))))
+  (defalias (intern (format "b-set-bookmark-%s" (number-to-string number)))
+    `(lambda (&optional arg)
+       ,(format "Set bookmark %d at point.\nWith ARG, remove the bookmark instead." number)
+       (interactive "P")
+       (if arg
+	   (b-kill-bookmark ,number)
+	 (b-set-bookmark ,number)))))
 
 (defun b-set-bookmark (number)
   "Set bookmark NUMBER at point."

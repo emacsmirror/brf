@@ -172,101 +172,100 @@ Set this to nil to conserve valuable mode line space."
 ;;;
 ;;; Keymap
 ;;;
-(defvar b-mode-map nil
+(defvar b-mode-map (make-sparse-keymap)
   "Local keymap for B mode.")
-(unless b-mode-map
-  (let ((map (make-sparse-keymap)))
-    ;; Put our definitions on the same keys as Brief
-    (define-key map [(control return)] 'b-insert-line)
-    (define-key map "\M-d" 'b-delete-line)
-    (define-key map "\M-m" 'set-mark-command)
-    (define-key map "\M-l" 'b-mark-line)
-    (when (fboundp 'rectangle-mark-mode)
-      (define-key map "\M-c" 'rectangle-mark-mode))
-    (define-key map [(kp-add)] 'b-copy-region)
-    (define-key map [(kp-subtract)] 'b-kill-region)
-    (define-key map [(kp-multiply)] 'undo)
-    (define-key map "\M-u" 'undo)
-    (define-key map [(delete)] 'b-delete)
-    (define-key map [(kp-delete)] 'b-delete)
-    (define-key map [(meta up)] 'b-row-up)
-    (define-key map [(meta down)] 'b-row-down)
-    (define-key map [(home)] 'b-home)
-    (define-key map [(end)] 'b-end)
-    (define-key map "\t" 'b-tab)
-    (define-key map "\M-=" 'b-next-bookmark)
-    (define-key map [(meta kp-add)] 'b-next-bookmark)
-    (define-key map "\M--" 'b-prev-bookmark)
-    (define-key map [(meta kp-subtract)] 'b-prev-bookmark)
-    (define-key map [(shift up)] 'b-change-window-up)
-    (define-key map [(shift down)] 'b-change-window-down)
-    (define-key map [(shift left)] 'b-change-window-left)
-    (define-key map [(shift right)] 'b-change-window-right)
 
-    ;; Also put them on the Emacs keys
-    (substitute-key-definition 'kill-ring-save 'b-copy-region map (current-global-map))
-    (substitute-key-definition 'kill-region 'b-kill-region map (current-global-map))
-    (substitute-key-definition 'yank 'b-yank map (current-global-map))
-    (substitute-key-definition 'yank-pop 'b-yank-pop map (current-global-map))
-    (substitute-key-definition 'beginning-of-line 'b-home map (current-global-map))
-    (substitute-key-definition 'end-of-line 'b-end map (current-global-map))
+;; Put the B-mode overrides on the same keys as Brief
+(define-key b-mode-map [(control return)] 'b-insert-line)
+(define-key b-mode-map "\M-d" 'b-delete-line)
+(define-key b-mode-map "\M-m" 'set-mark-command)
+(define-key b-mode-map "\M-l" 'b-mark-line)
+(when (fboundp 'rectangle-mark-mode)
+  (define-key b-mode-map "\M-c" 'rectangle-mark-mode))
+(define-key b-mode-map [(kp-add)] 'b-copy-region)
+(define-key b-mode-map [(kp-subtract)] 'b-kill-region)
+(define-key b-mode-map [(kp-multiply)] 'undo)
+(define-key b-mode-map "\M-u" 'undo)
+(define-key b-mode-map [(delete)] 'b-delete)
+(define-key b-mode-map [(kp-delete)] 'b-delete)
+(define-key b-mode-map [(meta up)] 'b-row-up)
+(define-key b-mode-map [(meta down)] 'b-row-down)
+(define-key b-mode-map [(home)] 'b-home)
+(define-key b-mode-map [(end)] 'b-end)
+(define-key b-mode-map "\t" 'b-tab)
+(define-key b-mode-map "\M-=" 'b-next-bookmark)
+(define-key b-mode-map [(meta kp-add)] 'b-next-bookmark)
+(define-key b-mode-map "\M--" 'b-prev-bookmark)
+(define-key b-mode-map [(meta kp-subtract)] 'b-prev-bookmark)
+(define-key b-mode-map [(shift up)] 'b-change-window-up)
+(define-key b-mode-map [(shift down)] 'b-change-window-down)
+(define-key b-mode-map [(shift left)] 'b-change-window-left)
+(define-key b-mode-map [(shift right)] 'b-change-window-right)
 
-    ;; Function keys
-    ;; F1 - Change window
-    (let ((f1-prefix (make-sparse-keymap "Point to destination (use cursor keys)")))
-      (define-key f1-prefix [(up)] 'b-change-window-up)
-      (define-key f1-prefix [(down)] 'b-change-window-down)
-      (define-key f1-prefix [(left)] 'b-change-window-left)
-      (define-key f1-prefix [(right)] 'b-change-window-right)
-      (define-key map [(f1)] f1-prefix))
-    ;; F2 - Resize window
-    (let ((f2-prefix (make-sparse-keymap "Choose direction to resize (use cursor keys)")))
-      (define-key f2-prefix [(up)] 'b-resize-window-up)
-      (define-key f2-prefix [(down)] 'b-resize-window-down)
-      (define-key f2-prefix [(left)] 'b-resize-window-left)
-      (define-key f2-prefix [(right)] 'b-resize-window-right)
-      (define-key map [(f2)] f2-prefix))
-    ;; F3 - Create window
-    (let ((f3-prefix (make-sparse-keymap "Select side for new window (use cursor keys)")))
-      (define-key f3-prefix [(up)] 'b-create-window-up)
-      (define-key f3-prefix [(down)] 'b-create-window-down)
-      (define-key f3-prefix [(left)] 'b-create-window-left)
-      (define-key f3-prefix [(right)] 'b-create-window-right)
-      (define-key map [(f3)] f3-prefix))
-    ;; F4 - Delete window
-    (let ((f4-prefix (make-sparse-keymap "Select window to delete (use cursor keys)")))
-      (define-key f4-prefix [(up)] 'b-delete-window-up)
-      (define-key f4-prefix [(down)] 'b-delete-window-down)
-      (define-key f4-prefix [(left)] 'b-delete-window-left)
-      (define-key f4-prefix [(right)] 'b-delete-window-right)
-      (define-key map [(f4)] f4-prefix))
-    (define-key map [(control f4)] 'b-delete-current-window) ; Not an original Brief key-sequence, but does seem useful
+;; Also put them on the original Emacs key-mappings
+(substitute-key-definition 'kill-ring-save 'b-copy-region b-mode-map (current-global-map))
+(substitute-key-definition 'kill-region 'b-kill-region b-mode-map (current-global-map))
+(substitute-key-definition 'yank 'b-yank b-mode-map (current-global-map))
+(substitute-key-definition 'yank-pop 'b-yank-pop b-mode-map (current-global-map))
+(substitute-key-definition 'beginning-of-line 'b-home b-mode-map (current-global-map))
+(substitute-key-definition 'end-of-line 'b-end b-mode-map (current-global-map))
 
-    ;; Create new key bindings for my new functions that weren't part of Brief
-    (define-key map "\C-c\C-b\C-n" 'b-next-bookmark)
-    (define-key map "\C-c\C-b\C-p" 'b-prev-bookmark)
-    (define-key map "\C-c\C-b\C-k" 'b-kill-all-bookmarks)
-    (define-key map "\C-c\C-b\C-l" 'b-list-bookmarks)
-    (define-key map "\C-c\C-b="	   'b-allocate-next-available-bookmark)
-    (define-key map "\C-c\C-b\C-w" 'b-copy-to-register)
-    (define-key map "\C-c\C-b\C-y" 'b-insert-register)
+;; Function keys
+;; F1 - Change window
+(let ((f1-prefix (make-sparse-keymap "Point to destination (use cursor keys)")))
+  (define-key f1-prefix [(up)] 'b-change-window-up)
+  (define-key f1-prefix [(down)] 'b-change-window-down)
+  (define-key f1-prefix [(left)] 'b-change-window-left)
+  (define-key f1-prefix [(right)] 'b-change-window-right)
+  (define-key b-mode-map [(f1)] f1-prefix))
+;; F2 - Resize window
+(let ((f2-prefix (make-sparse-keymap "Choose direction to resize (use cursor keys)")))
+  (define-key f2-prefix [(up)] 'b-resize-window-up)
+  (define-key f2-prefix [(down)] 'b-resize-window-down)
+  (define-key f2-prefix [(left)] 'b-resize-window-left)
+  (define-key f2-prefix [(right)] 'b-resize-window-right)
+  (define-key b-mode-map [(f2)] f2-prefix))
+;; F3 - Create window
+(let ((f3-prefix (make-sparse-keymap "Select side for new window (use cursor keys)")))
+  (define-key f3-prefix [(up)] 'b-create-window-up)
+  (define-key f3-prefix [(down)] 'b-create-window-down)
+  (define-key f3-prefix [(left)] 'b-create-window-left)
+  (define-key f3-prefix [(right)] 'b-create-window-right)
+  (define-key b-mode-map [(f3)] f3-prefix))
+;; F4 - Delete window
+(let ((f4-prefix (make-sparse-keymap "Select window to delete (use cursor keys)")))
+  (define-key f4-prefix [(up)] 'b-delete-window-up)
+  (define-key f4-prefix [(down)] 'b-delete-window-down)
+  (define-key f4-prefix [(left)] 'b-delete-window-left)
+  (define-key f4-prefix [(right)] 'b-delete-window-right)
+  (define-key b-mode-map [(f4)] f4-prefix))
+;; These were not original Brief key-sequences
+(define-key b-mode-map [(control f4)] 'b-delete-current-window)
+(define-key b-mode-map [(shift f4)] 'delete-other-windows)
 
-    ;; Try and find the existing commands for scrolling up/down,
-    ;; as these are different in Emacs & XEmacs
-    (let ((scroll-up-cmd (global-key-binding [(next)]))
-	  (scroll-down-cmd (global-key-binding [(prior)])))
-      (when scroll-up-cmd
-	(substitute-key-definition scroll-up-cmd 'b-page-down map (current-global-map)))
-      (when scroll-down-cmd
-	(substitute-key-definition scroll-down-cmd 'b-page-up map (current-global-map))))
+;; Create new key bindings for my new functions that weren't part of Brief
+(define-key b-mode-map "\C-c\C-b\C-n" 'b-next-bookmark)
+(define-key b-mode-map "\C-c\C-b\C-p" 'b-prev-bookmark)
+(define-key b-mode-map "\C-c\C-b\C-k" 'b-kill-all-bookmarks)
+(define-key b-mode-map "\C-c\C-b\C-l" 'b-list-bookmarks)
+(define-key b-mode-map "\C-c\C-b="    'b-allocate-next-available-bookmark)
+(define-key b-mode-map "\C-c\C-b\C-w" 'b-copy-to-register)
+(define-key b-mode-map "\C-c\C-b\C-y" 'b-insert-register)
 
-    ;; Setup the bookmarks on the M-digit keys, like in Brief
-    ;; Prefix args will have to be entered with the C-digit or C-U number methods...
-    (dotimes (digit b-max-bookmarks)
-      (define-key map (vector (list 'meta (+ digit ?0))) (b-make-set-bookmark digit)))
-    (define-key map "\M-j" 'b-jump-to-bookmark)
+;; Try and find the existing commands for scrolling up/down,
+;; as these are different in Emacs & XEmacs
+(let ((scroll-up-cmd (global-key-binding [(next)]))
+      (scroll-down-cmd (global-key-binding [(prior)])))
+  (when scroll-up-cmd
+    (substitute-key-definition scroll-up-cmd 'b-page-down b-mode-map (current-global-map)))
+  (when scroll-down-cmd
+    (substitute-key-definition scroll-down-cmd 'b-page-up b-mode-map (current-global-map))))
 
-    (setq b-mode-map map)))
+;; Setup the bookmarks on the M-digit keys, like in Brief
+;; Prefix args will have to be entered with the C-digit or C-U number methods...
+(dotimes (digit b-max-bookmarks)
+  (define-key b-mode-map (vector (list 'meta (+ digit ?0))) (b-make-set-bookmark digit)))
+(define-key b-mode-map "\M-j" 'b-jump-to-bookmark)
 
 ;;;
 ;;; B minor mode
