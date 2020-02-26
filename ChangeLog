@@ -1,3 +1,19 @@
+2020-02-26  Mike Woolley  <mike@bulsara.com>
+
+	* b-movement.el (b-window-height): Changed this function to handle
+	the different kinds of line-spacing and to return a more accurate
+	idea of the window height.
+	(b-page-down):
+	(b-page-up): Not sure why I was subtracting 1 from the
+	window-height (presumably because the window-height was wrong), so
+	removed this.
+	Also set minimum scrolled lines to 1.
+
+	* b-bookmark.el:
+	* b-movement.el: Put back the non "cl-" macros, as this is how the
+	code was originally and these days I'm silencing byte-compiler
+	warnings about `cl' by requiring it at compile time.
+
 2020-02-20  Mike Woolley  <mike@bulsara.com>
 
 	* b-bookmark.el (b-make-set-bookmark): Changed to return a named

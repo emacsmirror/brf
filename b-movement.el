@@ -1,4 +1,4 @@
-;;; b-movement.el --- Bookmark feature of b-mode
+;;; b-movement.el --- Paging & Scrolling features of b-mode
 
 ;; Copyright (C) 2000-2020 Mike Woolley
 ;; Author: Mike Woolley <mike@bulsara.com>
@@ -31,14 +31,23 @@
 ;;; Code:
 
 (require 'b-compat)
+(eval-when-compile
+  (require 'cl))
 
 (defvar b-temporary-goal-column 0
   "Original column of the start of a sequence B scrolling commands.")
 
 (defun b-window-height ()
-    "Return the window height, respecting the current line spacing."
-  (let ((height (window-body-height)))
-    (if line-spacing (round (/ height (1+ line-spacing))) height)))
+  "Return the window height in lines, respecting the current line spacing."
+  (let ((window-height (window-body-height (selected-window) t))
+	(line-height (frame-char-height)))
+    (cond ((floatp line-spacing)
+	   (setq line-height (* line-height (1+ line-spacing))))
+	  ((integerp line-spacing)
+	   (incf line-height line-spacing))
+	  (t
+	   (assert (null line-spacing) nil "Unknown line-spacing type!")))
+    (round window-height line-height)))
 
 (defun b-page-down (&optional arg)
   "Page the current window down, respecting `next-screen-context-lines'.
@@ -49,10 +58,12 @@ The optional ARG specifies the number of pages to scroll."
   (let ((pages (prefix-numeric-value arg)))
     (if (< pages 0)
 	(b-page-up (- pages))
-      (while (and (> pages 0) (not (pos-visible-in-window-p (point-max))))
-	(b-scroll-screen (- (1- (b-window-height))
-			    next-screen-context-lines))
-	(cl-decf pages)))))
+      (let ((lines (max (- (b-window-height)
+			   next-screen-context-lines)
+			1)))
+	(while (and (> pages 0) (not (pos-visible-in-window-p (point-max))))
+	  (b-scroll-screen lines)
+	  (decf pages))))))
 (put 'b-page-down 'b-scroll-command t)
 
 (defun b-page-up (&optional arg)
@@ -64,10 +75,12 @@ The optional ARG specifies the number of pages to scroll."
   (let ((pages (prefix-numeric-value arg)))
     (if (< pages 0)
 	(b-page-down (- pages))
-      (while (and (> pages 0) (not (pos-visible-in-window-p (point-min))))
-	(b-scroll-screen (- next-screen-context-lines
-			    (1- (b-window-height))))
-	(cl-decf pages)))))
+      (let ((lines (min (- next-screen-context-lines
+			   (b-window-height))
+			-1)))
+	(while (and (> pages 0) (not (pos-visible-in-window-p (point-min))))
+	  (b-scroll-screen lines)
+	  (decf pages))))))
 (put 'b-page-up 'b-scroll-command t)
 
 (defun b-scroll-screen (lines)

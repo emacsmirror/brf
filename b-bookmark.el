@@ -148,7 +148,7 @@
 ;; Remove fringe bitmap with:
 ;; (destroy-fringe-bitmap 'b-bookmark-bitmap-n)
 
-(cl-defstruct b-bookmark
+(defstruct b-bookmark
   "Bookmark."
   (number :read-only t)
   (marker :read-only t)
@@ -179,10 +179,10 @@ This function is meant to be called from a command's interactive form."
   (cl-labels ((digitp (char)
 		      (and (>= char ?0) (<= char ?9)))
 	      (read-digit (prompt)
-			  (cl-do* ((cursor-in-echo-area t)
-				   (char (ignore-errors (read-char prompt))
-					 (ignore-errors (read-char
-							 (format "%s(single digit) " prompt)))))
+			  (do* ((cursor-in-echo-area t)
+				(char (ignore-errors (read-char prompt))
+				      (ignore-errors (read-char
+						      (format "%s(single digit) " prompt)))))
 			      ((and char (digitp char)) char)
 			    (unless (characterp char)
 			      ;; Swallow the offending non-character event which is still pending
@@ -372,8 +372,8 @@ With ARG jump to the next one."
 	      :truncate-lines t
 	      :regexp-start-position (format "^[* ][ \t]+%d" b-current-bookmark)
 
-	      :elements (cl-loop for idx from 0 to (1- b-max-bookmarks)
-				 collect idx)
+	      :elements (loop for idx from 0 to (1- b-max-bookmarks)
+			      collect idx)
 
 	      :select-callback select-bookmark
 	      :display-string-function display-bookmark)))
