@@ -44,6 +44,13 @@
 
 ;;; Change Log:
 ;;
+;;  Version 1.16 2020-02-29 Mike Woolley <mike@bulsara.com>
+;;  * Changed the code to use the core C Emacs scrolling functions for
+;;  paging if `scroll-preserve-screen-position' is available, as the
+;;  builtin functions are more accurate when dealing with mixed font
+;;  heights, hidden lines etc.
+;;  * Added new command to delete all windows other than the current one.
+;;
 ;;  Version 1.15 2020-02-19 Mike Woolley <mike@bulsara.com>
 ;;  * Force conservative scrolling in B mode.
 ;;  * Minor fixes.
@@ -151,7 +158,7 @@ Set this to nil to conserve valuable mode line space."
 ;;;
 ;;; Version number
 ;;;
-(defconst b-version "1.15"
+(defconst b-version "1.16"
   "Version number of B mode.")
 
 (defun b-version ()
@@ -280,6 +287,8 @@ Set this to nil to conserve valuable mode line space."
   "Previous value of `hscroll-margin'.")
 (defvar b-prev-hscroll-step nil
   "Previous value of `hscroll-step'.")
+(defvar b-prev-scroll-preserve-screen-position nil
+  "Previous value of `scroll-preserve-screen-position'.")
 (defvar b-prev-c-m nil
   "Previous global binding of CR.")
 (defvar b-prev-c-j nil
@@ -314,6 +323,12 @@ Key bindings:
 	 (setq hscroll-margin 1)	  ; Scroll when we get to the end of the line
 	 (setq hscroll-step 1)		  ; Scroll one column at a time
 
+	 ;; Use Emacs scrolling to page up/dn when it supports the new
+	 ;; position-preserving behaviour
+	 (when (boundp 'scroll-preserve-screen-position)
+	   (setq b-prev-scroll-preserve-screen-position scroll-preserve-screen-position)
+	   (setq scroll-preserve-screen-position t))
+
 	 ;; Setup return (in the global map) to always indent
 	 (setq b-prev-c-m (global-key-binding "\C-m"))
 	 (setq b-prev-c-j (global-key-binding "\C-j"))
@@ -327,6 +342,8 @@ Key bindings:
 	 ;; Restore old settings
 	 (global-set-key "\C-j" b-prev-c-j)
 	 (global-set-key "\C-m" b-prev-c-m)
+	 (when (boundp 'scroll-preserve-screen-position)
+	   (setq scroll-preserve-screen-position b-prev-scroll-preserve-screen-position))
 	 (setq hscroll-step b-prev-hscroll-step)
 	 (setq hscroll-margin b-prev-hscroll-margin)
 	 (setq scroll-step b-prev-scroll-step)

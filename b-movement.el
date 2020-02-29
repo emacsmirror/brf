@@ -37,6 +37,10 @@
 (defvar b-temporary-goal-column 0
   "Original column of the start of a sequence B scrolling commands.")
 
+(defun b-emacs-scrolling-p ()
+  "Return non-nil if we're using Emacs scrolling rather than our scrolling."
+  (bound-and-true-p scroll-preserve-screen-position))
+
 (defun b-window-height ()
   "Return the window height in lines, respecting the current line spacing."
   (let ((window-height (window-body-height (selected-window) t))
@@ -89,12 +93,17 @@ This is a helper function used by `b-page-up' and `b-page-down'.
 It should still work in the presence of hidden lines."
   (unless (b-scroll-command-p last-command)
     (setq b-temporary-goal-column (current-column)))
-  (let ((point (point)))
-    (goto-char (window-start))
-    (forward-line lines)
-    (set-window-start (selected-window) (point))
-    (goto-char point))
-  (forward-line lines)
+  (if (b-emacs-scrolling-p)
+      ;; Scroll using the core C Emacs functions
+      (if (< lines 0) (scroll-down) (scroll-up))
+    ;; Use our method of scrolling, which is less accurate when there
+    ;; are mixed height fonts etc
+    (let ((point (point)))
+      (goto-char (window-start))
+      (forward-line lines)
+      (set-window-start (selected-window) (point))
+      (goto-char point))
+    (forward-line lines))
   (move-to-column b-temporary-goal-column))
 
 (defun b-row-up (&optional arg)

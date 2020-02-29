@@ -1,3 +1,16 @@
+2020-02-29  Mike Woolley  <mike@bulsara.com>
+
+	* b-movement.el (b-scroll-screen): Changed the code to use the
+	core C Emacs scrolling functions for paging if
+	`scroll-preserve-screen-position' is available and set. This is
+	because the builtin functions are more accurate when dealing with
+	mixed font heights, hidden lines etc.
+
+	* b.el (b-mode): Set `scroll-preserve-screen-position' to t, if
+	available in this version of Emacs.
+	* b.el (b-version): Increased version to 1.16 to reflect the
+	recent changes..
+
 2020-02-26  Mike Woolley  <mike@bulsara.com>
 
 	* b-movement.el (b-window-height): Changed this function to handle
