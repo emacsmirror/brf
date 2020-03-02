@@ -2,7 +2,6 @@
 
 ;; Copyright (C) 2000-2020 Mike Woolley
 ;; Author: Mike Woolley <mike@bulsara.com>
-;; Version: $Id$
 
 ;; This file is not part of Emacs
 

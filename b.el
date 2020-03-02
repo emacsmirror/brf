@@ -2,7 +2,7 @@
 
 ;; Copyright (C) 2000-2020 Mike Woolley
 ;; Author: Mike Woolley <mike@bulsara.com>
-;; Version: $Id$
+;; Version: 1.16
 ;; Keywords: convenience emulations
 
 ;; This file is not part of Emacs
