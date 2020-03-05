@@ -1,4 +1,4 @@
-;;; b-window.el --- Brief-style Window Management
+;;; b-window.el --- Brief-style Window Management -*- lexical-binding: t -*-
 
 ;; Copyright (C) 2000-2020 Mike Woolley
 ;; Author: Mike Woolley <mike@bulsara.com>

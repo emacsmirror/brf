@@ -1,4 +1,4 @@
-;;; b-undo.el --- Brief Cursor Motion Undo
+;;; b-undo.el --- Brief Cursor Motion Undo -*- lexical-binding: t -*-
 
 ;; Copyright (C) 2000-2020 Mike Woolley
 ;; Author: Mike Woolley <mike@bulsara.com>

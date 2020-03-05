@@ -1,3 +1,24 @@
+2020-03-05  Mike Woolley  <mike@bulsara.com>
+
+	* b.el: Changed to lexical-binding.
+	Added package tags.
+	(b-mode): Changes for lexical-binding.
+
+	* b-bookmark.el: Changed to lexical-binding.
+	(b-get-bookmark): Added this new accessor to
+	replace all the explicit `aref' calls.
+	(b-create-bookmark): Changes for lexical-binding.
+	(b-next-bookmark): Workaround lexical-binding "unused variable" warning.
+	(b-list-bookmarks): Stopped unavailability of `generic-menu'
+	generating an error.
+
+	* b-window.el:
+	* b-undo.el:
+	* b-movement.el:
+	* b-marking.el:
+	* b-editing.el:
+	* b-compat.el: Changed to lexical-binding.
+
 2020-02-29  Mike Woolley  <mike@bulsara.com>
 
 	* b-movement.el (b-scroll-screen): Changed the code to use the

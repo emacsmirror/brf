@@ -1,9 +1,11 @@
-;;; b.el --- Brief editor emulator
+;;; b.el --- Add functionality from the editor Brief -*- lexical-binding: t -*-
 
 ;; Copyright (C) 2000-2020 Mike Woolley
 ;; Author: Mike Woolley <mike@bulsara.com>
-;; Version: 1.16
-;; Keywords: convenience emulations
+;; Package-Version: 1.16
+;; Package-Requires: ((emacs "24"))
+;; Keywords: brief crisp emulations
+;; URL: https://bitbucket.org/MikeWoolley/b-mode
 
 ;; This file is not part of Emacs
 
@@ -24,8 +26,9 @@
 
 ;;; Commentary:
 ;;
-;;  This package provides an implementation of the some features that
-;;  I miss from the old DOS editor `Brief'.  Principally, these are:
+;;  This package is not an emulation of the old DOS editor `Brief',
+;;  but rather provides an implementation of specific features that I
+;;  miss from `Brief'.  Principally, these are:
 ;;
 ;;  * Line-mode cut and paste.
 ;;  * Column-mode cut and paste.
@@ -35,8 +38,12 @@
 ;;  * Easy window management.
 ;;
 ;;  However, the functions have been implemented in an Emacs-style,
-;;  respond to prefix args and where they override Emacs
-;;  functions live on the Emacs key bindings etc.
+;;  respond to prefix args and where they override Emacs functions,
+;;  live on the Emacs key bindings.
+;;
+;;  Moreover, functionality has been extended to those parts of Emacs
+;;  that were never part of `Brief'.  For example, text cut/copied in
+;;  line or column-mode can be saved/recalled in registers.
 ;;
 ;;  The code was originally tested on Emacs 20, Emacs 21 pretest and
 ;;  XEmacs 21.1 & 21.2.  However as of version 1.09 I'm only
@@ -138,7 +145,7 @@ A value of nil means B mode is not enabled.
 Setting this variable directly does not take effect;
 use either \\[execute-extended-command] customize or the function `b-mode'."
   :type 'boolean
-  :set (lambda (symbol value) (b-mode (or value 0)))
+  :set (lambda (_symbol value) (b-mode (or value 0)))
   :initialize 'custom-initialize-default
   :require 'b
   :version "20.4"

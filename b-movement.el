@@ -1,4 +1,4 @@
-;;; b-movement.el --- Paging & Scrolling features of b-mode
+;;; b-movement.el --- Paging & Scrolling features of b-mode -*- lexical-binding: t -*-
 
 ;; Copyright (C) 2000-2020 Mike Woolley
 ;; Author: Mike Woolley <mike@bulsara.com>

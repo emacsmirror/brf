@@ -1,4 +1,4 @@
-;;; b-editing.el --- Editing commands of b-mode
+;;; b-editing.el --- Editing commands of b-mode -*- lexical-binding: t -*-
 
 ;; Copyright (C) 2000-2020 Mike Woolley
 ;; Author: Mike Woolley <mike@bulsara.com>

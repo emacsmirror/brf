@@ -1,4 +1,4 @@
-;;; b-bookmark.el --- Bookmark feature of b-mode
+;;; b-bookmark.el --- Bookmark feature of b-mode -*- lexical-binding: t -*-
 
 ;; Copyright (C) 2000-2020 Mike Woolley
 ;; Author: Mike Woolley <mike@bulsara.com>
@@ -26,7 +26,7 @@
 ;;; Code:
 
 (require 'b-compat)
-(eval-when-compile (require 'cl)) ; lexical-let
+(eval-when-compile (require 'cl))
 
 (defface b-bookmark-face '((t (:background "khaki")))
   "Face used to show bookmark."
@@ -41,7 +41,7 @@
 ;;
 (when (defconst b-fringe-support-flag
 	(and (fboundp 'fringe-mode)
-	     (eval-when-compile (require 'fringe-helper "fringe-helper" t)))
+	     (eval-and-compile (require 'fringe-helper "fringe-helper" t)))
 	"Non-nil means this Emacs version has support for programmable fringes.")
 
   (fringe-helper-define 'b-bookmark-bitmap-0 nil
@@ -149,9 +149,9 @@
 
 (defstruct b-bookmark
   "Bookmark."
-  (number :read-only t)
-  (marker :read-only t)
-  (overlay :read-only t))
+  (number nil :read-only t)
+  (marker nil :read-only t)
+  (overlay nil :read-only t))
 
 (defconst b-max-bookmarks 10
   "The maximum number of bookmarks.")
@@ -166,6 +166,13 @@ This is used as the start point for the next/prev bookmark commands.")
 (defun b-valid-bookmark-number-p (number)
   "Return t if NUMBER is inside the range of valid bookmark numbers."
   (and (>= number 0) (< number b-max-bookmarks)))
+
+(defun b-get-bookmark (number)
+  "Return bookmark at NUMBER."
+  (assert (b-valid-bookmark-number-p number))
+  (let ((bookmark (aref b-bookmarks number)))
+    (assert (or (null bookmark) (= (b-bookmark-number bookmark) number)))
+    bookmark))
 
 (defun b-valid-bookmark-p (bookmark)
   "Return non-nil if BOOKMARK is set, nil otherwise."
@@ -215,7 +222,7 @@ If the command is given a prefix argument, then the bookmark is removed."
     (error "Bookmark not allowed in minibuffer"))
 
   ;; Lookup the bookmark and move it to the new location, create a new one if it doesn't exist yet
-  (let ((bookmark (aref b-bookmarks number)))
+  (let ((bookmark (b-get-bookmark number)))
     (if bookmark
 	(b-move-bookmark bookmark)
       (b-create-bookmark number)))
@@ -227,9 +234,9 @@ If the command is given a prefix argument, then the bookmark is removed."
   "Create new bookmark NUMBER at point."
   (let ((buffer (current-buffer))
 	(start-line (b-bol-position 1))
- 	(end-line (b-bol-position 2)))
-    (lexical-let ((marker (point-marker))
-		  (overlay (make-overlay start-line end-line buffer t nil)))
+	(end-line (b-bol-position 2)))
+    (let ((marker (point-marker))
+	  (overlay (make-overlay start-line end-line buffer t nil)))
       (set-marker-insertion-type marker t) ; Insert before the marker
       (overlay-put overlay 'face 'b-bookmark-face)
       (overlay-put overlay 'help-echo (format "Bookmark %d" number))
@@ -246,7 +253,7 @@ If the command is given a prefix argument, then the bookmark is removed."
       ;; if this property is set, so don't do this if XEmacs
       (unless b-xemacs-flag
 	(let ((protect-overlay
-	       #'(lambda (overlay after begin end &optional len)
+	       #'(lambda (overlay after _begin _end &optional _len)
 		   "Ensure the bookmark overlay is on the line containing the bookmark."
 		   (when after
 		     (save-excursion
@@ -263,7 +270,8 @@ If the command is given a prefix argument, then the bookmark is removed."
   "Allocate the next available bookmark."
   (interactive)
   (let ((number 0))
-    (while (and (b-valid-bookmark-number-p number) (b-valid-bookmark-p (aref b-bookmarks number)))
+    (while (and (b-valid-bookmark-number-p number)
+		(b-valid-bookmark-p (b-get-bookmark number)))
       (incf number))
     (if (b-valid-bookmark-number-p number)
 	(b-set-bookmark number)
@@ -281,7 +289,7 @@ If the command is given a prefix argument, then the bookmark is removed."
 (defun b-kill-bookmark (number)
   "Kill bookmark NUMBER."
   (interactive (b-read-bookmark-number "Kill Bookmark: "))
-  (let ((bookmark (aref b-bookmarks number)))
+  (let ((bookmark (b-get-bookmark number)))
     (unless (b-valid-bookmark-p bookmark)
       (error (format "Bookmark %d is not set" number)))
     (move-marker (b-bookmark-marker bookmark) nil)
@@ -291,7 +299,7 @@ If the command is given a prefix argument, then the bookmark is removed."
   "Kill all bookmarks."
   (interactive)
   (dotimes (number b-max-bookmarks)
-    (let ((bookmark (aref b-bookmarks number)))
+    (let ((bookmark (b-get-bookmark number)))
       (when (b-valid-bookmark-p bookmark)
 	(b-kill-bookmark number)))))
 
@@ -301,7 +309,7 @@ If the command is given a prefix argument, then the bookmark is removed."
   (interactive (b-read-bookmark-number "Jump to Bookmark: "))
 
   ;; Lookup the bookmark
-  (let ((bookmark (aref b-bookmarks number)))
+  (let ((bookmark (b-get-bookmark number)))
     (unless (b-valid-bookmark-p bookmark)
       (error (format "Bookmark %d is not set" number)))
     (let ((marker (b-bookmark-marker bookmark)))
@@ -313,18 +321,18 @@ If the command is given a prefix argument, then the bookmark is removed."
   "Jump to the next bookmark.
 With ARG jump to the previous one."
   (interactive "P")
-  (when (null b-current-bookmark)
-    (error "No bookmarks have been set"))
-
-  ;; Work out if we're going forwards or backwards through the bookmarks
-  (let ((dir-fn (if arg #'- #'+)))
-    ;; Find the next bookmark in that direction
-    (dotimes (i b-max-bookmarks (error "No bookmarks have been set"))
-      (let* ((number (mod (funcall dir-fn b-current-bookmark i 1) b-max-bookmarks))
-	     (bookmark (aref b-bookmarks number)))
-	(when (b-valid-bookmark-p bookmark)
-	  (b-jump-to-bookmark number)
-	  (return))))))
+  (block b-next-bookmark	  	; Annoying that this is necessary...
+    (when b-current-bookmark
+      ;; Work out if we're going forwards or backwards through the bookmarks
+      (let ((dir-fn (if arg #'- #'+)))
+	;; Find the next bookmark in that direction
+	(dotimes (i b-max-bookmarks)	; `dotimes' lexical-binding bug stops me using the result form now
+	  (let* ((number (mod (funcall dir-fn b-current-bookmark i 1) b-max-bookmarks))
+		 (bookmark (b-get-bookmark number)))
+	    (when (b-valid-bookmark-p bookmark)
+	      (b-jump-to-bookmark number)
+	      (return-from b-next-bookmark))))))
+    (error "No bookmarks have been set")))
 
 (defun b-prev-bookmark (&optional arg)
   "Jump to the previous bookmark.
@@ -335,12 +343,14 @@ With ARG jump to the next one."
 (defun b-list-bookmarks ()
   "Show list of all bookmarks."
   (interactive)
-  (when (null b-current-bookmark)
+  (unless b-current-bookmark
     (error "No bookmarks have been set"))
 
   ;; List selection buffer is provided by `generic-menu'
-  (eval-and-compile
-    (require 'generic-menu))
+  ;; *** Mike: Fix Me ***: Replace this with something more widely available (or my own code)
+  (unless (eval-and-compile
+	    (require 'generic-menu "generic-menu" t))
+    (error "Please install generic-menu"))
 
   (let ((select-bookmark #'(lambda (idx)
 			     (let ((bookmark (aref b-bookmarks idx)))

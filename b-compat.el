@@ -1,4 +1,4 @@
-;;; b-compat.el --- XEmacs compatibility code for b-mode
+;;; b-compat.el --- XEmacs compatibility code for b-mode -*- lexical-binding: t -*-
 
 ;; Copyright (C) 2000-2020 Mike Woolley
 ;; Author: Mike Woolley <mike@bulsara.com>
