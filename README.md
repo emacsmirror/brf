@@ -56,11 +56,12 @@ List All Bookmarks, and the mode uses the prefix C-c C-b for such commands.
 
 Customisable options are:
 
-* Bookmark Face
-* Bookmark Number face (when shown in Fringe)
-* Enable B-Mode
-* Mode-line string (including hiding)
-* Enable [Cursor Motion Undo](#cursor-motion-undo)
+1. Bookmark Face
+2. Bookmark Number face (when shown in Fringe)
+3. Enable B-Mode
+4. Mode-line string (including hiding)
+5. Enable [Cursor Motion Undo](#cursor-motion-undo)
+
 * **Key mapping**
  
  Default key mappings can be changed by modifying `b-mode-map` in the mode hook:
