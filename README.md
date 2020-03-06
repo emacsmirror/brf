@@ -15,12 +15,12 @@ Emacs.
 
 Principally these features are:
 
-* [Line-mode cut and paste](#line-&-column-mode-cut-and-paste)
-* [Column-mode cut and paste](#line-&-column-mode-cut-and-paste)
-* [Fully reversible paging and scrolling](#reversible-paging-and-scrolling)
-* [Temporary bookmarks](#temporary-bookmarks)
-* [Cursor motion undo](#cursor-motion-undo)
-* [Easy window management](#easy-window-management)
+* [Line-mode cut and paste](#markdown-header-line-column-mode-cut-and-paste)
+* [Column-mode cut and paste](#markdown-header-line-column-mode-cut-and-paste)
+* [Fully reversible paging and scrolling](#markdown-header-reversible-paging-and-scrolling)
+* [Temporary bookmarks](#markdown-header-temporary-bookmarks)
+* [Cursor motion undo](#markdown-header-cursor-motion-undo)
+* [Easy window management](#markdown-header-easy-window-management)
 
 However, these functions have been implemented in an Emacs-style -
 which means they respond to prefix args and where they override Emacs
