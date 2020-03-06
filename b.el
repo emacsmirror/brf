@@ -7,12 +7,12 @@
 ;; Keywords: brief crisp emulations
 ;; URL: https://bitbucket.org/MikeWoolley/b-mode
 
-;; This file is not part of Emacs
+;; This file is not part of GNU Emacs
 
 ;; This program is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
-;; the Free Software Foundation; either version 2, or (at your option)
-;; any later version.
+;; the Free Software Foundation, either version 3 of the License, or
+;; (at your option) any later version.
 
 ;; This program is distributed in the hope that it will be useful,
 ;; but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -20,119 +20,33 @@
 ;; GNU General Public License for more details.
 
 ;; You should have received a copy of the GNU General Public License
-;; along with this program; see the file COPYING.  If not, write to the
-;; Free Software Foundation, Inc., 59 Temple Place - Suite 330,
-;; Boston, MA 02111-1307, USA.
+;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 ;;; Commentary:
 ;;
-;;  This package is not an emulation of the old DOS editor `Brief',
-;;  but rather provides an implementation of specific features that I
-;;  miss from `Brief'.  Principally, these are:
+;; This package is not an emulation of the old DOS editor `Brief', but
+;; rather provides an implementation of specific features that I miss
+;; from `Brief'.  Principally these are:
 ;;
-;;  * Line-mode cut and paste.
-;;  * Column-mode cut and paste.
-;;  * Fully reversible paging and scrolling.
-;;  * Temporary bookmarks.
-;;  * Cursor motion undo.
-;;  * Easy window management.
+;; * Line-mode cut and paste.
+;; * Column-mode cut and paste.
+;; * Fully reversible paging and scrolling.
+;; * Temporary bookmarks.
+;; * Cursor motion undo.
+;; * Easy window management.
 ;;
-;;  However, the functions have been implemented in an Emacs-style,
-;;  respond to prefix args and where they override Emacs functions,
-;;  live on the Emacs key bindings.
-;;
-;;  Moreover, functionality has been extended to those parts of Emacs
-;;  that were never part of `Brief'.  For example, text cut/copied in
-;;  line or column-mode can be saved/recalled in registers.
-;;
-;;  The code was originally tested on Emacs 20, Emacs 21 pretest and
-;;  XEmacs 21.1 & 21.2.  However as of version 1.09 I'm only
-;;  targetting Emacs 24+, as XEmacs is dead...
+;; See the README.md file for further details.
 
 ;;; Change Log:
 ;;
-;;  Version 1.16 2020-02-29 Mike Woolley <mike@bulsara.com>
-;;  * Changed the code to use the core C Emacs scrolling functions for
-;;  paging if `scroll-preserve-screen-position' is available, as the
-;;  builtin functions are more accurate when dealing with mixed font
-;;  heights, hidden lines etc.
-;;  * Added new command to delete all windows other than the current one.
-;;
-;;  Version 1.15 2020-02-19 Mike Woolley <mike@bulsara.com>
-;;  * Force conservative scrolling in B mode.
-;;  * Minor fixes.
-;;
-;;  Version 1.14 2020-02-12 Mike Woolley <mike@bulsara.com>
-;;  * Implemented Brief-style Window Management.
-;;
-;;  Version 1.13 2020-02-11 Mike Woolley <mike@bulsara.com>
-;;  * Finally finished implementing Cursor Motion Undo (20 years after I started it!)
-;;  * Brought the Copyright statements up-to-date.
-;;
-;;  Version 1.12 2020-01-31 Mike Woolley <mike@bulsara.com>
-;;  * Use the new Gnu Emacs `rectangle-mark-mode' to implement Brief Column Marking.
-;;  * Also finished implementing the existing register functions.
-;;
-;;  Version 1.11 2019-05-05 Mike Woolley <mike@bulsara.com>
-;;  * Now use the Fringe to show bookmark numbers rather than the Margin.
-;;  * Cleaned up remaining compiler warnings.
-;;
-;;  Version 1.10 2019-02-28 Mike Woolley <mike@bulsara.com>
-;;  * Added new command to allocate the next available free bookmark.
-;;  * Fixes to doc strings and compiler warnings.
-;;
-;;  Version 1.09 2019-02-02 Mike Woolley <mike@bulsara.com>
-;;  * Fixed some minor problems that had crept in and made sure it
-;;  works & compiles clean on Emacs 26.
-;;
-;;  Version 1.08 2002-01-08 Mike Woolley <mike@bulsara.com>
-;;  * Split into separate files for ease of working.
-;;
-;;  Version 1.07 2001-08-12 Mike Woolley <mike@bulsara.com>
-;;  * Lots of small changes and bug fixes.
-;;
-;;  Version 1.06 2001-08-02 Mike Woolley <mike@bulsara.com>
-;;  * Renamed to b-mode, due to the large number of `brief.el's out
-;;  there and particularly because this mode is not really an emulation
-;;  of Brief, more a homage to Brief in Emacs.
-;;  * Added new commands to cycle backwards and forwards through the
-;;  bookmarks and to list them.
-;;  * Added new prefix key \C-c\c-b for infrequently used commands for
-;;  this mode.
-;;
-;;  Version 1.05 2001-05-21 Mike Woolley <mike@bulsara.com>
-;;  * Fixed some minor problems in the bookmark code.
-;;  * Now displays the bookmark number in the overlay.
-;;  * Turned `brief-protect-overlay' into a closure.
-;;  * Add command to remove bookmarks.
-;;
-;;  Version 1.04 2001-03-12 Mike Woolley <mike@bulsara.com>
-;;  * Added bookmarks.
-;;  * Moved the XEmacs specific code into functions.
-;;  * Removed the byte compiler warnings.
-;;
-;;  Version 1.03 2001-02-22 Mike Woolley <mike@bulsara.com>
-;;  * Added tab key handling.
-;;  * newline-and-indent setup in global map.
-;;  * Tidied up doc strings.
-;;
-;;  Version 1.02 2001-02-15 Mike Woolley <mike@bulsara.com>
-;;  * Changed M-d to delete a line rather than kill a line.
-;;
-;;  Version 1.01 - Mike Woolley <mike@bulsara.com>
-;;  * Added Brief-style Home and End key handling
-;;
-;;  Version 1.00 - Mike Woolley <mike@bulsara.com>
-;;  * Initial version.
-;;  * Cursor motion undo not working yet.
-;;
+;; See the ChangeLog file.
 
 ;;; Code:
 
 (require 'b-compat)
 
 (defgroup b nil
-  "Emulator for Brief."
+  "Add functionality from the editor Brief."
   :prefix "b-"
   :group 'editing)
 
