@@ -22,17 +22,17 @@ Principally these features are:
 * [Cursor motion undo](#markdown-header-cursor-motion-undo)
 * [Easy window management](#markdown-header-easy-window-management)
 
-However, these functions have been implemented in an Emacs-style -
-which means they respond to prefix args and where they override Emacs
+However they have been implemented in an Emacs-style. This means the
+functions respond to prefix args and where they override Emacs
 functions, they live on the Emacs key bindings as well as the original
 Brief keys.
 
 Moreover, functionality has been extended to those parts of Emacs
 that were never part of Brief.  For example, text cut/copied in
-line or column-mode can be saved/recalled in registers etc.
+line or column-mode can be saved/recalled in registers.
 
-Also some functionality was never part of Brief nor Emacs, for example
-List All Bookmarks, and the mode uses the prefix C-c C-b for such commands.
+Also some functionality was never part of Brief nor Emacs (for example
+`List Bookmarks`) and the mode uses the prefix `C-c C-b` for such commands.
 
 ## Setup
 
@@ -45,7 +45,9 @@ List All Bookmarks, and the mode uses the prefix C-c C-b for such commands.
   (b-mode t) ; or set via customize below
 ```
 
-* **Package** Hopefully coming soon...
+* **Package** 
+
+Coming soon...
 
 ### Customisation
 * **Options**
@@ -60,7 +62,7 @@ Customisable options are:
 2. Bookmark Number face (when shown in Fringe)
 3. Enable B-Mode
 4. Mode-line string (including hiding)
-5. Enable [Cursor Motion Undo](#cursor-motion-undo)
+5. Enable [Cursor Motion Undo](#markdown-header-cursor-motion-undo)
 
 * **Key mapping**
  
