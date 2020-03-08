@@ -1,3 +1,18 @@
+2020-03-08  Mike Woolley  <mike@bulsara.com>
+
+	* b.el (b-mode-map): Put key-mapping code back to how it was
+	before, because the MELPA package checking tool had warnings about
+	the new code.
+	Added package dependency on `fringe-helper'.
+
+	* b-bookmark.el (b-list-bookmarks): Fixed compiler warning when
+	the package is compiled without `generic-menu' installed.
+
+	* *.el: Changed GPL 3 text to the very latest.
+	Clarified usages of #'.
+
+	* LICENSE.md: Added this file with GPL 3 text.
+
 2020-03-06  Mike Woolley  <mike@bulsara.com>
 
 	* *.el: Updated GPL to version 3.

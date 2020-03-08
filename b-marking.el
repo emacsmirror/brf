@@ -5,7 +5,7 @@
 
 ;; This file is not part of GNU Emacs
 
-;; This program is free software; you can redistribute it and/or modify
+;; This program is free software: you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
 ;; the Free Software Foundation, either version 3 of the License, or
 ;; (at your option) any later version.
@@ -16,10 +16,10 @@
 ;; GNU General Public License for more details.
 
 ;; You should have received a copy of the GNU General Public License
-;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
+;; along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 ;;; Commentary:
-;;
+
 ;; See the README.md file for further details.
 
 ;;; Code:
@@ -76,11 +76,11 @@ line is terminated with a newline."
   (when (and (fboundp 'make-local-hook)
 	     (or b-xemacs-flag (< emacs-major-version 21)))
       (make-local-hook 'post-command-hook)) ;; Not needed since Emacs 21
-  (add-hook 'post-command-hook 'b-mark-line-hook nil t))
+  (add-hook 'post-command-hook #'b-mark-line-hook nil t))
 
 (defun b-stop-line-marking ()
   "Stops line-marking mode."
-  (remove-hook 'post-command-hook  'b-mark-line-hook t)
+  (remove-hook 'post-command-hook #'b-mark-line-hook t)
   (move-to-column b-line-mark-col))
 
 (defun b-line-marking-p ()

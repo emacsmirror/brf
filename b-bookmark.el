@@ -5,7 +5,7 @@
 
 ;; This file is not part of GNU Emacs
 
-;; This program is free software; you can redistribute it and/or modify
+;; This program is free software: you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
 ;; the Free Software Foundation, either version 3 of the License, or
 ;; (at your option) any later version.
@@ -16,10 +16,10 @@
 ;; GNU General Public License for more details.
 
 ;; You should have received a copy of the GNU General Public License
-;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
+;; along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 ;;; Commentary:
-;;
+
 ;; See the README.md file for further details.
 
 ;;; Code:
@@ -38,11 +38,12 @@
 ;;
 ;; Fringe bitmaps
 ;;
-(when (defconst b-fringe-support-flag
+(defconst b-fringe-support-flag
 	(and (fboundp 'fringe-mode)
 	     (eval-and-compile (require 'fringe-helper "fringe-helper" t)))
 	"Non-nil means this Emacs version has support for programmable fringes.")
 
+(when b-fringe-support-flag
   (fringe-helper-define 'b-bookmark-bitmap-0 nil
     "..XXXX.."
     ".XX..XX."
@@ -252,12 +253,12 @@ If the command is given a prefix argument, then the bookmark is removed."
       ;; if this property is set, so don't do this if XEmacs
       (unless b-xemacs-flag
 	(let ((protect-overlay
-	       #'(lambda (overlay after _begin _end &optional _len)
-		   "Ensure the bookmark overlay is on the line containing the bookmark."
-		   (when after
-		     (save-excursion
-		       (goto-char marker)
-		       (move-overlay overlay (b-bol-position 1) (b-bol-position 2)))))))
+	       (lambda (overlay after _begin _end &optional _len)
+		 "Ensure the bookmark overlay is on the line containing the bookmark."
+		 (when after
+		   (save-excursion
+		     (goto-char marker)
+		     (move-overlay overlay (b-bol-position 1) (b-bol-position 2)))))))
 	  (overlay-put overlay 'modification-hooks (list protect-overlay))
 	  (overlay-put overlay 'insert-in-front-hooks (list protect-overlay))))
 
@@ -347,44 +348,48 @@ With ARG jump to the next one."
 
   ;; List selection buffer is provided by `generic-menu'
   ;; *** Mike: Fix Me ***: Replace this with something more widely available (or my own code)
-  (unless (eval-and-compile
-	    (require 'generic-menu "generic-menu" t))
-    (error "Please install generic-menu"))
+  (if (eval-and-compile
+	(require 'generic-menu "generic-menu" t))
+      (let ((select-bookmark (lambda (idx)
+			       (let ((bookmark (aref b-bookmarks idx)))
+				 (cond ((b-valid-bookmark-p bookmark)
+					(gm-quit)
+					(b-jump-to-bookmark idx))
+				       (t	; Bookmark not set
+					(message "Bookmark %d has not been set" idx)
+					(ding))))))
+	    (display-bookmark (lambda (idx)
+				(let ((bookmark (aref b-bookmarks idx)))
+				  (cond ((b-valid-bookmark-p bookmark)
+					 (let ((marker (b-bookmark-marker bookmark)))
+					   (with-current-buffer (marker-buffer marker)
+					     (save-excursion
+					       (goto-char marker)
+					       (format "%s %d\tL%d\tC%d\t%d%%\t%s"
+						       (if (= b-current-bookmark idx) "*" " ")
+						       idx
+						       (b-current-line) (b-current-column)
+						       (/ (* (point) 100) (buffer-size))
+						       (buffer-name))))))
+					(t ; Bookmark not set
+					 (format "  %d <NOT SET>" idx)))))))
+	(gm-popup :buffer-name "*Bookmarks*"
+		  :header-line "Bookmarks: [SELECT] to Jump to bookmark, [q] to Quit."
+		  :max-entries b-max-bookmarks
+		  :truncate-lines t
+		  :regexp-start-position (format "^[* ][ \t]+%d" b-current-bookmark)
 
-  (let ((select-bookmark #'(lambda (idx)
-			     (let ((bookmark (aref b-bookmarks idx)))
-			       (cond ((b-valid-bookmark-p bookmark)
-				      (gm-quit)
-				      (b-jump-to-bookmark idx))
-				     (t	; Bookmark not set
-				      (message "Bookmark %d has not been set" idx)
-				      (ding))))))
-	(display-bookmark #'(lambda (idx)
-			      (let ((bookmark (aref b-bookmarks idx)))
-				(cond ((b-valid-bookmark-p bookmark)
-				       (let ((marker (b-bookmark-marker bookmark)))
-					 (with-current-buffer (marker-buffer marker)
-					   (save-excursion
-					     (goto-char marker)
-					     (format "%s %d\tL%d\tC%d\t%d%%\t%s"
-						     (if (= b-current-bookmark idx) "*" " ")
-						     idx
-						     (b-current-line) (b-current-column)
-						     (/ (* (point) 100) (buffer-size))
-						     (buffer-name))))))
-				      (t ; Bookmark not set
-				       (format "  %d <NOT SET>" idx)))))))
-    (gm-popup :buffer-name "*Bookmarks*"
-	      :header-line "Bookmarks: [SELECT] to Jump to bookmark, [q] to Quit."
-	      :max-entries b-max-bookmarks
-	      :truncate-lines t
-	      :regexp-start-position (format "^[* ][ \t]+%d" b-current-bookmark)
+		  :elements (loop for idx from 0 to (1- b-max-bookmarks)
+				  collect idx)
 
-	      :elements (loop for idx from 0 to (1- b-max-bookmarks)
-			      collect idx)
+		  :select-callback select-bookmark
+		  :display-string-function display-bookmark))
 
-	      :select-callback select-bookmark
-	      :display-string-function display-bookmark)))
+    ;; `generic-menu' not available
+    (eval-when-compile
+      (defun gm-quit ())
+      (defun gm-popup (&rest _args)))
+    (error "Please install generic-menu")))
 
 (defun b-current-line ()
   "Return current line number of point (starting at 1)."

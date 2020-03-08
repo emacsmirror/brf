@@ -5,7 +5,7 @@
 
 ;; This file is not part of GNU Emacs
 
-;; This program is free software; you can redistribute it and/or modify
+;; This program is free software: you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
 ;; the Free Software Foundation, either version 3 of the License, or
 ;; (at your option) any later version.
@@ -16,10 +16,10 @@
 ;; GNU General Public License for more details.
 
 ;; You should have received a copy of the GNU General Public License
-;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
+;; along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 ;;; Commentary:
-;;
+
 ;; See the README.md file for further details.
 
 ;;; Code:
@@ -50,9 +50,9 @@
 
 ;; Function to get the position of the beginning of the line
 (cond ((fboundp 'line-beginning-position)
-       (defalias 'b-bol-position 'line-beginning-position))
+       (defalias 'b-bol-position #'line-beginning-position))
       ((fboundp 'point-at-bol)
-       (defalias 'b-bol-position 'point-at-bol))
+       (defalias 'b-bol-position #'point-at-bol))
       (t ; Supply our own definition
        (defun b-bol-position (&optional n)
 	 "Return the index of the character at the start of the line."

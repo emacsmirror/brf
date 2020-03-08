@@ -5,7 +5,7 @@
 
 ;; This file is not part of GNU Emacs
 
-;; This program is free software; you can redistribute it and/or modify
+;; This program is free software: you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
 ;; the Free Software Foundation, either version 3 of the License, or
 ;; (at your option) any later version.
@@ -16,10 +16,10 @@
 ;; GNU General Public License for more details.
 
 ;; You should have received a copy of the GNU General Public License
-;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
+;; along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 ;;; Commentary:
-;;
+
 ;;  Implements Cursor Motion Undo just like in Brief.
 ;;  This works with both default Emacs Undo and Redo(+).el.
 ;;  Finally finished this off 20 years after I started it...
@@ -33,8 +33,8 @@
   :type 'boolean
   :set (lambda (symbol value)
 	 (if value
-	     (add-hook 'post-command-hook 'b-undo-post-command-hook)
-	   (remove-hook 'post-command-hook 'b-undo-post-command-hook))
+	     (add-hook 'post-command-hook #'b-undo-post-command-hook)
+	   (remove-hook 'post-command-hook #'b-undo-post-command-hook))
 	 (set-default symbol value))
   :initialize 'custom-initialize-default
   :group 'b)
