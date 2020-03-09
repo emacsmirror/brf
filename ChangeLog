@@ -1,3 +1,13 @@
+2020-03-09  Mike Woolley  <mike@bulsara.com>
+
+	* b-bookmark.el (b-list-bookmarks): Changed the code which makes
+	`generic-menu' optional to use `declare-function', as this is a bit
+	cleaner.
+
+	* b-bookmark.el:
+	* b-marking.el:
+	* b-window.el: Changed `error' to `user-error'.
+
 2020-03-08  Mike Woolley  <mike@bulsara.com>
 
 	* b.el (b-mode-map): Put key-mapping code back to how it was

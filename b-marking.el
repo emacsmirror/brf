@@ -315,7 +315,7 @@ However, correctly insert text that was killed in line-mode and
 also indent it."
   (interactive "*p")
   (unless (eq last-command 'yank)
-    (error "Previous command was not a yank"))
+    (user-error "Previous command was not a yank"))
   (setq this-command 'yank)
   (cond ((b-line-kill-p (current-kill arg t))
 	 (cond (b-last-yank-was-line

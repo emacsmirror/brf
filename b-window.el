@@ -112,8 +112,7 @@
   (let ((window (window-in-direction dir)))
     (if window
 	(delete-window window)
-      (funcall (if (fboundp 'user-error) 'user-error 'error)
-	       "No window %s from selected window" dir))))
+      (user-error "No window %s from selected window" dir))))
 
 (defun b-delete-window-up ()
   "Delete the window above the current window."

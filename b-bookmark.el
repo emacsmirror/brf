@@ -199,7 +199,7 @@ This function is meant to be called from a command's interactive form."
     (let ((number (or current-prefix-arg
 		      (- (read-digit prompt) ?0))))
       (unless (b-valid-bookmark-number-p number)
-	(error (format "%d is an invalid bookmark number" number)))
+	(user-error (format "%d is an invalid bookmark number" number)))
       (list number))))
 
 (defun b-make-set-bookmark (number)
@@ -219,7 +219,7 @@ If the command is given a prefix argument, then the bookmark is removed."
 
   ;; Don't allow bookmark to be dropped in the minibuffer
   (when (window-minibuffer-p (selected-window))
-    (error "Bookmark not allowed in minibuffer"))
+    (user-error "Bookmark not allowed in minibuffer"))
 
   ;; Lookup the bookmark and move it to the new location, create a new one if it doesn't exist yet
   (let ((bookmark (b-get-bookmark number)))
@@ -275,7 +275,7 @@ If the command is given a prefix argument, then the bookmark is removed."
       (incf number))
     (if (b-valid-bookmark-number-p number)
 	(b-set-bookmark number)
-      (error "All bookmarks allocated"))))
+      (user-error "All bookmarks allocated"))))
 
 (defun b-move-bookmark (bookmark)
   "Move BOOKMARK to point."
@@ -291,7 +291,7 @@ If the command is given a prefix argument, then the bookmark is removed."
   (interactive (b-read-bookmark-number "Kill Bookmark: "))
   (let ((bookmark (b-get-bookmark number)))
     (unless (b-valid-bookmark-p bookmark)
-      (error (format "Bookmark %d is not set" number)))
+      (user-error (format "Bookmark %d is not set" number)))
     (move-marker (b-bookmark-marker bookmark) nil)
     (delete-overlay (b-bookmark-overlay bookmark))))
 
@@ -311,7 +311,7 @@ If the command is given a prefix argument, then the bookmark is removed."
   ;; Lookup the bookmark
   (let ((bookmark (b-get-bookmark number)))
     (unless (b-valid-bookmark-p bookmark)
-      (error (format "Bookmark %d is not set" number)))
+      (user-error (format "Bookmark %d is not set" number)))
     (let ((marker (b-bookmark-marker bookmark)))
       (switch-to-buffer (marker-buffer marker))
       (goto-char marker)))
@@ -332,7 +332,7 @@ With ARG jump to the previous one."
 	    (when (b-valid-bookmark-p bookmark)
 	      (b-jump-to-bookmark number)
 	      (return-from b-next-bookmark))))))
-    (error "No bookmarks have been set")))
+    (user-error "No bookmarks have been set")))
 
 (defun b-prev-bookmark (&optional arg)
   "Jump to the previous bookmark.
@@ -344,22 +344,20 @@ With ARG jump to the next one."
   "Show list of all bookmarks."
   (interactive)
   (unless b-current-bookmark
-    (error "No bookmarks have been set"))
+    (user-error "No bookmarks have been set"))
 
   ;; List selection buffer is provided by `generic-menu'
   ;; *** Mike: Fix Me ***: Replace this with something more widely available (or my own code)
-  (if (eval-and-compile
-	(require 'generic-menu "generic-menu" t))
+  (if (require 'generic-menu "generic-menu" t)
       (let ((select-bookmark (lambda (idx)
-			       (let ((bookmark (aref b-bookmarks idx)))
+			       (let ((bookmark (b-get-bookmark idx)))
 				 (cond ((b-valid-bookmark-p bookmark)
 					(gm-quit)
 					(b-jump-to-bookmark idx))
-				       (t	; Bookmark not set
-					(message "Bookmark %d has not been set" idx)
-					(ding))))))
+				       (t ; Bookmark not set
+					(user-error "Bookmark %d is not set" idx))))))
 	    (display-bookmark (lambda (idx)
-				(let ((bookmark (aref b-bookmarks idx)))
+				(let ((bookmark (b-get-bookmark idx)))
 				  (cond ((b-valid-bookmark-p bookmark)
 					 (let ((marker (b-bookmark-marker bookmark)))
 					   (with-current-buffer (marker-buffer marker)
@@ -386,10 +384,9 @@ With ARG jump to the next one."
 		  :display-string-function display-bookmark))
 
     ;; `generic-menu' not available
-    (eval-when-compile
-      (defun gm-quit ())
-      (defun gm-popup (&rest _args)))
-    (error "Please install generic-menu")))
+    (declare-function gm-popup "ext:generic-menu" (&rest plain-properties))
+    (declare-function gm-quit "ext:generic-menu" nil)
+    (user-error "Please install generic-menu")))
 
 (defun b-current-line ()
   "Return current line number of point (starting at 1)."
