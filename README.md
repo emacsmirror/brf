@@ -41,8 +41,8 @@ Also some functionality was never part of Brief nor Emacs (for example
 * **Manual**
 
 ```emacs-lisp
-  (require 'b)
-  (b-mode t) ; or set via customize below
+   (require 'b)
+   (b-mode t) ; or set via customize
 ```
 
 * **Package** 
@@ -53,7 +53,7 @@ Coming soon...
 * **Options**
 
 ```emacs-lisp
-  (customize-group 'b)
+   (customize-group 'b)
 ```
 
 Customisable options are:
@@ -67,11 +67,11 @@ Customisable options are:
 * **Key mapping**
  
  Default key mappings can be changed by modifying `b-mode-map` in the mode hook:
-  
+
 ```emacs-lisp
-  (add-hook 'b-mode-hook
-     #'(lambda ()
-         (define-key b-mode-map ...)))
+   (add-hook 'b-mode-hook
+     (lambda ()
+       (define-key b-mode-map ...)))
 ```
 
 ## Features
@@ -83,6 +83,8 @@ Customisable options are:
 current line.
 * Yanked text is inserted in line or column mode, if that's how it was
 marked.
+* Text in Line or Column mode can be stored and recalled from registers, 
+as well as the kill-ring.
 
 | Key         | Action                        |
 |-------------|-------------------------------|
