@@ -349,44 +349,86 @@ With ARG jump to the next one."
   ;; List selection buffer is provided by `generic-menu'
   ;; *** Mike: Fix Me ***: Replace this with something more widely available (or my own code)
   (if (require 'generic-menu "generic-menu" t)
-      (let ((select-bookmark (lambda (idx)
-			       (let ((bookmark (b-get-bookmark idx)))
-				 (cond ((b-valid-bookmark-p bookmark)
-					(gm-quit)
-					(b-jump-to-bookmark idx))
-				       (t ; Bookmark not set
-					(user-error "Bookmark %d is not set" idx))))))
-	    (display-bookmark (lambda (idx)
-				(let ((bookmark (b-get-bookmark idx)))
-				  (cond ((b-valid-bookmark-p bookmark)
-					 (let ((marker (b-bookmark-marker bookmark)))
-					   (with-current-buffer (marker-buffer marker)
-					     (save-excursion
-					       (goto-char marker)
-					       (format "%s %d\tL%d\tC%d\t%d%%\t%s"
-						       (if (= b-current-bookmark idx) "*" " ")
-						       idx
-						       (b-current-line) (b-current-column)
-						       (/ (* (point) 100) (buffer-size))
-						       (buffer-name))))))
-					(t ; Bookmark not set
-					 (format "  %d <NOT SET>" idx)))))))
-	(gm-popup :buffer-name "*Bookmarks*"
-		  :header-line "Bookmarks: [SELECT] to Jump to bookmark, [q] to Quit."
+      (let ((map (make-sparse-keymap)))
+	(require 'derived) ; `generic-menu' should really be doing this...
+
+	;; Add some command to delete bookmarks
+	(define-key map "d" 'b-bookmark-menu-kill)
+	(define-key map "k" 'b-bookmark-menu-kill-all)
+	(define-key map "?" nil) ; Disable `generic-mode'-specific help
+
+	;; Show the Bookmark menu
+	(gm-popup :buffer-name "*B Bookmarks*"
+		  :mode-name "Bookmarks"
+		  :header-line "Bookmarks: [SELECT] Jump to bookmark, [d] Delete, [k] Delete All, [q] Quit."
 		  :max-entries b-max-bookmarks
 		  :truncate-lines t
 		  :regexp-start-position (format "^[* ][ \t]+%d" b-current-bookmark)
-
 		  :elements (loop for idx from 0 to (1- b-max-bookmarks)
 				  collect idx)
+		  :keymap map
+		  :font-lock-keywords #'b-bookmark-menu-font-lock
+		  :select-callback #'b-bookmark-menu-select
+		  :display-string-function #'b-bookmark-menu-display)
 
-		  :select-callback select-bookmark
-		  :display-string-function display-bookmark))
+	;; Size the window to show all the bookmarks, if possible
+	(fit-window-to-buffer))
 
     ;; `generic-menu' not available
+    ;; Silence the byte-compiler, about the missing gm- functions
     (declare-function gm-popup "ext:generic-menu" (&rest plain-properties))
     (declare-function gm-quit "ext:generic-menu" nil)
+    (declare-function gm-full-refresh "ext:generic-menu" nil)
     (user-error "Please install generic-menu")))
+
+(defun b-bookmark-menu-font-lock ()
+  "Return font-lock keywords to fontify the menu buffer."
+  '(("\\<[0-9]\\>" . font-lock-constant-face)	; Bookmark #
+    ("\\<NOT SET\\>" . compilation-error-face)	; "NOT SET"
+    ("^\\*" . font-lock-function-name-face)	; Current bookmark
+    ("%\\b\\(.*\\)$" . 1)))			; Buffer name
+
+(defun b-bookmark-menu-select (idx)
+  "Jump to bookmark at menu IDX."
+  (let ((bookmark (b-get-bookmark idx)))
+    (cond ((b-valid-bookmark-p bookmark)
+	   (gm-quit)
+	   (b-jump-to-bookmark idx))
+	  (t ; Bookmark not set
+	   (user-error "Bookmark %d is not set" idx)))))
+
+(defun b-bookmark-menu-display (idx)
+  "Return display string for bookmark at menu IDX."
+  (let ((bookmark (b-get-bookmark idx)))
+    (cond ((b-valid-bookmark-p bookmark)
+	   (let ((marker (b-bookmark-marker bookmark)))
+	     (with-current-buffer (marker-buffer marker)
+	       (save-excursion
+		 (goto-char marker)
+		 (format "%s %d\tL%d\tC%d\t%d%%\t%s"
+			 (if (= b-current-bookmark idx) "*" " ")
+			 idx
+			 (b-current-line) (b-current-column)
+			 (/ (* (point) 100) (max (buffer-size) 1))
+			 (buffer-name))))))
+	  (t ; Bookmark not set
+	   (format "  %d NOT SET" idx)))))
+
+(defun b-bookmark-menu-kill ()
+  "Kill the current bookmark when in the bookmark menu."
+  (interactive)
+  (let ((line (count-lines (point-min) (b-bol-position))))
+    (if (or (< line 1)
+	    (> line b-max-bookmarks))
+	(user-error "You aren't on a bookmark line")
+      (b-kill-bookmark (1- line))
+      (gm-full-refresh))))
+
+(defun b-bookmark-menu-kill-all ()
+  "Kill all bookmarks when in the bookmark menu."
+  (interactive)
+  (b-kill-all-bookmarks)
+  (gm-full-refresh))
 
 (defun b-current-line ()
   "Return current line number of point (starting at 1)."

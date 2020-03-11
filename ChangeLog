@@ -1,3 +1,9 @@
+2020-03-11  Mike Woolley  <mike@bulsara.com>
+
+	* b-bookmark.el (b-list-bookmarks): Added Delete and Delete All
+	commands to the bookmark menu.
+	Also added some code to fontify the menu buffer.
+
 2020-03-09  Mike Woolley  <mike@bulsara.com>
 
 	* b-bookmark.el (b-list-bookmarks): Changed the code which makes
