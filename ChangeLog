@@ -1,3 +1,12 @@
+2020-03-12  Mike Woolley  <mike@bulsara.com>
+
+	* b.el: Changed to define the mode using the modern
+	`define-minor-mode', rather than doing it by hand the old way. Now
+	that I've abandon compatibility with XEmacs & GNU Emacs versions
+	older than 24, this is unlikely to be a problem.
+	Added the keymap initialisation to it's `defvar', rather than
+	having a second step.
+
 2020-03-11  Mike Woolley  <mike@bulsara.com>
 
 	* b-bookmark.el (b-list-bookmarks): Added Delete and Delete All

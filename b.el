@@ -50,30 +50,10 @@
   :prefix "b-"
   :group 'editing)
 
-;;;###autoload
-(defcustom b-mode nil
-  "Track status of B mode.
-A value of t indicates B mode is enabled.
-A value of nil means B mode is not enabled.
-
-Setting this variable directly does not take effect;
-use either \\[execute-extended-command] customize or the function `b-mode'."
-  :type 'boolean
-  :set (lambda (_symbol value) (b-mode (or value 0)))
-  :initialize 'custom-initialize-default
-  :require 'b
-  :version "20.4"
-  :group 'b)
-
 (defcustom b-mode-modeline-string " B"
   "String to display in the mode-line when B mode is enabled.
 Set this to nil to conserve valuable mode line space."
   :type 'string
-  :group 'b)
-
-(defcustom b-mode-hook nil
-  "Hook run on entering B mode."
-  :type 'hook
   :group 'b)
 
 ;;;
@@ -100,9 +80,7 @@ Set this to nil to conserve valuable mode line space."
 ;;;
 ;;; Keymap
 ;;;
-(defvar b-mode-map nil
-  "Local keymap for B mode.")
-(unless b-mode-map
+(defvar b-mode-map
   (let ((map (make-sparse-keymap)))
     ;; Put the B-mode overrides on the same keys as Brief
     (define-key map [(control return)] 'b-insert-line)
@@ -196,7 +174,8 @@ Set this to nil to conserve valuable mode line space."
       (define-key map (vector (list 'meta (+ digit ?0))) (b-make-set-bookmark digit)))
     (define-key map "\M-j" 'b-jump-to-bookmark)
 
-    (setq b-mode-map map)))
+    map)
+  "Local keymap for B mode.")
 
 ;;;
 ;;; B minor mode
@@ -218,20 +197,11 @@ Set this to nil to conserve valuable mode line space."
 (defvar b-prev-c-j nil
   "Previous global binding of LF.")
 
-;;;###autoload
-(defun b-mode (&optional arg)
-  "Toggle B minor mode.
-With ARG, turn B mode on if ARG is positive, off otherwise.
-
-Key bindings:
-\\{b-mode-map}"
-  (interactive "P")
-
-  ;; Turn the mode on or off
-  (setq b-mode
-	(if (null arg)
-	    (not b-mode)
-	  (> (prefix-numeric-value arg) 0)))
+(define-minor-mode b-mode
+  nil ; Use default doc string
+  :lighter b-mode-modeline-string
+  :keymap b-mode-map
+  :global t
 
   ;; Processing that needs to be done when the mode is started or stopped
   (cond (b-mode
@@ -257,10 +227,7 @@ Key bindings:
 	 (setq b-prev-c-m (global-key-binding "\C-m"))
 	 (setq b-prev-c-j (global-key-binding "\C-j"))
 	 (global-set-key "\C-m" 'newline-and-indent)
-	 (global-set-key "\C-j" 'newline)
-
-	 ;; Run mode hook
-	 (run-hooks 'b-mode-hook))
+	 (global-set-key "\C-j" 'newline))
 
 	(t ; b-mode off
 	 ;; Restore old settings
@@ -273,10 +240,6 @@ Key bindings:
 	 (setq scroll-step b-prev-scroll-step)
 	 (setq-default truncate-lines b-prev-truncate-lines)
 	 (b-transient-mark-mode b-prev-mark-mode))))
-
-;; Add B mode as a minor mode
-(add-to-list 'minor-mode-alist '(b-mode b-mode-modeline-string))
-(add-to-list 'minor-mode-map-alist (cons 'b-mode b-mode-map))
 
 ;; Load successful
 (provide 'b)
