@@ -1,4 +1,4 @@
-;;; b-bookmark.el --- Bookmark feature of b-mode -*- lexical-binding: t -*-
+;;; brf-bookmark.el --- Bookmark feature of brf-mode -*- lexical-binding: t -*-
 
 ;; Copyright (C) 2000-2020 Mike Woolley
 ;; Author: Mike Woolley <mike@bulsara.com>
@@ -24,27 +24,27 @@
 
 ;;; Code:
 
-(require 'b-compat)
+(require 'brf-compat)
 (eval-when-compile (require 'cl))
 
-(defface b-bookmark-face '((t (:background "khaki")))
+(defface brf-bookmark-face '((t (:background "khaki")))
   "Face used to show bookmark."
-  :group 'b)
+  :group 'brf)
 
-(defface b-bookmark-number-face '((t (:foreground "red")))
+(defface brf-bookmark-number-face '((t (:foreground "red")))
   "Face used (to set color) of bookmark number."
-  :group 'b)
+  :group 'brf)
 
 ;;
 ;; Fringe bitmaps
 ;;
-(defconst b-fringe-support-flag
-	(and (fboundp 'fringe-mode)
-	     (eval-and-compile (require 'fringe-helper "fringe-helper" t)))
-	"Non-nil means this Emacs version has support for programmable fringes.")
+(defconst brf-fringe-support-flag
+  (and (fboundp 'fringe-mode)
+       (eval-and-compile (require 'fringe-helper "fringe-helper" t)))
+  "Non-nil means this Emacs version has support for programmable fringes.")
 
-(when b-fringe-support-flag
-  (fringe-helper-define 'b-bookmark-bitmap-0 nil
+(when brf-fringe-support-flag
+  (fringe-helper-define 'brf-bookmark-bitmap-0 nil
     "..XXXX.."
     ".XX..XX."
     "XX....XX"
@@ -54,7 +54,7 @@
     ".XX..XX."
     "..XXXX..")
 
-  (fringe-helper-define 'b-bookmark-bitmap-1 nil
+  (fringe-helper-define 'brf-bookmark-bitmap-1 nil
     "...XX..."
     "..XXX..."
     ".X.XX..."
@@ -64,7 +64,7 @@
     "...XX..."
     ".XXXXXX.")
 
-  (fringe-helper-define 'b-bookmark-bitmap-2 nil
+  (fringe-helper-define 'brf-bookmark-bitmap-2 nil
     "..XXXX.."
     "XX....XX"
     "......XX"
@@ -74,7 +74,7 @@
     "XX.....X"
     "XXXXXXXX")
 
-  (fringe-helper-define 'b-bookmark-bitmap-3 nil
+  (fringe-helper-define 'brf-bookmark-bitmap-3 nil
     "..XXXX.."
     "XX....XX"
     "......XX"
@@ -84,7 +84,7 @@
     "XX....XX"
     "..XXXX..")
 
-  (fringe-helper-define 'b-bookmark-bitmap-4 nil
+  (fringe-helper-define 'brf-bookmark-bitmap-4 nil
     "...XXXX."
     "..XX.XX."
     ".XX..XX."
@@ -94,7 +94,7 @@
     ".....XX."
     ".....XX.")
 
-  (fringe-helper-define 'b-bookmark-bitmap-5 nil
+  (fringe-helper-define 'brf-bookmark-bitmap-5 nil
     "XXXXXXXX"
     "XX......"
     "XX......"
@@ -104,7 +104,7 @@
     "X.....X."
     ".XXXXX..")
 
-  (fringe-helper-define 'b-bookmark-bitmap-6 nil
+  (fringe-helper-define 'brf-bookmark-bitmap-6 nil
     "..XXXX.."
     "XX....XX"
     "XX......"
@@ -114,7 +114,7 @@
     "XX....XX"
     "..XXXX..")
 
-  (fringe-helper-define 'b-bookmark-bitmap-7 nil
+  (fringe-helper-define 'brf-bookmark-bitmap-7 nil
     "XXXXXXXX"
     "X.....XX"
     "......XX"
@@ -124,7 +124,7 @@
     "..XX...."
     ".XX.....")
 
-  (fringe-helper-define 'b-bookmark-bitmap-8 nil
+  (fringe-helper-define 'brf-bookmark-bitmap-8 nil
     ".XXXXXX."
     "XX....XX"
     "XX....XX"
@@ -134,7 +134,7 @@
     "XX....XX"
     ".XXXXXX.")
 
-  (fringe-helper-define 'b-bookmark-bitmap-9 nil
+  (fringe-helper-define 'brf-bookmark-bitmap-9 nil
     "..XXXX.."
     "XX....XX"
     "XX....XX"
@@ -145,40 +145,40 @@
     "..XXXX.."))
 
 ;; Remove fringe bitmap with:
-;; (destroy-fringe-bitmap 'b-bookmark-bitmap-n)
+;; (destroy-fringe-bitmap 'brf-bookmark-bitmap-n)
 
-(defstruct b-bookmark
+(defstruct brf-bookmark
   "Bookmark."
   (number nil :read-only t)
   (marker nil :read-only t)
   (overlay nil :read-only t))
 
-(defconst b-max-bookmarks 10
+(defconst brf-max-bookmarks 10
   "The maximum number of bookmarks.")
 
-(defvar b-bookmarks (make-vector b-max-bookmarks nil)
+(defvar brf-bookmarks (make-vector brf-max-bookmarks nil)
   "Bookmark vector.")
 
-(defvar b-current-bookmark nil
+(defvar brf-current-bookmark nil
   "Last bookmark set or jumped to.
 This is used as the start point for the next/prev bookmark commands.")
 
-(defun b-valid-bookmark-number-p (number)
+(defun brf-valid-bookmark-number-p (number)
   "Return t if NUMBER is inside the range of valid bookmark numbers."
-  (and (>= number 0) (< number b-max-bookmarks)))
+  (and (>= number 0) (< number brf-max-bookmarks)))
 
-(defun b-get-bookmark (number)
+(defun brf-get-bookmark (number)
   "Return bookmark at NUMBER."
-  (assert (b-valid-bookmark-number-p number))
-  (let ((bookmark (aref b-bookmarks number)))
-    (assert (or (null bookmark) (= (b-bookmark-number bookmark) number)))
+  (assert (brf-valid-bookmark-number-p number))
+  (let ((bookmark (aref brf-bookmarks number)))
+    (assert (or (null bookmark) (= (brf-bookmark-number bookmark) number)))
     bookmark))
 
-(defun b-valid-bookmark-p (bookmark)
+(defun brf-valid-bookmark-p (bookmark)
   "Return non-nil if BOOKMARK is set, nil otherwise."
-  (and bookmark (marker-buffer (b-bookmark-marker bookmark))))
+  (and bookmark (marker-buffer (brf-bookmark-marker bookmark))))
 
-(defun b-read-bookmark-number (prompt)
+(defun brf-read-bookmark-number (prompt)
   "Read the bookmark number from the minibuffer as a single character digit.
 The user is prompted with PROMPT, which can be nil for no prompt.
 This function is meant to be called from a command's interactive form."
@@ -198,152 +198,152 @@ This function is meant to be called from a command's interactive form."
 
     (let ((number (or current-prefix-arg
 		      (- (read-digit prompt) ?0))))
-      (unless (b-valid-bookmark-number-p number)
+      (unless (brf-valid-bookmark-number-p number)
 	(user-error (format "%d is an invalid bookmark number" number)))
       (list number))))
 
-(defun b-make-set-bookmark (number)
+(defun brf-make-set-bookmark (number)
   "Generate a command to set bookmark NUMBER at point.
 If the command is given a prefix argument, then the bookmark is removed."
-  (defalias (intern (format "b-set-bookmark-%s" (number-to-string number)))
+  (defalias (intern (format "brf-set-bookmark-%s" (number-to-string number)))
     `(lambda (&optional arg)
        ,(format "Set bookmark %d at point.\nWith ARG, remove the bookmark instead." number)
        (interactive "P")
        (if arg
-	   (b-kill-bookmark ,number)
-	 (b-set-bookmark ,number)))))
+	   (brf-kill-bookmark ,number)
+	 (brf-set-bookmark ,number)))))
 
-(defun b-set-bookmark (number)
+(defun brf-set-bookmark (number)
   "Set bookmark NUMBER at point."
-  (interactive (b-read-bookmark-number "Set Bookmark: "))
+  (interactive (brf-read-bookmark-number "Set Bookmark: "))
 
   ;; Don't allow bookmark to be dropped in the minibuffer
   (when (window-minibuffer-p (selected-window))
     (user-error "Bookmark not allowed in minibuffer"))
 
   ;; Lookup the bookmark and move it to the new location, create a new one if it doesn't exist yet
-  (let ((bookmark (b-get-bookmark number)))
+  (let ((bookmark (brf-get-bookmark number)))
     (if bookmark
-	(b-move-bookmark bookmark)
-      (b-create-bookmark number)))
+	(brf-move-bookmark bookmark)
+      (brf-create-bookmark number)))
 
-  (setq b-current-bookmark number)
+  (setq brf-current-bookmark number)
   (message "Bookmark %d dropped" number))
 
-(defun b-create-bookmark (number)
+(defun brf-create-bookmark (number)
   "Create new bookmark NUMBER at point."
   (let ((buffer (current-buffer))
-	(start-line (b-bol-position 1))
-	(end-line (b-bol-position 2)))
+	(start-line (brf-bol-position 1))
+	(end-line (brf-bol-position 2)))
     (let ((marker (point-marker))
 	  (overlay (make-overlay start-line end-line buffer t nil)))
       (set-marker-insertion-type marker t) ; Insert before the marker
-      (overlay-put overlay 'face 'b-bookmark-face)
+      (overlay-put overlay 'face 'brf-bookmark-face)
       (overlay-put overlay 'help-echo (format "Bookmark %d" number))
-      (when b-fringe-support-flag
+      (when brf-fringe-support-flag
 	(let ((overlay-string (format "%d>" number))
-	      (bitmap (intern (format "b-bookmark-bitmap-%d" number))))
+	      (bitmap (intern (format "brf-bookmark-bitmap-%d" number))))
 	  (put-text-property 0 (length overlay-string)
-			     'display `(left-fringe ,bitmap b-bookmark-number-face)
+			     'display `(left-fringe ,bitmap brf-bookmark-number-face)
 			     overlay-string)
 	  (overlay-put overlay 'before-string overlay-string)))
 
       ;; Ensure the bookmark overlay is on the line containing the bookmark
       ;; XEmacs overlay compatibility doesn't support modification hook and barfs
       ;; if this property is set, so don't do this if XEmacs
-      (unless b-xemacs-flag
+      (unless brf-xemacs-flag
 	(let ((protect-overlay
 	       (lambda (overlay after _begin _end &optional _len)
 		 "Ensure the bookmark overlay is on the line containing the bookmark."
 		 (when after
 		   (save-excursion
 		     (goto-char marker)
-		     (move-overlay overlay (b-bol-position 1) (b-bol-position 2)))))))
+		     (move-overlay overlay (brf-bol-position 1) (brf-bol-position 2)))))))
 	  (overlay-put overlay 'modification-hooks (list protect-overlay))
 	  (overlay-put overlay 'insert-in-front-hooks (list protect-overlay))))
 
       ;; Add the new bookmark to the vector
-      (setf (aref b-bookmarks number)
-	    (make-b-bookmark :number number :marker marker :overlay overlay)))))
+      (setf (aref brf-bookmarks number)
+	    (make-brf-bookmark :number number :marker marker :overlay overlay)))))
 
-(defun b-allocate-next-available-bookmark ()
+(defun brf-allocate-next-available-bookmark ()
   "Allocate the next available bookmark."
   (interactive)
   (let ((number 0))
-    (while (and (b-valid-bookmark-number-p number)
-		(b-valid-bookmark-p (b-get-bookmark number)))
+    (while (and (brf-valid-bookmark-number-p number)
+		(brf-valid-bookmark-p (brf-get-bookmark number)))
       (incf number))
-    (if (b-valid-bookmark-number-p number)
-	(b-set-bookmark number)
+    (if (brf-valid-bookmark-number-p number)
+	(brf-set-bookmark number)
       (user-error "All bookmarks allocated"))))
 
-(defun b-move-bookmark (bookmark)
+(defun brf-move-bookmark (bookmark)
   "Move BOOKMARK to point."
   (let ((buffer (current-buffer))
-	(overlay (b-bookmark-overlay bookmark))
-	(start-line (b-bol-position 1))
- 	(end-line (b-bol-position 2)))
-    (move-marker (b-bookmark-marker bookmark) (point) buffer)
+	(overlay (brf-bookmark-overlay bookmark))
+	(start-line (brf-bol-position 1))
+ 	(end-line (brf-bol-position 2)))
+    (move-marker (brf-bookmark-marker bookmark) (point) buffer)
     (move-overlay overlay start-line end-line buffer)))
 
-(defun b-kill-bookmark (number)
+(defun brf-kill-bookmark (number)
   "Kill bookmark NUMBER."
-  (interactive (b-read-bookmark-number "Kill Bookmark: "))
-  (let ((bookmark (b-get-bookmark number)))
-    (unless (b-valid-bookmark-p bookmark)
+  (interactive (brf-read-bookmark-number "Kill Bookmark: "))
+  (let ((bookmark (brf-get-bookmark number)))
+    (unless (brf-valid-bookmark-p bookmark)
       (user-error (format "Bookmark %d is not set" number)))
-    (move-marker (b-bookmark-marker bookmark) nil)
-    (delete-overlay (b-bookmark-overlay bookmark))))
+    (move-marker (brf-bookmark-marker bookmark) nil)
+    (delete-overlay (brf-bookmark-overlay bookmark))))
 
-(defun b-kill-all-bookmarks ()
+(defun brf-kill-all-bookmarks ()
   "Kill all bookmarks."
   (interactive)
-  (dotimes (number b-max-bookmarks)
-    (let ((bookmark (b-get-bookmark number)))
-      (when (b-valid-bookmark-p bookmark)
-	(b-kill-bookmark number)))))
+  (dotimes (number brf-max-bookmarks)
+    (let ((bookmark (brf-get-bookmark number)))
+      (when (brf-valid-bookmark-p bookmark)
+	(brf-kill-bookmark number)))))
 
-(defun b-jump-to-bookmark (number)
+(defun brf-jump-to-bookmark (number)
   "Jump to bookmark NUMBER."
   ;; Read the bookmark number
-  (interactive (b-read-bookmark-number "Jump to Bookmark: "))
+  (interactive (brf-read-bookmark-number "Jump to Bookmark: "))
 
   ;; Lookup the bookmark
-  (let ((bookmark (b-get-bookmark number)))
-    (unless (b-valid-bookmark-p bookmark)
+  (let ((bookmark (brf-get-bookmark number)))
+    (unless (brf-valid-bookmark-p bookmark)
       (user-error (format "Bookmark %d is not set" number)))
-    (let ((marker (b-bookmark-marker bookmark)))
+    (let ((marker (brf-bookmark-marker bookmark)))
       (switch-to-buffer (marker-buffer marker))
       (goto-char marker)))
-  (setq b-current-bookmark number))
+  (setq brf-current-bookmark number))
 
-(defun b-next-bookmark (&optional arg)
+(defun brf-next-bookmark (&optional arg)
   "Jump to the next bookmark.
 With ARG jump to the previous one."
   (interactive "P")
-  (block b-next-bookmark	  	; Annoying that this is necessary...
-    (when b-current-bookmark
+  (block brf-next-bookmark	  	; Annoying that this is necessary...
+    (when brf-current-bookmark
       ;; Work out if we're going forwards or backwards through the bookmarks
       (let ((dir-fn (if arg #'- #'+)))
 	;; Find the next bookmark in that direction
-	(dotimes (i b-max-bookmarks)	; `dotimes' lexical-binding bug stops me using the result form now
-	  (let* ((number (mod (funcall dir-fn b-current-bookmark i 1) b-max-bookmarks))
-		 (bookmark (b-get-bookmark number)))
-	    (when (b-valid-bookmark-p bookmark)
-	      (b-jump-to-bookmark number)
-	      (return-from b-next-bookmark))))))
+	(dotimes (i brf-max-bookmarks)	; `dotimes' lexical-binding bug stops me using the result form now
+	  (let* ((number (mod (funcall dir-fn brf-current-bookmark i 1) brf-max-bookmarks))
+		 (bookmark (brf-get-bookmark number)))
+	    (when (brf-valid-bookmark-p bookmark)
+	      (brf-jump-to-bookmark number)
+	      (return-from brf-next-bookmark))))))
     (user-error "No bookmarks have been set")))
 
-(defun b-prev-bookmark (&optional arg)
+(defun brf-prev-bookmark (&optional arg)
   "Jump to the previous bookmark.
 With ARG jump to the next one."
   (interactive "P")
-  (b-next-bookmark (null arg)))
+  (brf-next-bookmark (null arg)))
 
-(defun b-list-bookmarks ()
+(defun brf-list-bookmarks ()
   "Show list of all bookmarks."
   (interactive)
-  (unless b-current-bookmark
+  (unless brf-current-bookmark
     (user-error "No bookmarks have been set"))
 
   ;; List selection buffer is provided by `generic-menu'
@@ -353,23 +353,23 @@ With ARG jump to the next one."
 	(require 'derived) ; `generic-menu' should really be doing this...
 
 	;; Add some command to delete bookmarks
-	(define-key map "d" 'b-bookmark-menu-kill)
-	(define-key map "k" 'b-bookmark-menu-kill-all)
+	(define-key map "d" 'brf-bookmark-menu-kill)
+	(define-key map "k" 'brf-bookmark-menu-kill-all)
 	(define-key map "?" nil) ; Disable `generic-mode'-specific help
 
 	;; Show the Bookmark menu
-	(gm-popup :buffer-name "*B Bookmarks*"
+	(gm-popup :buffer-name "*Brf Bookmarks*"
 		  :mode-name "Bookmarks"
 		  :header-line "Bookmarks: [SELECT] Jump to bookmark, [d] Delete, [k] Delete All, [q] Quit."
-		  :max-entries b-max-bookmarks
+		  :max-entries brf-max-bookmarks
 		  :truncate-lines t
-		  :regexp-start-position (format "^[* ][ \t]+%d" b-current-bookmark)
-		  :elements (loop for idx from 0 to (1- b-max-bookmarks)
+		  :regexp-start-position (format "^[* ][ \t]+%d" brf-current-bookmark)
+		  :elements (loop for idx from 0 to (1- brf-max-bookmarks)
 				  collect idx)
 		  :keymap map
-		  :font-lock-keywords #'b-bookmark-menu-font-lock
-		  :select-callback #'b-bookmark-menu-select
-		  :display-string-function #'b-bookmark-menu-display)
+		  :font-lock-keywords #'brf-bookmark-menu-font-lock
+		  :select-callback #'brf-bookmark-menu-select
+		  :display-string-function #'brf-bookmark-menu-display)
 
 	;; Size the window to show all the bookmarks, if possible
 	(fit-window-to-buffer))
@@ -381,64 +381,69 @@ With ARG jump to the next one."
     (declare-function gm-full-refresh "ext:generic-menu" nil)
     (user-error "Please install generic-menu")))
 
-(defun b-bookmark-menu-font-lock ()
+(defun brf-bookmark-menu-font-lock ()
   "Return font-lock keywords to fontify the menu buffer."
   '(("\\<[0-9]\\>" . font-lock-constant-face)	; Bookmark #
     ("\\<NOT SET\\>" . compilation-error-face)	; "NOT SET"
     ("^\\*" . font-lock-function-name-face)	; Current bookmark
     ("%\\b\\(.*\\)$" . 1)))			; Buffer name
 
-(defun b-bookmark-menu-select (idx)
+(defun brf-bookmark-menu-select (idx)
   "Jump to bookmark at menu IDX."
-  (let ((bookmark (b-get-bookmark idx)))
-    (cond ((b-valid-bookmark-p bookmark)
+  (let ((bookmark (brf-get-bookmark idx)))
+    (cond ((brf-valid-bookmark-p bookmark)
 	   (gm-quit)
-	   (b-jump-to-bookmark idx))
+	   (brf-jump-to-bookmark idx))
 	  (t ; Bookmark not set
 	   (user-error "Bookmark %d is not set" idx)))))
 
-(defun b-bookmark-menu-display (idx)
+(defun brf-bookmark-menu-display (idx)
   "Return display string for bookmark at menu IDX."
-  (let ((bookmark (b-get-bookmark idx)))
-    (cond ((b-valid-bookmark-p bookmark)
-	   (let ((marker (b-bookmark-marker bookmark)))
+  (let ((bookmark (brf-get-bookmark idx)))
+    (cond ((brf-valid-bookmark-p bookmark)
+	   (let ((marker (brf-bookmark-marker bookmark)))
 	     (with-current-buffer (marker-buffer marker)
 	       (save-excursion
 		 (goto-char marker)
 		 (format "%s %d\tL%d\tC%d\t%d%%\t%s"
-			 (if (= b-current-bookmark idx) "*" " ")
+			 (if (= brf-current-bookmark idx) "*" " ")
 			 idx
-			 (b-current-line) (b-current-column)
+			 (brf-current-line) (brf-current-column)
 			 (/ (* (point) 100) (max (buffer-size) 1))
 			 (buffer-name))))))
 	  (t ; Bookmark not set
 	   (format "  %d NOT SET" idx)))))
 
-(defun b-bookmark-menu-kill ()
+(defun brf-bookmark-menu-kill ()
   "Kill the current bookmark when in the bookmark menu."
   (interactive)
-  (let ((line (count-lines (point-min) (b-bol-position))))
+  (let ((line (count-lines (point-min) (brf-bol-position))))
     (if (or (< line 1)
-	    (> line b-max-bookmarks))
+	    (> line brf-max-bookmarks))
 	(user-error "You aren't on a bookmark line")
-      (b-kill-bookmark (1- line))
+      (brf-kill-bookmark (1- line))
       (gm-full-refresh))))
 
-(defun b-bookmark-menu-kill-all ()
+(defun brf-bookmark-menu-kill-all ()
   "Kill all bookmarks when in the bookmark menu."
   (interactive)
-  (b-kill-all-bookmarks)
+  (brf-kill-all-bookmarks)
   (gm-full-refresh))
 
-(defun b-current-line ()
+(defun brf-current-line ()
   "Return current line number of point (starting at 1)."
   (+ (count-lines 1 (point))
      (if (= (current-column) 0) 1 0)))
 
-(defun b-current-column ()
+(defun brf-current-column ()
   "Return current column of point (starting at 1)."
   (1+ (current-column)))
 
-(provide 'b-bookmark)
+(provide 'brf-bookmark)
 
-;;; b-bookmark.el ends here
+;; Local Variables:
+;; tab-width: 8
+;; indent-tabs-mode: t
+;; End:
+
+;;; brf-bookmark.el ends here

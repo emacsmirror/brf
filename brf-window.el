@@ -1,4 +1,4 @@
-;;; b-window.el --- Brief-style Window Management -*- lexical-binding: t -*-
+;;; brf-window.el --- Brief-style Window Management -*- lexical-binding: t -*-
 
 ;; Copyright (C) 2000-2020 Mike Woolley
 ;; Author: Mike Woolley <mike@bulsara.com>
@@ -28,22 +28,22 @@
 ;;
 ;; Change window
 ;;
-(defun b-change-window-up ()
+(defun brf-change-window-up ()
   "Select the window above the current one."
   (interactive)
   (windmove-up))
 
-(defun b-change-window-down ()
+(defun brf-change-window-down ()
   "Select the window below the current one."
   (interactive)
   (windmove-down))
 
-(defun b-change-window-left ()
+(defun brf-change-window-left ()
   "Select the window to the left of the current one."
   (interactive)
   (windmove-left))
 
-(defun b-change-window-right ()
+(defun brf-change-window-right ()
   "Select the window to the right of the current one."
   (interactive)
   (windmove-right))
@@ -51,28 +51,28 @@
 ;;
 ;; Resize window
 ;;
-(defun b-resize-window-up (delta)
+(defun brf-resize-window-up (delta)
   "Resize current window upwards by DELTA columns."
   (interactive "p")
   (if (window-in-direction 'above)
       (enlarge-window delta)
     (shrink-window delta)))
 
-(defun b-resize-window-down (delta)
+(defun brf-resize-window-down (delta)
   "Resize current window downwards by DELTA columns."
   (interactive "p")
   (if (window-in-direction 'below)
       (enlarge-window delta)
     (shrink-window delta)))
 
-(defun b-resize-window-left (delta)
+(defun brf-resize-window-left (delta)
   "Resize current window leftwards by DELTA columns."
   (interactive "p")
   (if (window-in-direction 'left)
       (enlarge-window-horizontally delta)
     (shrink-window-horizontally delta)))
 
-(defun b-resize-window-right (delta)
+(defun brf-resize-window-right (delta)
   "Resize current window rightwards by DELTA columns."
   (interactive "p")
   (if (window-in-direction 'right)
@@ -82,24 +82,24 @@
 ;;
 ;; Create window
 ;;
-(defun b-create-window-up ()
+(defun brf-create-window-up ()
   "Create a new window above the current window."
   (interactive)
   (split-window-vertically)
   (other-window 1))
 
-(defun b-create-window-down ()
+(defun brf-create-window-down ()
   "Create a new window below the current window."
   (interactive)
   (split-window-vertically))
 
-(defun b-create-window-left ()
+(defun brf-create-window-left ()
   "Create a new window on the left of the current window."
   (interactive)
   (split-window-horizontally)
   (other-window 1))
 
-(defun b-create-window-right ()
+(defun brf-create-window-right ()
   "Create a new window on the right of the current window."
   (interactive)
   (split-window-horizontally))
@@ -107,39 +107,44 @@
 ;;
 ;; Delete window
 ;;
-(defun b-delete-window (dir)
+(defun brf-delete-window (dir)
   "Delete the window in direction DIR from the current window."
   (let ((window (window-in-direction dir)))
     (if window
 	(delete-window window)
       (user-error "No window %s from selected window" dir))))
 
-(defun b-delete-window-up ()
+(defun brf-delete-window-up ()
   "Delete the window above the current window."
   (interactive)
-  (b-delete-window 'above))
+  (brf-delete-window 'above))
 
-(defun b-delete-window-down ()
+(defun brf-delete-window-down ()
   "Delete the window below the current window."
   (interactive)
-  (b-delete-window 'below))
+  (brf-delete-window 'below))
 
-(defun b-delete-window-left ()
+(defun brf-delete-window-left ()
   "Delete the window to the left of the current window."
   (interactive)
-  (b-delete-window 'left))
+  (brf-delete-window 'left))
 
-(defun b-delete-window-right ()
+(defun brf-delete-window-right ()
   "Delete the window to the right of the current window."
   (interactive)
-  (b-delete-window 'right))
+  (brf-delete-window 'right))
 
-(defun b-delete-current-window ()
+(defun brf-delete-current-window ()
   "Delete the current window."
   (interactive)
   (delete-window)
   (other-window -1))
 
-(provide 'b-window)
+(provide 'brf-window)
 
-;;; b-window.el ends here
+;; Local Variables:
+;; tab-width: 8
+;; indent-tabs-mode: t
+;; End:
+
+;;; brf-window.el ends here

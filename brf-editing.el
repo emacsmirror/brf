@@ -1,4 +1,4 @@
-;;; b-editing.el --- Editing commands of b-mode -*- lexical-binding: t -*-
+;;; brf-editing.el --- Editing commands of brf-mode -*- lexical-binding: t -*-
 
 ;; Copyright (C) 2000-2020 Mike Woolley
 ;; Author: Mike Woolley <mike@bulsara.com>
@@ -24,13 +24,13 @@
 
 ;;; Code:
 
-(require 'b-compat)
-(require 'b-marking)
+(require 'brf-compat)
+(require 'brf-marking)
 
 ;;
 ;; Brief insert-line command
 ;;
-(defun b-insert-line (&optional arg)
+(defun brf-insert-line (&optional arg)
   "Open a new line underneath the current one and indent point.
 Do not break current line.  Emulates the Brief insert-line function.
 With ARG, do not indent."
@@ -43,7 +43,7 @@ With ARG, do not indent."
 ;;
 ;; Brief delete-line command
 ;;
-(defun b-delete-line (&optional arg)
+(defun brf-delete-line (&optional arg)
   "Delete the current line from anywhere on the line.
 Emulates the Brief delete-line function.
 With ARG, do it that many times."
@@ -62,9 +62,9 @@ With ARG, do it that many times."
 ;; Brief kill-line command
 ;;
 ;; Note that this command is not currently mapped to a key, as its
-;; functionality is subsumed by b-kill-region.
+;; functionality is subsumed by brf-kill-region.
 ;;
-(defun b-kill-line (&optional arg)
+(defun brf-kill-line (&optional arg)
   "Kill the current line from anywhere on the line.
 With ARG, do it that many times."
   (interactive "*P")
@@ -72,22 +72,22 @@ With ARG, do it that many times."
 	(column (current-column)))
     (beginning-of-line)
     (kill-line count)
-    (b-set-line-kill (car kill-ring))
+    (brf-set-line-kill (car kill-ring))
     (move-to-column column)))
 
 ;;
 ;; Tab key handling
 ;;
-(defun b-tab (&optional arg)
+(defun brf-tab (&optional arg)
   "Indent the region if the region is active.
 Otherwise call the function which would ordinarily be bound to
 the tab key with ARG."
   (interactive "P")
   (let ((tab-fn (or (local-key-binding "\t")
-		    (global-key-binding "\t"))))
-    (cond ((or (null tab-fn) (b-indent-cmd-p tab-fn))
+		      (global-key-binding "\t"))))
+    (cond ((or (null tab-fn) (brf-indent-cmd-p tab-fn))
 	   ;; If the region is active, indent it
-	   (if (b-region-active-p)
+	   (if (brf-region-active-p)
 	       (indent-region (region-beginning) (region-end) arg)
 	     ;; Otherwise, call the usual binding for the tab key
 	     (if tab-fn
@@ -101,12 +101,17 @@ the tab key with ARG."
 	       (funcall tab-fn arg)
 	     (funcall tab-fn))))))
 
-(defun b-indent-cmd-p (cmd)
+(defun brf-indent-cmd-p (cmd)
   "Non-nil if CMD is an indent command, nil otherwise.
 This is determined heuristically by seeing if the command name contains
 the word \"indent\"."
   (and (symbolp cmd) (string-match "indent" (symbol-name cmd))))
 
-(provide 'b-editing)
+(provide 'brf-editing)
 
-;;; b-editing.el ends here
+;; Local Variables:
+;; tab-width: 8
+;; indent-tabs-mode: t
+;; End:
+
+;;; brf-editing.el ends here

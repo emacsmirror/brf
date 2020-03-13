@@ -1,4 +1,4 @@
-;;; b-undo.el --- Brief Cursor Motion Undo -*- lexical-binding: t -*-
+;;; brf-undo.el --- Brief Cursor Motion Undo -*- lexical-binding: t -*-
 
 ;; Copyright (C) 2000-2020 Mike Woolley
 ;; Author: Mike Woolley <mike@bulsara.com>
@@ -26,33 +26,33 @@
 
 ;;; Code:
 
-(require 'b-compat)
+(require 'brf-compat)
 
-(defcustom b-undo-enable nil
+(defcustom brf-undo-enable nil
   "Enable cursor motion undo."
   :type 'boolean
   :set (lambda (symbol value)
 	 (if value
-	     (add-hook 'post-command-hook #'b-undo-post-command-hook)
-	   (remove-hook 'post-command-hook #'b-undo-post-command-hook))
+	     (add-hook 'post-command-hook #'brf-undo-post-command-hook)
+	   (remove-hook 'post-command-hook #'brf-undo-post-command-hook))
 	 (set-default symbol value))
   :initialize 'custom-initialize-default
-  :group 'b)
+  :group 'brf)
 
-(defvar b-undo-point 0
+(defvar brf-undo-point 0
   "The location of point after a command is executed.")
-(make-variable-buffer-local 'b-undo-point)
-(defvar b-undo-list-head nil
+(make-variable-buffer-local 'brf-undo-point)
+(defvar brf-undo-list-head nil
   "The first non-boundary item on the undo list after a command is executed.")
-(make-variable-buffer-local 'b-undo-list-head)
+(make-variable-buffer-local 'brf-undo-list-head)
 
-(defvar b-undo-debug-enabled nil
+(defvar brf-undo-debug-enabled nil
   "Undo debug is enabled.")
 
-(defconst b-undo-debug-buffer-name "*B Debug*"
+(defconst brf-undo-debug-buffer-name "*Brf Debug*"
   "Name of undo debug buffer.")
 
-(defun b-undo-post-command-hook ()
+(defun brf-undo-post-command-hook ()
   "Post-command hook to implement cursor-motion undo."
   ;; Put point on the undo list if necessary
   (when (listp buffer-undo-list)
@@ -64,12 +64,12 @@
 	(setq head (cadr buffer-undo-list))		; Real head is the second item
 	(unless (eq this-command 'redo)			; ie (redo) from Redo(+).el
 	  ;; Check if there was cursor motion with no other changes
-	  (when (and (/= b-undo-point 0)
-		     (/= point b-undo-point) 		; Point has moved
-		     (or (eq head b-undo-list-head) 	; and a change has not been made
+	  (when (and (/= brf-undo-point 0)
+		     (/= point brf-undo-point) 		; Point has moved
+		     (or (eq head brf-undo-list-head) 	; and a change has not been made
 			 (and (integerp head)		; or previous change was cursor motion
 			      (null (caddr buffer-undo-list)))))
-	    (setq buffer-undo-list (cons b-undo-point buffer-undo-list))
+	    (setq buffer-undo-list (cons brf-undo-point buffer-undo-list))
 	    ;; If we're undoing then the cursor motion was a redo, so mark it as such
 	    (when (eq this-command 'undo)
 	      (puthash buffer-undo-list
@@ -81,14 +81,14 @@
 	    (undo-boundary))))
 
       ;; Save point and the undo-list head for next time
-      (setq b-undo-point point)
-      (setq b-undo-list-head head))
+      (setq brf-undo-point point)
+      (setq brf-undo-list-head head))
 
     ;; Debug output
-    (when b-undo-debug-enabled
-      (b-undo-debug))))
+    (when brf-undo-debug-enabled
+      (brf-undo-debug))))
 
-(defun b-undo-debug ()
+(defun brf-undo-debug ()
   "Show Undo state in a buffer for debugging."
   (unless (or (active-minibuffer-window)
 	      (not (listp buffer-undo-list)))
@@ -96,7 +96,7 @@
 	  (pending pending-undo-list)
 	  (point (point))
 	  (buffer-name (buffer-name)))
-      (let* ((buffer (get-buffer b-undo-debug-buffer-name))
+      (let* ((buffer (get-buffer brf-undo-debug-buffer-name))
 	     (window (get-buffer-window buffer t)))
 	(when buffer
 	  (save-current-buffer
@@ -116,22 +116,27 @@
 			 (not (pos-visible-in-window-p log-point window)))
 		(set-window-start window log-point)))))))))
 
-(defun b-undo-toggle-debug (&optional arg)
+(defun brf-undo-toggle-debug (&optional arg)
   "Turn Undo debugging on or off with ARG."
   (interactive "P")
-  (setq b-undo-debug-enabled
+  (setq brf-undo-debug-enabled
 	(if (null arg)
-	    (not b-undo-debug-enabled)
+	    (not brf-undo-debug-enabled)
 	  (> (prefix-numeric-value arg) 0)))
 
-  (when b-undo-debug-enabled
+  (when brf-undo-debug-enabled
     (save-current-buffer
-      (let ((buffer (get-buffer-create b-undo-debug-buffer-name)))
+      (let ((buffer (get-buffer-create brf-undo-debug-buffer-name)))
 	(set-buffer buffer)
 	(buffer-disable-undo buffer)
 	(erase-buffer)
 	(display-buffer-at-bottom buffer nil)))))
 
-(provide 'b-undo)
+(provide 'brf-undo)
 
-;;; b-undo.el ends here
+;; Local Variables:
+;; tab-width: 8
+;; indent-tabs-mode: t
+;; End:
+
+;;; brf-undo.el ends here

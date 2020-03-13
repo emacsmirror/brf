@@ -1,4 +1,4 @@
-;;; b-marking.el --- Marking / Cut & Paste commands of b-mode -*- lexical-binding: t -*-
+;;; brf-marking.el --- Marking / Cut & Paste commands of brf-mode -*- lexical-binding: t -*-
 
 ;; Copyright (C) 2000-2020 Mike Woolley
 ;; Author: Mike Woolley <mike@bulsara.com>
@@ -24,72 +24,72 @@
 
 ;;; Code:
 
-(require 'b-compat)
+(require 'brf-compat)
 
-(defvar b-line-mark-min nil
+(defvar brf-line-mark-min nil
   "The minimum position of the mark in line marking mode.
 The mark is positioned here if point is below this line.")
-(defvar b-line-mark-max nil
+(defvar brf-line-mark-max nil
   "The maximum position of the mark in line marking mode.
 The mark is positioned here if point is above or on this line.")
-(defvar b-line-mark-col nil
+(defvar brf-line-mark-col nil
   "The original column where line marking was initiated.
 This is restored after saving/killing the region.")
 
 ;;
 ;; Line kill helper functions
 ;;
-(defmacro b-set-line-kill (place)
+(defmacro brf-set-line-kill (place)
   "Make the string at PLACE a line-mode kill.
 This is done by adding a text property and ensuring that the (last)
 line is terminated with a newline."
   ;; Ensure the line is terminated with a newline
-  `(let ((line (b-terminate-line ,place)))
+  `(let ((line (brf-terminate-line ,place)))
      ;; Indicate that this is a line-mode kill with a text property
-     (put-text-property 0 1 'b-line-kill t line)
+     (put-text-property 0 1 'brf-line-kill t line)
      (setf ,place line)))
 
-(defun b-terminate-line (line)
+(defun brf-terminate-line (line)
   "Ensure LINE is terminated with a newline."
   (let ((len (length line)))
     (if (and (> len 0) (= (aref line (1- len)) ?\n))
 	line
       (concat line "\n"))))
 
-(defun b-clear-line-kill (pos)
+(defun brf-clear-line-kill (pos)
   "Remove the line-mode kill property from text at position POS in the buffer."
-  (remove-text-properties pos (1+ pos) '(b-line-kill t)))
+  (remove-text-properties pos (1+ pos) '(brf-line-kill t)))
 
-(defun b-line-kill-p (string)
+(defun brf-line-kill-p (string)
   "Test if STRING is a line-mode kill."
   (when (stringp string)
-      (get-text-property 0 'b-line-kill string)))
+    (get-text-property 0 'brf-line-kill string)))
 
 ;;
 ;; Line Marking Mode
 ;;
-(defun b-start-line-marking ()
+(defun brf-start-line-marking ()
   "Start line-marking mode."
-  (when (b-column-marking-p)
-    (b-stop-column-marking))
-  (setq b-line-mark-col (current-column))
+  (when (brf-column-marking-p)
+    (brf-stop-column-marking))
+  (setq brf-line-mark-col (current-column))
   (when (and (fboundp 'make-local-hook)
-	     (or b-xemacs-flag (< emacs-major-version 21)))
-      (make-local-hook 'post-command-hook)) ;; Not needed since Emacs 21
-  (add-hook 'post-command-hook #'b-mark-line-hook nil t))
+	     (or brf-xemacs-flag (< emacs-major-version 21)))
+    (make-local-hook 'post-command-hook)) ;; Not needed since Emacs 21
+  (add-hook 'post-command-hook #'brf-mark-line-hook nil t))
 
-(defun b-stop-line-marking ()
+(defun brf-stop-line-marking ()
   "Stops line-marking mode."
-  (remove-hook 'post-command-hook #'b-mark-line-hook t)
-  (move-to-column b-line-mark-col))
+  (remove-hook 'post-command-hook #'brf-mark-line-hook t)
+  (move-to-column brf-line-mark-col))
 
-(defun b-line-marking-p ()
+(defun brf-line-marking-p ()
   "Return non-nil if the buffer is in line marking mode."
-  (memq 'b-mark-line-hook post-command-hook))
+  (memq 'brf-mark-line-hook post-command-hook))
 
-(defun b-mark-line-hook ()
+(defun brf-mark-line-hook ()
   "Ensure point and mark are correctly positioned for line-marking after cursor motion commands."
-  (cond ((and (b-region-active-p) (not (b-column-marking-p)))
+  (cond ((and (brf-region-active-p) (not (brf-column-marking-p)))
 	 ;; Marking - emulate Brief "line mode"
 	 (let ((point (point))
 	       (mark (mark)))
@@ -101,61 +101,61 @@ line is terminated with a newline."
 
 	   ;; Ensure mark and point are straddling the original line
 	   (cond ((< point mark)
-		  (when (/= mark b-line-mark-max)
-		    (set-mark b-line-mark-max)))
+		  (when (/= mark brf-line-mark-max)
+		    (set-mark brf-line-mark-max)))
 		 ((> point mark)
-		  (when (/= mark b-line-mark-min)
-		    (set-mark b-line-mark-min)))
+		  (when (/= mark brf-line-mark-min)
+		    (set-mark brf-line-mark-min)))
 		 ;; point = mark
-		 ((= point b-line-mark-max) ; point = mark-max
+		 ((= point brf-line-mark-max) ; point = mark-max
 		  (forward-line 1)
-		  (set-mark b-line-mark-min))
+		  (set-mark brf-line-mark-min))
 		 (t			; point = mark-min
 		  (forward-line -1)
-		  (set-mark b-line-mark-max)))
+		  (set-mark brf-line-mark-max)))
 
-	   (b-activate-region)))
+	   (brf-activate-region)))
 	(t				; Not marking
-	 (b-stop-line-marking))))
+	 (brf-stop-line-marking))))
 
-(defun b-mark-line (&optional arg)
+(defun brf-mark-line (&optional arg)
   "Mark the current line from anywhere on the line.
 Emulates the Brief mark-line function.
 With ARG, do it that many times."
   (interactive "P")
   (let ((lines (prefix-numeric-value arg)))
     (when (/= lines 0)
-      (b-start-line-marking)
+      (brf-start-line-marking)
       (beginning-of-line)
-      (setq b-line-mark-min (point))
+      (setq brf-line-mark-min (point))
       (forward-line)
-      (setq b-line-mark-max (point))
+      (setq brf-line-mark-max (point))
       (cond ((bolp)			; Normal case
 	     (forward-line (1- lines))
-	     (push-mark b-line-mark-min nil t))
+	     (push-mark brf-line-mark-min nil t))
 	    (t			  ; Case where last line is incomplete
-	     (goto-char b-line-mark-min)
-	     (push-mark b-line-mark-max nil t))))))
+	     (goto-char brf-line-mark-min)
+	     (push-mark brf-line-mark-max nil t))))))
 
-(defun b-mark-default ()
+(defun brf-mark-default ()
   "Mark the default unit in the buffer.
 Normally this is the current line, but in Lisp modes it is the containing sexp."
-  (cond ((b-lisp-mode-p)
+  (cond ((brf-lisp-mode-p)
 	 (condition-case nil
 	     (progn
 	       (unless (= (following-char) ?\()
 		 (backward-up-list 1 t t))
 	       (mark-sexp))
-	   (error (b-mark-line))))
+	   (error (brf-mark-line))))
 	(t				; Non-lisp mode
-	 (b-mark-line))))
+	 (brf-mark-line))))
 
-(defun b-lisp-mode-p ()
+(defun brf-lisp-mode-p ()
   "Return non-nil if the current major mode is a Lisp mode.
 This is determined heuristically by looking for `lisp' in the mode name."
   (string-match "lisp" (format-mode-line mode-name)))
 
-(defun b-emphasise-region (beg end &optional message-len)
+(defun brf-emphasise-region (beg end &optional message-len)
   "Emphasise the region BEG END, like `kill-ring-save' does.
 
 If the mark lies outside the selected window, display an
@@ -188,128 +188,128 @@ of this sample text; it defaults to 40."
 ;;
 ;; Now `rectangle-mark-mode' has been added to Gnu Emacs, I'm just using that for column marking :-)
 ;;
-(defun b-column-marking-p ()
+(defun brf-column-marking-p ()
   "Return non-nil if the buffer is in column marking mode."
   (and (boundp 'rectangle-mark-mode) rectangle-mark-mode))
 
-(defun b-stop-column-marking ()
+(defun brf-stop-column-marking ()
   "Stops column-marking mode."
   (when (fboundp 'rectangle-mark-mode)
-      (rectangle-mark-mode -1)))
+    (rectangle-mark-mode -1)))
 
 ;;
 ;; Brief copy-region command
 ;;
-(defun b-copy-region ()
+(defun brf-copy-region ()
   "Copy the current active region to the kill ring.
 If there is no active region then the current line is copied.
 Emulates the Brief copy function."
   (interactive)
-  (unless (b-region-active-p)
-    (b-mark-default))
+  (unless (brf-region-active-p)
+    (brf-mark-default))
   (let ((beg (region-beginning))
 	(end (region-end)))
     (copy-region-as-kill beg end t)	; It seems rectangle-mode needs the t arg, to process the regiona as a rectangle
-    (b-emphasise-region beg end)	; Emphasise the region like `kill-ring-save' does
-    (when (b-line-marking-p)
-      (b-set-line-kill (car kill-ring))
-      (b-stop-line-marking)
+    (brf-emphasise-region beg end)	; Emphasise the region like `kill-ring-save' does
+    (when (brf-line-marking-p)
+      (brf-set-line-kill (car kill-ring))
+      (brf-stop-line-marking)
       (when (> (point) (mark))
 	(forward-line -1)
-	(move-to-column b-line-mark-col))))
-  (b-deactivate-region))
+	(move-to-column brf-line-mark-col))))
+  (brf-deactivate-region))
 
-(defun b-copy-to-register (register &optional delete-flag)
+(defun brf-copy-to-register (register &optional delete-flag)
   "Copy the current active region to REGISTER.
 With prefix arg DELETE-FLAG, delete as well.
 If there is no active region then the current line is copied."
   (interactive (list (register-read-with-preview "Copy to register: ")
 		     current-prefix-arg))
-  (unless (b-region-active-p)
-    (b-mark-default))
+  (unless (brf-region-active-p)
+    (brf-mark-default))
   (let ((beg (region-beginning))
 	(end (region-end)))
-    (if (b-column-marking-p)
+    (if (brf-column-marking-p)
 	(copy-rectangle-to-register register beg end delete-flag)
       (copy-to-register register beg end delete-flag))
-    (b-emphasise-region beg end)
-    (when (b-line-marking-p)
-      (b-set-line-kill (get-register register))
-      (b-stop-line-marking)
+    (brf-emphasise-region beg end)
+    (when (brf-line-marking-p)
+      (brf-set-line-kill (get-register register))
+      (brf-stop-line-marking)
       (when (> (point) (mark))
 	(forward-line -1)
-	(move-to-column b-line-mark-col))))
-  (b-deactivate-region t))
+	(move-to-column brf-line-mark-col))))
+  (brf-deactivate-region t))
 
 ;;
 ;; Brief kill-region command
 ;;
-(defun b-kill-region ()
+(defun brf-kill-region ()
   "Kill the current active region.
 If there is no active region then the current line is killed.
 Emulates the Brief cut function."
   (interactive "*")
-  (unless (b-region-active-p)
-    (b-mark-default))
+  (unless (brf-region-active-p)
+    (brf-mark-default))
   (kill-region (region-beginning) (region-end) t) ; Again rectangle-mode needs the t arg
-  (when (b-line-marking-p)
-    (b-set-line-kill (car kill-ring))
-    (b-stop-line-marking)))
+  (when (brf-line-marking-p)
+    (brf-set-line-kill (car kill-ring))
+    (brf-stop-line-marking)))
 
 ;;
 ;; Brief delete command
 ;;
-(defun b-delete (&optional arg)
+(defun brf-delete (&optional arg)
   "Delete the current active region.
 If there is no active region then ARG characters following point are deleted.
 Emulates the Brief delete function."
   (interactive "*P")
-  (cond ((b-region-active-p)
+  (cond ((brf-region-active-p)
 	 ;; Delete the rectangle if one is active
-	 (if (b-column-marking-p)
+	 (if (brf-column-marking-p)
 	     (delete-rectangle (region-beginning) (region-end))
 	   ;; Otherwise delete the current region
 	   (delete-region (region-beginning) (region-end))
-	   (when (b-line-marking-p)
-	     (b-stop-line-marking))))
+	   (when (brf-line-marking-p)
+	     (brf-stop-line-marking))))
 	(t				; No active region
 	 (delete-char (prefix-numeric-value arg)))))
 
 ;;
 ;; Brief Yank & Yank-pop commands
 ;;
-(defvar b-yank-col 0
-  "The original column where `b-yank' was initiated.
+(defvar brf-yank-col 0
+  "The original column where `brf-yank' was initiated.
 This is restored after the yank.")
 
-(defvar b-last-yank-was-line nil
+(defvar brf-last-yank-was-line nil
   "Non-nil if the last yank was from a line-mode kill.")
 
-(defun b-yank (&optional arg)
+(defun brf-yank (&optional arg)
   "Similar to the normal `yank' ARG command.
 However, correctly insert text that was killed in line-mode and
 also indent it (if the buffer is in a programming mode)."
   (interactive "*P")
   (setq this-command 'yank)
-  (setq b-yank-col (current-column))
-  (cond ((b-line-kill-p (current-kill (cond ((listp arg) 0)
-					    ((eq arg '-) -1)
-					    (t (1- arg))) t))
+  (setq brf-yank-col (current-column))
+  (cond ((brf-line-kill-p (current-kill (cond ((listp arg) 0)
+					      ((eq arg '-) -1)
+					      (t (1- arg))) t))
 	 (beginning-of-line)
 	 (yank arg)
 	 (let ((point (point))
 	       (mark (mark t)))
-	   (b-clear-line-kill (min mark point))
-	   (when (b-buffer-in-programming-mode-p)
+	   (brf-clear-line-kill (min mark point))
+	   (when (brf-buffer-in-programming-mode-p)
 	     (indent-region (min mark point) (max mark point) nil)))
-	 (setq b-last-yank-was-line t)
-	 (move-to-column b-yank-col))
+	 (setq brf-last-yank-was-line t)
+	 (move-to-column brf-yank-col))
 
 	(t				; Not line kill
 	 (yank arg)
-	 (setq b-last-yank-was-line nil))))
+	 (setq brf-last-yank-was-line nil))))
 
-(defun b-yank-pop (arg)
+(defun brf-yank-pop (arg)
   "Similar to the normal `yank-pop' ARG command.
 However, correctly insert text that was killed in line-mode and
 also indent it."
@@ -317,39 +317,39 @@ also indent it."
   (unless (eq last-command 'yank)
     (user-error "Previous command was not a yank"))
   (setq this-command 'yank)
-  (cond ((b-line-kill-p (current-kill arg t))
-	 (cond (b-last-yank-was-line
+  (cond ((brf-line-kill-p (current-kill arg t))
+	 (cond (brf-last-yank-was-line
 		(beginning-of-line))
 	       (t
 		(delete-region (point) (mark t))
 		(beginning-of-line)
 		(set-mark (point))
-		(setq b-last-yank-was-line t)))
+		(setq brf-last-yank-was-line t)))
 	 (yank-pop arg)
 	 (let ((point (point))
 	       (mark (mark t)))
-	   (b-clear-line-kill (min mark point))
-	   (when (b-buffer-in-programming-mode-p)
+	   (brf-clear-line-kill (min mark point))
+	   (when (brf-buffer-in-programming-mode-p)
 	     (indent-region (min mark point) (max mark point) nil)))
-	 (move-to-column b-yank-col))
+	 (move-to-column brf-yank-col))
 
 	(t				; Not line kill
-	 (when b-last-yank-was-line
+	 (when brf-last-yank-was-line
 	   (beginning-of-line)
 	   (delete-region (point) (mark t))
-	   (move-to-column b-yank-col)
+	   (move-to-column brf-yank-col)
 	   (set-mark (point))
-	   (setq b-last-yank-was-line nil))
+	   (setq brf-last-yank-was-line nil))
 	 (yank-pop arg))))
 
-(defun b-insert-register (register)
+(defun brf-insert-register (register)
   "Similar to the normal `insert-register' REGISTER command.
 However, correctly insert text that was killed in line-mode and
 also indent it."
   (interactive "*cInsert Register:")
-  (let ((line-kill (b-line-kill-p (get-register register))))
+  (let ((line-kill (brf-line-kill-p (get-register register))))
     (when line-kill
-      (setq b-yank-col (current-column))
+      (setq brf-yank-col (current-column))
       (beginning-of-line))
 
     (insert-register register (not current-prefix-arg))
@@ -357,19 +357,24 @@ also indent it."
     (when line-kill
       (let ((point (point))
 	    (mark (mark t)))
-	(b-clear-line-kill (min mark point))
-	(when (b-buffer-in-programming-mode-p)
+	(brf-clear-line-kill (min mark point))
+	(when (brf-buffer-in-programming-mode-p)
 	  (indent-region (min mark point) (max mark point) nil)))
-      (move-to-column b-yank-col))))
+      (move-to-column brf-yank-col))))
 
 ;;
 ;; Utilities
 ;;
-(defun b-buffer-in-programming-mode-p ()
+(defun brf-buffer-in-programming-mode-p ()
   "Return non-nil if the current buffer is in a programming major mode."
   (not (or (eq indent-line-function 'indent-to-left-margin)
 	   (eq indent-line-function 'indent-relative))))
 
-(provide 'b-marking)
+(provide 'brf-marking)
 
-;;; b-marking.el ends here
+;; Local Variables:
+;; tab-width: 8
+;; indent-tabs-mode: t
+;; End:
+
+;;; brf-marking.el ends here

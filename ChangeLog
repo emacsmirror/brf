@@ -1,3 +1,12 @@
+2020-03-13  Mike Woolley  <mike@bulsara.com>
+
+	* *.el: Changed package-name (& mode prefix) to "brf" from "b".
+	Renamed all the lisp files from b-*.el to brf-*.el.
+	Changed all the symbol names to the new prefix.
+	Added a local-variables section to each file set the default
+	indentation settings (for those viewers who have non-standard
+	settings).
+
 2020-03-12  Mike Woolley  <mike@bulsara.com>
 
 	* b.el: Changed to define the mode using the modern
