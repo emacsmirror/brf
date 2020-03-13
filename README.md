@@ -87,6 +87,13 @@ marked.
 * Text in Line or Column mode can be stored and recalled from registers, 
 as well as the kill-ring.
 
+#### Screenshot
+![line-mode](https://bitbucket.org/MikeWoolley/brf-mode/raw/master/images/bookmarks.png)
+
+#### Screenshot
+![column-mode](https://bitbucket.org/MikeWoolley/brf-mode/raw/master/images/column-mode.png)
+
+#### Keys
 | Key         | Action                        |
 |-------------|-------------------------------|
 | M-l         | Start line marking            |
@@ -116,6 +123,7 @@ as well as the kill-ring.
 * Paging and scrolling respect relative screen row and absolute column.
 * Paging up and then down again returns point to the same original position.
 
+#### Keys
 | Key    | Action                        |
 |--------|-------------------------------|
 | next   | page-down                     |
@@ -138,10 +146,15 @@ invocations of Emacs.
 * If the package `fringe-helper` is installed, the bookmark number is
  put in the fringe (which otherwise shows as a tooltip).
 * If the package `generic-menu` is installed, bookmarks can be listed
- & chosen from a menu. This is also an extension to Brief.
+ & chosen from a menu, [see below](#markdown-header-list-bookmarks). 
+ This is also an extension to Brief.
 * Other extensions are a command to allocate the next free bookmark
   and one to delete all bookmarks.
 
+#### Screenshot
+![bookmarks](https://bitbucket.org/MikeWoolley/brf-mode/raw/master/images/bookmarks.png)
+
+#### Keys
 | Key                 | Action                               |
 |---------------------|--------------------------------------|
 | M-0 to M-9          | Drop bookmark 0-9 at point           |
@@ -158,6 +171,16 @@ invocations of Emacs.
 | C-c C-b C-p         | Goto Previous Bookmark               |
 | C-c C-b =           | Allocate Next Free Bookmark at Point |
 
+#### List Bookmarks
+
+![list-bookmarks](https://bitbucket.org/MikeWoolley/brf-mode/raw/master/images/list-bookmarks.png)
+
+| key  | Action                    |
+|------|---------------------------|
+| RET  | Jump to bookmark at point |
+| d    | Delete bookmark at point  |
+| q    | Delete All bookmarks      |
+
 ### Cursor Motion Undo
 
 * Cursor motion, without any buffer changes, is recorded as an
@@ -168,6 +191,7 @@ packages - it should work, but you never know!
 * It is turned off by default (unlike in Brief), but can enabled by Customise
 option `b-undo-enable`.
 
+#### Keys
 | Key         | Action                                 |
 |-------------|----------------------------------------|
 | kp-multiply | Undo                                   |
@@ -179,6 +203,7 @@ option `b-undo-enable`.
 * Create, Switch, Resize and Delete arbitrary windows with simple
   keystrokes.
 
+#### Keys
 | Key                        | Action                        |
 |----------------------------|-------------------------------|
 | S- [up, down, right, left] | Switch to Window in Direction |
