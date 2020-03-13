@@ -1,12 +1,12 @@
-# B-Mode
+# Brf-Mode
 
-B-Mode adds functionality from the old DOS editor Brief to Emacs.
+Brf-Mode adds functionality from the old DOS editor Brief to Emacs.
 
 ## Motivation
 
-This package is not an emulation of Brief (there are plenty of
-those already), but rather provides an implementation in Emacs of specific
-features that I miss from Brief. 
+This package is not an emulation of Brief (there are plenty of those
+already), but rather provides an **accurate** implementation in Emacs
+of specific features that I miss from Brief. ie a brief version of Brief.
 
 The emphasis is on accurately implementing these specific features in
 Emacs, rather than doing what these Brief emulations tend to do, which
@@ -41,8 +41,9 @@ Also some functionality was never part of Brief nor Emacs (for example
 * **Manual**
 
 ```emacs-lisp
-   (require 'b)
-   (b-mode t) ; or set via customize
+   (require 'brf)
+   (brf-mode) 
+   ;; or set via customize
 ```
 
 * **Package** 
@@ -53,25 +54,25 @@ Coming soon...
 * **Options**
 
 ```emacs-lisp
-   (customize-group 'b)
+   (customize-group 'brf)
 ```
 
 Customisable options are:
 
 1. Bookmark Face
 2. Bookmark Number face (when shown in Fringe)
-3. Enable B-Mode
+3. Enable Brf-Mode
 4. Mode-line string (including hiding)
 5. Enable [Cursor Motion Undo](#markdown-header-cursor-motion-undo)
 
 * **Key mapping**
  
- Default key mappings can be changed by modifying `b-mode-map` in the mode hook:
+ Default key mappings can be changed by modifying `brf-mode-map` in the mode hook:
 
 ```emacs-lisp
-   (add-hook 'b-mode-hook
+   (add-hook 'brf-mode-hook
      (lambda ()
-       (define-key b-mode-map ...)))
+       (define-key brf-mode-map ...)))
 ```
 
 ## Features
@@ -104,7 +105,10 @@ as well as the kill-ring.
 |             |                               |
 | M-d         | Delete Line                   |
 | delete      | Delete Region or Char         |
-| C-return    | Open New Line                 |
+|             |                               |
+| RET         | Newline and Indent            |
+| C-j         | Newline                       |
+| C-RET       | Open New Line                 |
 | Tab         | Indent                        |
 
 ### Reversible Paging and Scrolling
@@ -178,7 +182,7 @@ option `b-undo-enable`.
 | Key                        | Action                        |
 |----------------------------|-------------------------------|
 | S- [up, down, right, left] | Switch to Window in Direction |
-| f1 [up, down, right, left] | Switch to window in direction |
+| f1 [up, down, right, left] | Switch to window in Direction |
 | f2 [up, down, right, left] | Resize Window in Direction    |
 | f3 [up, down, right, left] | Create Window in Direction    |
 | f4 [up, down, right, left] | Delete Window in Direction    |
