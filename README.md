@@ -87,10 +87,10 @@ marked.
 * Text in Line or Column mode can be stored and recalled from registers, 
 as well as the kill-ring.
 
-#### Screenshot
-![line-mode](https://bitbucket.org/MikeWoolley/brf-mode/raw/master/images/bookmarks.png)
+#### Line Mode
+![line-mode](https://bitbucket.org/MikeWoolley/brf-mode/raw/master/images/line-mode.png)
 
-#### Screenshot
+#### Column Mode
 ![column-mode](https://bitbucket.org/MikeWoolley/brf-mode/raw/master/images/column-mode.png)
 
 #### Keys
@@ -151,7 +151,6 @@ invocations of Emacs.
 * Other extensions are a command to allocate the next free bookmark
   and one to delete all bookmarks.
 
-#### Screenshot
 ![bookmarks](https://bitbucket.org/MikeWoolley/brf-mode/raw/master/images/bookmarks.png)
 
 #### Keys
@@ -179,7 +178,8 @@ invocations of Emacs.
 |------|---------------------------|
 | RET  | Jump to bookmark at point |
 | d    | Delete bookmark at point  |
-| q    | Delete All bookmarks      |
+| k    | Delete All bookmarks      |
+| q    | Quit                      |
 
 ### Cursor Motion Undo
 
