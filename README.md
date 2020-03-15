@@ -16,12 +16,12 @@ Emacs.
 
 Principally these features are:
 
-* [Line-mode cut and paste](#line-column-mode)
-* [Column-mode cut and paste](#line-column-mode)
-* [Fully reversible paging and scrolling](#paging-and-scrolling)
+* [Line-mode cut and paste](#line--column-mode-cut-and-paste)
+* [Column-mode cut and paste](#line--column-mode-cut-and-paste)
+* [Fully reversible paging and scrolling](#reversible-paging-and-scrolling)
 * [Temporary bookmarks](#temporary-bookmarks)
 * [Cursor motion undo](#cursor-motion-undo)
-* [Easy window management](#window-management)
+* [Easy window management](#easy-window-management)
 
 However they have been implemented in an Emacs-style. This means the
 functions respond to prefix args and where they override Emacs
@@ -79,7 +79,7 @@ Customisable options are:
 
 ## Features
 
-### Line & Column Mode Cut and Paste {#line-column-mode}
+### <a name="line--column-mode-cut-and-paste"></a>Line & Column Mode Cut and Paste
 
 * Mark regions by whole line or column.
 * If no region is marked, the copy and kill commands operate on the
@@ -117,7 +117,7 @@ as well as the kill-ring.
 | C-RET       | Open New Line                 |
 | Tab         | Indent                        |
 
-### Reversible Paging and Scrolling {#paging-and-scrolling}
+### <a name="reversible-paging-and-scrolling">Reversible Paging and Scrolling
 
 * Paging and scrolling respect relative screen row and absolute column.
 * Paging up and then down again returns point to the same original position.
@@ -133,7 +133,7 @@ as well as the kill-ring.
 | home   | Beginning of Line/Page/Buffer |
 | end    | End of Line/Page/Buffer       |
 
-### Temporary Bookmarks {#temporary-bookmarks}
+### <a name="temporary-bookmarks">Temporary Bookmarks
 
 * 10 bookmarks can be set and navigated between. 
 * They can also be moved and deleted.
@@ -167,7 +167,7 @@ invocations of Emacs.
 | C-c C-b C-p         | Goto Previous Bookmark               |
 | C-c C-b =           | Allocate Next Free Bookmark at Point |
 
-### List Bookmarks {#list-bookmarks}
+### <a name="list-bookmarks">List Bookmarks
 
 ![list-bookmarks](https://bitbucket.org/MikeWoolley/brf-mode/raw/master/images/list-bookmarks.png)
 
@@ -178,7 +178,7 @@ invocations of Emacs.
 | k    | Delete All bookmarks      |
 | q    | Quit                      |
 
-### Cursor Motion Undo {#cursor-motion-undo}
+### <a name="cursor-motion-undo">Cursor Motion Undo
 
 * Cursor motion, without any buffer changes, is recorded as an
 undo-able (& redo-able) action.
@@ -194,7 +194,7 @@ option `b-undo-enable`.
 | M-u         | Undo                                   |
 | M-r         | Redo (if `redo` or `redo+` installed). |
 
-### Easy Window Management {#window-management}
+### <a name="easy-window-management">Easy Window Management
 
 * Create, Switch, Resize and Delete arbitrary windows with simple
   keystrokes.
