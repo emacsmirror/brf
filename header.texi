@@ -1,0 +1,8 @@
+@c Header text that will be inserted by Pandoc
+@setfilename brf-mode.info
+@settitle Brf Mode
+@ifinfo
+This is the manual for Brf-Mode.
+
+Copyright @copyright{} 2000-2020 Mike Woolley
+@end ifinfo
