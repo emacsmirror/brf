@@ -1,26 +1,27 @@
 # Brf-Mode
 
-Brf-Mode adds functionality from the old DOS editor Brief to Emacs.
+Brf-Mode adds functionality from the old DOS editor
+[Brief](https://en.wikipedia.org/wiki/Brief_(text_editor)) to Emacs.
 
-## Motivation
+## Summary
 
 This package is not an emulation of Brief (there are plenty of those
-already), but rather provides an **accurate** implementation in Emacs
-of specific features that I miss from Brief. ie a brief version of Brief.
+already), but rather provides an accurate implementation in Emacs of
+specific features that I miss from Brief.
 
 The emphasis is on accurately implementing these specific features in
-Emacs, rather than doing what these Brief emulations tend to do, which
-is just mapping all the Brief key-sequences to similar functions in
+Emacs rather than doing what Brief emulations tend to do, which
+is mapping the Brief key-sequences to similar functions in
 Emacs.
 
 Principally these features are:
 
-* [Line-mode cut and paste](#markdown-header-line-column-mode-cut-and-paste)
-* [Column-mode cut and paste](#markdown-header-line-column-mode-cut-and-paste)
-* [Fully reversible paging and scrolling](#markdown-header-reversible-paging-and-scrolling)
-* [Temporary bookmarks](#markdown-header-temporary-bookmarks)
-* [Cursor motion undo](#markdown-header-cursor-motion-undo)
-* [Easy window management](#markdown-header-easy-window-management)
+* [Line-mode cut and paste](#line-column-mode)
+* [Column-mode cut and paste](#line-column-mode)
+* [Fully reversible paging and scrolling](#paging-and-scrolling)
+* [Temporary bookmarks](#temporary-bookmarks)
+* [Cursor motion undo](#cursor-motion-undo)
+* [Easy window management](#window-management)
 
 However they have been implemented in an Emacs-style. This means the
 functions respond to prefix args and where they override Emacs
@@ -32,13 +33,14 @@ that were never part of Brief.  For example, text cut/copied in
 line or column-mode can be saved/recalled in registers.
 
 Also some functionality was never part of Brief nor Emacs (for example
-`List Bookmarks`) and the mode uses the prefix `C-c C-b` for such commands.
+[`List Bookmarks`](#list-bookmarks) and the mode uses the prefix `C-c
+C-b` for such commands.
 
 ## Setup
 
 ### Installation
 
-* **Manual**
+* Manual
 
 ```emacs-lisp
    (require 'brf)
@@ -46,12 +48,12 @@ Also some functionality was never part of Brief nor Emacs (for example
    ;; or set via customize
 ```
 
-* **Package** 
+* Package 
 
 Coming soon...
 
 ### Customisation
-* **Options**
+* Options
 
 ```emacs-lisp
    (customize-group 'brf)
@@ -63,9 +65,9 @@ Customisable options are:
 2. Bookmark Number face (when shown in Fringe)
 3. Enable Brf-Mode
 4. Mode-line string (including hiding)
-5. Enable [Cursor Motion Undo](#markdown-header-cursor-motion-undo)
+5. Enable [Cursor Motion Undo](#cursor-motion-undo)
 
-* **Key mapping**
+* Key mapping
  
  Default key mappings can be changed by modifying `brf-mode-map` in the mode hook:
 
@@ -77,7 +79,7 @@ Customisable options are:
 
 ## Features
 
-### Line & Column Mode Cut and Paste
+### Line & Column Mode Cut and Paste {#line-column-mode}
 
 * Mark regions by whole line or column.
 * If no region is marked, the copy and kill commands operate on the
@@ -87,13 +89,10 @@ marked.
 * Text in Line or Column mode can be stored and recalled from registers, 
 as well as the kill-ring.
 
-#### Line Mode
 ![line-mode](https://bitbucket.org/MikeWoolley/brf-mode/raw/master/images/line-mode.png)
 
-#### Column Mode
 ![column-mode](https://bitbucket.org/MikeWoolley/brf-mode/raw/master/images/column-mode.png)
 
-#### Keys
 | Key         | Action                        |
 |-------------|-------------------------------|
 | M-l         | Start line marking            |
@@ -118,12 +117,11 @@ as well as the kill-ring.
 | C-RET       | Open New Line                 |
 | Tab         | Indent                        |
 
-### Reversible Paging and Scrolling
+### Reversible Paging and Scrolling {#paging-and-scrolling}
 
 * Paging and scrolling respect relative screen row and absolute column.
 * Paging up and then down again returns point to the same original position.
 
-#### Keys
 | Key    | Action                        |
 |--------|-------------------------------|
 | next   | page-down                     |
@@ -135,7 +133,7 @@ as well as the kill-ring.
 | home   | Beginning of Line/Page/Buffer |
 | end    | End of Line/Page/Buffer       |
 
-### Temporary Bookmarks
+### Temporary Bookmarks {#temporary-bookmarks}
 
 * 10 bookmarks can be set and navigated between. 
 * They can also be moved and deleted.
@@ -146,14 +144,13 @@ invocations of Emacs.
 * If the package `fringe-helper` is installed, the bookmark number is
  put in the fringe (which otherwise shows as a tooltip).
 * If the package `generic-menu` is installed, bookmarks can be listed
- & chosen from a menu, [see below](#markdown-header-list-bookmarks). 
+ & chosen from a menu, [see below](#list-bookmarks). 
  This is also an extension to Brief.
 * Other extensions are a command to allocate the next free bookmark
   and one to delete all bookmarks.
 
 ![bookmarks](https://bitbucket.org/MikeWoolley/brf-mode/raw/master/images/bookmarks.png)
 
-#### Keys
 | Key                 | Action                               |
 |---------------------|--------------------------------------|
 | M-0 to M-9          | Drop bookmark 0-9 at point           |
@@ -170,7 +167,7 @@ invocations of Emacs.
 | C-c C-b C-p         | Goto Previous Bookmark               |
 | C-c C-b =           | Allocate Next Free Bookmark at Point |
 
-#### List Bookmarks
+### List Bookmarks {#list-bookmarks}
 
 ![list-bookmarks](https://bitbucket.org/MikeWoolley/brf-mode/raw/master/images/list-bookmarks.png)
 
@@ -181,7 +178,7 @@ invocations of Emacs.
 | k    | Delete All bookmarks      |
 | q    | Quit                      |
 
-### Cursor Motion Undo
+### Cursor Motion Undo {#cursor-motion-undo}
 
 * Cursor motion, without any buffer changes, is recorded as an
 undo-able (& redo-able) action.
@@ -191,19 +188,17 @@ packages - it should work, but you never know!
 * It is turned off by default (unlike in Brief), but can enabled by Customise
 option `b-undo-enable`.
 
-#### Keys
 | Key         | Action                                 |
 |-------------|----------------------------------------|
 | kp-multiply | Undo                                   |
 | M-u         | Undo                                   |
 | M-r         | Redo (if `redo` or `redo+` installed). |
 
-### Easy Window Management
+### Easy Window Management {#window-management}
 
 * Create, Switch, Resize and Delete arbitrary windows with simple
   keystrokes.
 
-#### Keys
 | Key                        | Action                        |
 |----------------------------|-------------------------------|
 | S- [up, down, right, left] | Switch to Window in Direction |
