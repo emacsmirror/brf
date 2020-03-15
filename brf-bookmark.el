@@ -199,7 +199,7 @@ This function is meant to be called from a command's interactive form."
     (let ((number (or current-prefix-arg
 		      (- (read-digit prompt) ?0))))
       (unless (brf-valid-bookmark-number-p number)
-	(user-error (format "%d is an invalid bookmark number" number)))
+	(user-error "%d is an invalid bookmark number" number))
       (list number))))
 
 (defun brf-make-set-bookmark (number)
@@ -291,7 +291,7 @@ If the command is given a prefix argument, then the bookmark is removed."
   (interactive (brf-read-bookmark-number "Kill Bookmark: "))
   (let ((bookmark (brf-get-bookmark number)))
     (unless (brf-valid-bookmark-p bookmark)
-      (user-error (format "Bookmark %d is not set" number)))
+      (user-error "Bookmark %d is not set" number))
     (move-marker (brf-bookmark-marker bookmark) nil)
     (delete-overlay (brf-bookmark-overlay bookmark))))
 
@@ -311,7 +311,7 @@ If the command is given a prefix argument, then the bookmark is removed."
   ;; Lookup the bookmark
   (let ((bookmark (brf-get-bookmark number)))
     (unless (brf-valid-bookmark-p bookmark)
-      (user-error (format "Bookmark %d is not set" number)))
+      (user-error "Bookmark %d is not set" number))
     (let ((marker (brf-bookmark-marker bookmark)))
       (switch-to-buffer (marker-buffer marker))
       (goto-char marker)))

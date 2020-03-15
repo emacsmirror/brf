@@ -1,3 +1,9 @@
+2020-03-15  Mike Woolley  <mike@bulsara.com>
+
+	* brf.el (brf-mode): Forgot to add autoload marker.
+
+	* brf-bookmark.el: Removed extraneous `format' calls in error messages.
+
 2020-03-13  Mike Woolley  <mike@bulsara.com>
 
 	* *.el: Changed package-name (& mode prefix) to "brf" from "b".

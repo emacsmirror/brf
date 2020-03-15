@@ -197,6 +197,7 @@ Set this to nil to conserve valuable mode line space."
 (defvar brf-prev-c-j nil
   "Previous global binding of LF.")
 
+;;;###autoload
 (define-minor-mode brf-mode
   nil ; Use default doc string
   :lighter brf-mode-modeline-string
