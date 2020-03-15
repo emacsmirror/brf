@@ -1,9 +1,7 @@
-# Brf-Mode
+# Summary
 
 Brf-Mode adds functionality from the old DOS editor
 [Brief](https://en.wikipedia.org/wiki/Brief_(text_editor)) to Emacs.
-
-## Summary
 
 This package is not an emulation of Brief (there are plenty of those
 already), but rather provides an accurate implementation in Emacs of
@@ -36,9 +34,9 @@ Also some functionality was never part of Brief nor Emacs (for example
 [`List Bookmarks`](#list-bookmarks) and the mode uses the prefix `C-c
 C-b` for such commands.
 
-## Setup
+# Setup
 
-### Installation
+## Installation
 
 * Manual
 
@@ -52,7 +50,7 @@ C-b` for such commands.
 
 Coming soon...
 
-### Customisation
+## Customisation
 * Options
 
 ```emacs-lisp
@@ -77,9 +75,9 @@ Customisable options are:
        (define-key brf-mode-map ...)))
 ```
 
-## Features
+# Features
 
-### Line and Column Mode Cut and Paste
+## Line and Column Mode Cut and Paste
 
 * Mark regions by whole line or column.
 * If no region is marked, the copy and kill commands operate on the
@@ -117,7 +115,7 @@ as well as the kill-ring.
 | C-RET       | Open New Line                 |
 | Tab         | Indent                        |
 
-### Reversible Paging and Scrolling
+## Reversible Paging and Scrolling
 
 * Paging and scrolling respect relative screen row and absolute column.
 * Paging up and then down again returns point to the same original position.
@@ -133,7 +131,7 @@ as well as the kill-ring.
 | home   | Beginning of Line/Page/Buffer |
 | end    | End of Line/Page/Buffer       |
 
-### Temporary Bookmarks
+## Temporary Bookmarks
 
 * 10 bookmarks can be set and navigated between. 
 * They can also be moved and deleted.
@@ -167,7 +165,7 @@ invocations of Emacs.
 | C-c C-b C-p         | Goto Previous Bookmark               |
 | C-c C-b =           | Allocate Next Free Bookmark at Point |
 
-### List Bookmarks
+## List Bookmarks
 
 ![list-bookmarks](https://bitbucket.org/MikeWoolley/brf-mode/raw/master/images/list-bookmarks.png)
 
@@ -178,7 +176,7 @@ invocations of Emacs.
 | k    | Delete All bookmarks      |
 | q    | Quit                      |
 
-### Cursor Motion Undo
+## Cursor Motion Undo
 
 * Cursor motion, without any buffer changes, is recorded as an
 undo-able (& redo-able) action.
@@ -194,7 +192,7 @@ option `b-undo-enable`.
 | M-u         | Undo                                   |
 | M-r         | Redo (if `redo` or `redo+` installed). |
 
-### Easy Window Management
+## Easy Window Management
 
 * Create, Switch, Resize and Delete arbitrary windows with simple
   keystrokes.

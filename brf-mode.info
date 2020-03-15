@@ -11,23 +11,10 @@ START-INFO-DIR-ENTRY
 END-INFO-DIR-ENTRY
 
 
-File: brf-mode.info,  Node: Top,  Next: Brf-Mode,  Up: (dir)
+File: brf-mode.info,  Node: Top,  Next: Summary,  Up: (dir)
 
 Top
 ***
-
-* Menu:
-
-* Brf-Mode::
-
-
-File: brf-mode.info,  Node: Brf-Mode,  Prev: Top,  Up: Top
-
-1 Brf-Mode
-**********
-
-Brf-Mode adds functionality from the old DOS editor Brief
-(https://en.wikipedia.org/wiki/Brief_(text_editor)) to Emacs.
 
 * Menu:
 
@@ -36,14 +23,17 @@ Brf-Mode adds functionality from the old DOS editor Brief
 * Features::
 
 
-File: brf-mode.info,  Node: Summary,  Next: Setup,  Up: Brf-Mode
+File: brf-mode.info,  Node: Summary,  Next: Setup,  Prev: Top,  Up: Top
 
-1.1 Summary
-===========
+1 Summary
+*********
 
-This package is not an emulation of Brief (there are plenty of those
-already), but rather provides an accurate implementation in Emacs of
-specific features that I miss from Brief.
+Brf-Mode adds functionality from the old DOS editor Brief
+(https://en.wikipedia.org/wiki/Brief_(text_editor)) to Emacs.
+
+   This package is not an emulation of Brief (there are plenty of
+those already), but rather provides an accurate implementation in
+Emacs of specific features that I miss from Brief.
 
    The emphasis is on accurately implementing these specific features
 in Emacs rather than doing what Brief emulations tend to do, which is
@@ -80,10 +70,10 @@ example *Note `List Bookmarks': #list-bookmarks. and the mode uses
 the prefix `C-c C-b' for such commands.
 
 
-File: brf-mode.info,  Node: Setup,  Next: Features,  Prev: Summary,  Up: Brf-Mode
+File: brf-mode.info,  Node: Setup,  Next: Features,  Prev: Summary,  Up: Top
 
-1.2 Setup
-=========
+2 Setup
+*******
 
 * Menu:
 
@@ -93,8 +83,8 @@ File: brf-mode.info,  Node: Setup,  Next: Features,  Prev: Summary,  Up: Brf-Mod
 
 File: brf-mode.info,  Node: Installation,  Next: Customisation,  Up: Setup
 
-1.2.1 Installation
-------------------
+2.1 Installation
+================
 
    * Manual
 
@@ -110,8 +100,8 @@ File: brf-mode.info,  Node: Installation,  Next: Customisation,  Up: Setup
 
 File: brf-mode.info,  Node: Customisation,  Prev: Installation,  Up: Setup
 
-1.2.2 Customisation
--------------------
+2.2 Customisation
+=================
 
    * Options
 
@@ -141,10 +131,10 @@ the mode hook:
        (define-key brf-mode-map ...)))
 
 
-File: brf-mode.info,  Node: Features,  Prev: Setup,  Up: Brf-Mode
+File: brf-mode.info,  Node: Features,  Prev: Setup,  Up: Top
 
-1.3 Features
-============
+3 Features
+**********
 
 * Menu:
 
@@ -158,8 +148,8 @@ File: brf-mode.info,  Node: Features,  Prev: Setup,  Up: Brf-Mode
 
 File: brf-mode.info,  Node: Line and Column Mode Cut and Paste,  Next: Reversible Paging and Scrolling,  Up: Features
 
-1.3.1 Line and Column Mode Cut and Paste
-----------------------------------------
+3.1 Line and Column Mode Cut and Paste
+======================================
 
    * Mark regions by whole line or column.
 
@@ -199,8 +189,8 @@ Tab           Indent
 
 File: brf-mode.info,  Node: Reversible Paging and Scrolling,  Next: Temporary Bookmarks,  Prev: Line and Column Mode Cut and Paste,  Up: Features
 
-1.3.2 Reversible Paging and Scrolling
--------------------------------------
+3.2 Reversible Paging and Scrolling
+===================================
 
    * Paging and scrolling respect relative screen row and absolute
      column.
@@ -222,8 +212,8 @@ end      End of Line/Page/Buffer
 
 File: brf-mode.info,  Node: Temporary Bookmarks,  Next: List Bookmarks,  Prev: Reversible Paging and Scrolling,  Up: Features
 
-1.3.3 Temporary Bookmarks
--------------------------
+3.3 Temporary Bookmarks
+=======================
 
    * 10 bookmarks can be set and navigated between.
 
@@ -264,8 +254,8 @@ C-c C-b =             Allocate Next Free Bookmark at Point
 
 File: brf-mode.info,  Node: List Bookmarks,  Next: Cursor Motion Undo,  Prev: Temporary Bookmarks,  Up: Features
 
-1.3.4 List Bookmarks
---------------------
+3.4 List Bookmarks
+==================
 
 key   Action
 ---------------------------------- 
@@ -277,8 +267,8 @@ q     Quit
 
 File: brf-mode.info,  Node: Cursor Motion Undo,  Next: Easy Window Management,  Prev: List Bookmarks,  Up: Features
 
-1.3.5 Cursor Motion Undo
-------------------------
+3.5 Cursor Motion Undo
+======================
 
    * Cursor motion, without any buffer changes, is recorded as an
      undo-able (& redo-able) action.
@@ -300,8 +290,8 @@ M-r           Redo (if `redo' or `redo+' installed).
 
 File: brf-mode.info,  Node: Easy Window Management,  Prev: Cursor Motion Undo,  Up: Features
 
-1.3.6 Easy Window Management
-----------------------------
+3.6 Easy Window Management
+==========================
 
    * Create, Switch, Resize and Delete arbitrary windows with simple
      keystrokes.
@@ -320,29 +310,27 @@ S-f4                         Delete Other Windows
 
 Tag Table:
 Node: Top290
-Node: Brf-Mode386
-Ref: #brf-mode471
-Node: Summary637
-Ref: #summary730
-Node: Setup2152
-Ref: #setup2258
-Node: Installation2303
-Ref: #installation2420
-Node: Customisation2527
-Ref: #customisation2646
-Node: Features3101
-Ref: #features3197
-Node: Line and Column Mode Cut and Paste3375
-Ref: #line-and-column-mode-cut-and-paste3579
-Node: Reversible Paging and Scrolling4502
-Ref: #reversible-paging-and-scrolling4728
-Node: Temporary Bookmarks5139
-Ref: #temporary-bookmarks5321
-Node: List Bookmarks6642
-Ref: #list-bookmarks6801
-Node: Cursor Motion Undo6952
-Ref: #cursor-motion-undo7122
-Node: Easy Window Management7719
-Ref: #easy-window-management7874
+Node: Summary407
+Ref: #summary503
+Node: Setup2049
+Ref: #setup2146
+Node: Installation2191
+Ref: #installation2304
+Node: Customisation2411
+Ref: #customisation2526
+Node: Features2981
+Ref: #features3068
+Node: Line and Column Mode Cut and Paste3246
+Ref: #line-and-column-mode-cut-and-paste3446
+Node: Reversible Paging and Scrolling4369
+Ref: #reversible-paging-and-scrolling4591
+Node: Temporary Bookmarks5002
+Ref: #temporary-bookmarks5180
+Node: List Bookmarks6501
+Ref: #list-bookmarks6656
+Node: Cursor Motion Undo6807
+Ref: #cursor-motion-undo6973
+Node: Easy Window Management7570
+Ref: #easy-window-management7721
 
 End Tag Table
