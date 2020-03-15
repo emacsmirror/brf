@@ -5,6 +5,11 @@ README.texi.
 
    Copyright (C) 2000-2020 Mike Woolley
 
+INFO-DIR-SECTION Emacs
+START-INFO-DIR-ENTRY
+* Brf-mode: (brf-mode).         Add functionality from the editor Brief.
+END-INFO-DIR-ENTRY
+
 
 File: brf-mode.info,  Node: Top,  Next: Brf-Mode,  Up: (dir)
 
@@ -314,30 +319,30 @@ S-f4                         Delete Other Windows
 
 
 Tag Table:
-Node: Top153
-Node: Brf-Mode249
-Ref: #brf-mode334
-Node: Summary500
-Ref: #summary593
-Node: Setup2015
-Ref: #setup2121
-Node: Installation2166
-Ref: #installation2283
-Node: Customisation2390
-Ref: #customisation2509
-Node: Features2964
-Ref: #features3060
-Node: Line and Column Mode Cut and Paste3238
-Ref: #line-and-column-mode-cut-and-paste3442
-Node: Reversible Paging and Scrolling4365
-Ref: #reversible-paging-and-scrolling4591
-Node: Temporary Bookmarks5002
-Ref: #temporary-bookmarks5184
-Node: List Bookmarks6505
-Ref: #list-bookmarks6664
-Node: Cursor Motion Undo6815
-Ref: #cursor-motion-undo6985
-Node: Easy Window Management7582
-Ref: #easy-window-management7737
+Node: Top290
+Node: Brf-Mode386
+Ref: #brf-mode471
+Node: Summary637
+Ref: #summary730
+Node: Setup2152
+Ref: #setup2258
+Node: Installation2303
+Ref: #installation2420
+Node: Customisation2527
+Ref: #customisation2646
+Node: Features3101
+Ref: #features3197
+Node: Line and Column Mode Cut and Paste3375
+Ref: #line-and-column-mode-cut-and-paste3579
+Node: Reversible Paging and Scrolling4502
+Ref: #reversible-paging-and-scrolling4728
+Node: Temporary Bookmarks5139
+Ref: #temporary-bookmarks5321
+Node: List Bookmarks6642
+Ref: #list-bookmarks6801
+Node: Cursor Motion Undo6952
+Ref: #cursor-motion-undo7122
+Node: Easy Window Management7719
+Ref: #easy-window-management7874
 
 End Tag Table

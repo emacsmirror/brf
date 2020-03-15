@@ -35,7 +35,7 @@
 ;; * Cursor motion undo.
 ;; * Easy window management.
 ;;
-;; See the README.md file for further details.
+;; See README.md or Info manual for further details.
 
 ;;; Change Log:
 ;;
