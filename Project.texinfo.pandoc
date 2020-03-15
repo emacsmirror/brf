@@ -1,7 +1,7 @@
 ;; -*- mode: emacs-lisp -*-
 
 ;; pandoc-mode project settings file
-;; saved on 2020.03.15 11:43
+;; saved on 2020.03.15 15:00
 
 ((latexmathml)
  (mathml)
@@ -64,7 +64,7 @@
  (highlight-style)
  (syntax-definition)
  (include-in-header)
- (include-before-body . "header.texi")
+ (include-before-body . "manual/header.texi")
  (include-after-body)
  (request-header)
  (resource-path)
