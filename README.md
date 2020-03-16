@@ -1,4 +1,4 @@
-# Summary
+# Brf-Mode
 
 Brf-Mode adds functionality from the old DOS editor
 [Brief](https://en.wikipedia.org/wiki/Brief_(text_editor)) to Emacs.
@@ -38,19 +38,26 @@ C-b` for such commands.
 
 ## Installation
 
+* Melpa Package 
+
+[![MELPA](https://melpa.org/packages/brf-badge.svg)](https://melpa.org/#/brf)
+
+Make sure [melpa is in your package archives list](https://melpa.org/#/getting-started), and `M-x package-install brf`
+
 * Manual
 
+Download the package to a directory, add it to your `load-path` and
+enable `brf-mode`.
+
 ```emacs-lisp
-   (require 'brf)
-   (brf-mode) 
-   ;; or set via customize
+   (add-to-list 'load-path <install directory>)
+   (brf-mode) ;; or enable brf-mode via customize
 ```
 
-* Package 
-
-Coming soon...
+Install the Info manual with `install-info` (optional).
 
 ## Customisation
+
 * Options
 
 ```emacs-lisp

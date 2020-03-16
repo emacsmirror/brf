@@ -11,22 +11,22 @@ START-INFO-DIR-ENTRY
 END-INFO-DIR-ENTRY
 
 
-File: brf-mode.info,  Node: Top,  Next: Summary,  Up: (dir)
+File: brf-mode.info,  Node: Top,  Next: Brf-Mode,  Up: (dir)
 
-Top
-***
+Emacs Brf-Mode
+**************
 
 * Menu:
 
-* Summary::
+* Brf-Mode::
 * Setup::
 * Features::
 
 
-File: brf-mode.info,  Node: Summary,  Next: Setup,  Prev: Top,  Up: Top
+File: brf-mode.info,  Node: Brf-Mode,  Next: Setup,  Prev: Top,  Up: Top
 
-1 Summary
-*********
+1 Brf-Mode
+**********
 
 Brf-Mode adds functionality from the old DOS editor Brief
 (https://en.wikipedia.org/wiki/Brief_(text_editor)) to Emacs.
@@ -70,7 +70,7 @@ example *Note `List Bookmarks': #list-bookmarks. and the mode uses
 the prefix `C-c C-b' for such commands.
 
 
-File: brf-mode.info,  Node: Setup,  Next: Features,  Prev: Summary,  Up: Top
+File: brf-mode.info,  Node: Setup,  Next: Features,  Prev: Brf-Mode,  Up: Top
 
 2 Setup
 *******
@@ -86,16 +86,23 @@ File: brf-mode.info,  Node: Installation,  Next: Customisation,  Up: Setup
 2.1 Installation
 ================
 
+   * Melpa Package
+
+   (https://melpa.org/#/brf)
+
+   Make sure melpa is in your package archives list
+(https://melpa.org/#/getting-started), and `M-x package-install brf'
+
    * Manual
 
+   Download the package to a directory, add it to your `load-path' and
+enable `brf-mode'.
 
-   (require 'brf)
-   (brf-mode)
-   ;; or set via customize
 
-   * Package
+   (add-to-list 'load-path <install directory>)
+   (brf-mode) ;; or enable brf-mode via customize
 
-   Coming soon...
+   Install the Info manual with `install-info' (optional).
 
 
 File: brf-mode.info,  Node: Customisation,  Prev: Installation,  Up: Setup
@@ -310,27 +317,27 @@ S-f4                         Delete Other Windows
 
 Tag Table:
 Node: Top290
-Node: Summary407
-Ref: #summary503
-Node: Setup2049
-Ref: #setup2146
-Node: Installation2191
-Ref: #installation2304
-Node: Customisation2411
-Ref: #customisation2526
-Node: Features2981
-Ref: #features3068
-Node: Line and Column Mode Cut and Paste3246
-Ref: #line-and-column-mode-cut-and-paste3446
-Node: Reversible Paging and Scrolling4369
-Ref: #reversible-paging-and-scrolling4591
-Node: Temporary Bookmarks5002
-Ref: #temporary-bookmarks5180
-Node: List Bookmarks6501
-Ref: #list-bookmarks6656
-Node: Cursor Motion Undo6807
-Ref: #cursor-motion-undo6973
-Node: Easy Window Management7570
-Ref: #easy-window-management7721
+Node: Brf-Mode431
+Ref: #brf-mode530
+Node: Setup2076
+Ref: #setup2174
+Node: Installation2219
+Ref: #installation2332
+Node: Customisation2768
+Ref: #customisation2883
+Node: Features3338
+Ref: #features3425
+Node: Line and Column Mode Cut and Paste3603
+Ref: #line-and-column-mode-cut-and-paste3803
+Node: Reversible Paging and Scrolling4726
+Ref: #reversible-paging-and-scrolling4948
+Node: Temporary Bookmarks5359
+Ref: #temporary-bookmarks5537
+Node: List Bookmarks6858
+Ref: #list-bookmarks7013
+Node: Cursor Motion Undo7164
+Ref: #cursor-motion-undo7330
+Node: Easy Window Management7927
+Ref: #easy-window-management8078
 
 End Tag Table
