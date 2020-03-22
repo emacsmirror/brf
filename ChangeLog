@@ -1,3 +1,11 @@
+2020-03-22  Mike Woolley  <mike@bulsara.com>
+
+	* brf-menu.el:
+	* brf-bookmark.el: Created `brf-menu' as a self-contained
+	replacement for `generic-menu', as that package was outdated and
+	not widely available. It also had some bugs which stopped some of
+	the features (like font-lock) from working.
+
 2020-03-15  Mike Woolley  <mike@bulsara.com>
 
 	* brf.el (brf-mode): Forgot to add autoload marker.

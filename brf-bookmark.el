@@ -25,6 +25,7 @@
 ;;; Code:
 
 (require 'brf-compat)
+(require 'brf-menu)
 (eval-when-compile (require 'cl))
 
 (defface brf-bookmark-face '((t (:background "khaki")))
@@ -346,40 +347,26 @@ With ARG jump to the next one."
   (unless brf-current-bookmark
     (user-error "No bookmarks have been set"))
 
-  ;; List selection buffer is provided by `generic-menu'
-  ;; *** Mike: Fix Me ***: Replace this with something more widely available (or my own code)
-  (if (require 'generic-menu "generic-menu" t)
-      (let ((map (make-sparse-keymap)))
-	(require 'derived) ; `generic-menu' should really be doing this...
+  ;; Show the Bookmark menu
+  (let ((map (make-sparse-keymap)))
+    ;; Add some commands to delete bookmarks
+    (define-key map "d" 'brf-bookmark-menu-kill)
+    (define-key map "k" 'brf-bookmark-menu-kill-all)
 
-	;; Add some command to delete bookmarks
-	(define-key map "d" 'brf-bookmark-menu-kill)
-	(define-key map "k" 'brf-bookmark-menu-kill-all)
-	(define-key map "?" nil) ; Disable `generic-mode'-specific help
+    (brf-menu
+      :buffer-name "*Brf Bookmarks*"
+      :mode-name "Bookmarks"
+      :header-line "Bookmarks: [SELECT] Jump to bookmark, [d] Delete, [k] Delete All, [q] Quit."
+      :regexp-start-position (format "^[* ][ \t]+%d" brf-current-bookmark)
+      :items (loop for idx from 0 to (1- brf-max-bookmarks) collect idx)
+      :keymap map
+      :font-lock-keywords #'brf-bookmark-menu-font-lock
+      :select-function #'brf-bookmark-menu-select
+      :display-function #'brf-bookmark-menu-display
+      :mode-help "Manage Bookmarks")
 
-	;; Show the Bookmark menu
-	(gm-popup :buffer-name "*Brf Bookmarks*"
-		  :mode-name "Bookmarks"
-		  :header-line "Bookmarks: [SELECT] Jump to bookmark, [d] Delete, [k] Delete All, [q] Quit."
-		  :max-entries brf-max-bookmarks
-		  :truncate-lines t
-		  :regexp-start-position (format "^[* ][ \t]+%d" brf-current-bookmark)
-		  :elements (loop for idx from 0 to (1- brf-max-bookmarks)
-				  collect idx)
-		  :keymap map
-		  :font-lock-keywords #'brf-bookmark-menu-font-lock
-		  :select-callback #'brf-bookmark-menu-select
-		  :display-string-function #'brf-bookmark-menu-display)
-
-	;; Size the window to show all the bookmarks, if possible
-	(fit-window-to-buffer))
-
-    ;; `generic-menu' not available
-    ;; Silence the byte-compiler, about the missing gm- functions
-    (declare-function gm-popup "ext:generic-menu" (&rest plain-properties))
-    (declare-function gm-quit "ext:generic-menu" nil)
-    (declare-function gm-full-refresh "ext:generic-menu" nil)
-    (user-error "Please install generic-menu")))
+    ;; Size the window to show all the bookmarks, if possible
+    (fit-window-to-buffer)))
 
 (defun brf-bookmark-menu-font-lock ()
   "Return font-lock keywords to fontify the menu buffer."
@@ -392,7 +379,7 @@ With ARG jump to the next one."
   "Jump to bookmark at menu IDX."
   (let ((bookmark (brf-get-bookmark idx)))
     (cond ((brf-valid-bookmark-p bookmark)
-	   (gm-quit)
+	   (brf-menu-quit)
 	   (brf-jump-to-bookmark idx))
 	  (t ; Bookmark not set
 	   (user-error "Bookmark %d is not set" idx)))))
@@ -422,13 +409,13 @@ With ARG jump to the next one."
 	    (> line brf-max-bookmarks))
 	(user-error "You aren't on a bookmark line")
       (brf-kill-bookmark (1- line))
-      (gm-full-refresh))))
+      (brf-menu-refresh))))
 
 (defun brf-bookmark-menu-kill-all ()
   "Kill all bookmarks when in the bookmark menu."
   (interactive)
   (brf-kill-all-bookmarks)
-  (gm-full-refresh))
+  (brf-menu-refresh))
 
 (defun brf-current-line ()
   "Return current line number of point (starting at 1)."

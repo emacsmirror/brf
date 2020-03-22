@@ -148,8 +148,7 @@ invocations of Emacs.
  (customisable).
 * If the package `fringe-helper` is installed, the bookmark number is
  put in the fringe (which otherwise shows as a tooltip).
-* If the package `generic-menu` is installed, bookmarks can be listed
- & chosen from a menu, [see below](#list-bookmarks). 
+* Bookmarks can be listed & chosen from a menu, [see below](#list-bookmarks). 
  This is also an extension to Brief.
 * Other extensions are a command to allocate the next free bookmark
   and one to delete all bookmarks.
@@ -179,8 +178,17 @@ invocations of Emacs.
 | key  | Action                    |
 |------|---------------------------|
 | RET  | Jump to bookmark at point |
+| SPC  | Jump to bookmark at point |
 | d    | Delete bookmark at point  |
 | k    | Delete All bookmarks      |
+|      |                           |
+| down | Move point down           |
+| up   | Move point up             |
+| <    | Move to start of buffer   |
+| >    | Move to end of buffer     |
+|      |                           |
+| ?    | Help                      |
+| h    | Describe Mode             |
 | q    | Quit                      |
 
 ## Cursor Motion Undo

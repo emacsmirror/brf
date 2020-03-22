@@ -235,9 +235,8 @@ File: brf-mode.info,  Node: Temporary Bookmarks,  Next: List Bookmarks,  Prev: R
    * If the package `fringe-helper' is installed, the bookmark number
      is put in the fringe (which otherwise shows as a tooltip).
 
-   * If the package `generic-menu' is installed, bookmarks can be
-     listed & chosen from a menu, *Note see below: #list-bookmarks.
-     This is also an extension to Brief.
+   * Bookmarks can be listed & chosen from a menu, *Note see below:
+     #list-bookmarks. This is also an extension to Brief.
 
    * Other extensions are a command to allocate the next free
      bookmark and one to delete all bookmarks.
@@ -264,12 +263,21 @@ File: brf-mode.info,  Node: List Bookmarks,  Next: Cursor Motion Undo,  Prev: Te
 3.4 List Bookmarks
 ==================
 
-key   Action
----------------------------------- 
-RET   Jump to bookmark at point
-d     Delete bookmark at point
-k     Delete All bookmarks
-q     Quit
+key    Action
+----------------------------------- 
+RET    Jump to bookmark at point
+SPC    Jump to bookmark at point
+d      Delete bookmark at point
+k      Delete All bookmarks
+
+down   Move point down
+up     Move point up
+<      Move to start of buffer
+>      Move to end of buffer
+
+?      Help
+h      Describe Mode
+q      Quit
 
 
 File: brf-mode.info,  Node: Cursor Motion Undo,  Next: Easy Window Management,  Prev: List Bookmarks,  Up: Features
@@ -333,11 +341,11 @@ Node: Reversible Paging and Scrolling4726
 Ref: #reversible-paging-and-scrolling4948
 Node: Temporary Bookmarks5359
 Ref: #temporary-bookmarks5537
-Node: List Bookmarks6858
-Ref: #list-bookmarks7013
-Node: Cursor Motion Undo7164
-Ref: #cursor-motion-undo7330
-Node: Easy Window Management7927
-Ref: #easy-window-management8078
+Node: List Bookmarks6809
+Ref: #list-bookmarks6964
+Node: Cursor Motion Undo7293
+Ref: #cursor-motion-undo7459
+Node: Easy Window Management8056
+Ref: #easy-window-management8207
 
 End Tag Table
