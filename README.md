@@ -31,7 +31,7 @@ that were never part of Brief.  For example, text cut/copied in
 line or column-mode can be saved/recalled in registers.
 
 Also some functionality was never part of Brief nor Emacs (for example
-[`List Bookmarks`](#list-bookmarks) and the mode uses the prefix `C-c
+[`List Bookmarks`](#list-bookmarks)) and the mode uses the prefix `C-c
 C-b` for such commands.
 
 # Setup
@@ -148,8 +148,8 @@ invocations of Emacs.
  (customisable).
 * If the package `fringe-helper` is installed, the bookmark number is
  put in the fringe (which otherwise shows as a tooltip).
-* Bookmarks can be listed & chosen from a menu, [see below](#list-bookmarks). 
- This is also an extension to Brief.
+* Bookmarks can be listed & chosen from a menu, [see
+  below](#list-bookmarks).  This is also an extension to Brief.
 * Other extensions are a command to allocate the next free bookmark
   and one to delete all bookmarks.
 
@@ -172,6 +172,9 @@ invocations of Emacs.
 | C-c C-b =           | Allocate Next Free Bookmark at Point |
 
 ## List Bookmarks
+
+* Invoke the List Bookmarks menu with `C-c C-b C-l`.
+* This allows you to view and manage all the current bookmarks.
 
 ![list-bookmarks](https://bitbucket.org/MikeWoolley/brf-mode/raw/master/images/list-bookmarks.png)
 

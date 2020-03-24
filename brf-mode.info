@@ -66,7 +66,7 @@ that were never part of Brief. For example, text cut/copied in line or
 column-mode can be saved/recalled in registers.
 
    Also some functionality was never part of Brief nor Emacs (for
-example *Note `List Bookmarks': #list-bookmarks. and the mode uses
+example *Note `List Bookmarks': #list-bookmarks.) and the mode uses
 the prefix `C-c C-b' for such commands.
 
 
@@ -263,6 +263,10 @@ File: brf-mode.info,  Node: List Bookmarks,  Next: Cursor Motion Undo,  Prev: Te
 3.4 List Bookmarks
 ==================
 
+   * Invoke the List Bookmarks menu with `C-c C-b C-l'.
+
+   * This allows you to view and manage all the current bookmarks.
+
 key    Action
 ----------------------------------- 
 RET    Jump to bookmark at point
@@ -327,25 +331,25 @@ Tag Table:
 Node: Top290
 Node: Brf-Mode431
 Ref: #brf-mode530
-Node: Setup2076
-Ref: #setup2174
-Node: Installation2219
-Ref: #installation2332
-Node: Customisation2768
-Ref: #customisation2883
-Node: Features3338
-Ref: #features3425
-Node: Line and Column Mode Cut and Paste3603
-Ref: #line-and-column-mode-cut-and-paste3803
-Node: Reversible Paging and Scrolling4726
-Ref: #reversible-paging-and-scrolling4948
-Node: Temporary Bookmarks5359
-Ref: #temporary-bookmarks5537
-Node: List Bookmarks6809
-Ref: #list-bookmarks6964
-Node: Cursor Motion Undo7293
-Ref: #cursor-motion-undo7459
-Node: Easy Window Management8056
-Ref: #easy-window-management8207
+Node: Setup2077
+Ref: #setup2175
+Node: Installation2220
+Ref: #installation2333
+Node: Customisation2769
+Ref: #customisation2884
+Node: Features3339
+Ref: #features3426
+Node: Line and Column Mode Cut and Paste3604
+Ref: #line-and-column-mode-cut-and-paste3804
+Node: Reversible Paging and Scrolling4727
+Ref: #reversible-paging-and-scrolling4949
+Node: Temporary Bookmarks5360
+Ref: #temporary-bookmarks5538
+Node: List Bookmarks6810
+Ref: #list-bookmarks6965
+Node: Cursor Motion Undo7419
+Ref: #cursor-motion-undo7585
+Node: Easy Window Management8182
+Ref: #easy-window-management8333
 
 End Tag Table
