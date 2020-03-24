@@ -371,7 +371,7 @@ With ARG jump to the next one."
 (defun brf-bookmark-menu-font-lock ()
   "Return font-lock keywords to fontify the menu buffer."
   '(("\\<[0-9]\\>" . font-lock-constant-face)	; Bookmark #
-    ("\\<NOT SET\\>" . compilation-error-face)	; "NOT SET"
+    ("\\<NOT SET\\>" . font-lock-warning-face)	; "NOT SET"
     ("^\\*" . font-lock-function-name-face)	; Current bookmark
     ("%\\b\\(.*\\)$" . 1)))			; Buffer name
 
