@@ -1,3 +1,9 @@
+2020-03-25  Mike Woolley  <mike@bulsara.com>
+
+	* brf-marking.el (brf-mark-default): Reverted change to supply
+	extra args to `backward-up-list', as this caused compilation
+	warnings on Emacs 24.
+
 2020-03-24  Mike Woolley  <mike@bulsara.com>
 
 	* brf-bookmark.el (brf-bookmark-menu-font-lock): Changed "NOT SET"

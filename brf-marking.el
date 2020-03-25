@@ -144,7 +144,7 @@ Normally this is the current line, but in Lisp modes it is the containing sexp."
 	 (condition-case nil
 	     (progn
 	       (unless (= (following-char) ?\()
-		 (backward-up-list 1 t t))
+		 (backward-up-list))
 	       (mark-sexp))
 	   (error (brf-mark-line))))
 	(t				; Non-lisp mode
