@@ -1,3 +1,9 @@
+2020-03-29  Mike Woolley  <mike@bulsara.com>
+
+	* brf-bookmark.el (brf-fringe-support-flag): Removed extraneous
+	argument to `require'.
+	(brf-make-set-bookmark): Removed extraneous `number-to-string' call.
+
 2020-03-25  Mike Woolley  <mike@bulsara.com>
 
 	* brf-marking.el (brf-mark-default): Reverted change to supply

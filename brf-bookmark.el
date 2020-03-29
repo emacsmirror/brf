@@ -41,7 +41,7 @@
 ;;
 (defconst brf-fringe-support-flag
   (and (fboundp 'fringe-mode)
-       (eval-and-compile (require 'fringe-helper "fringe-helper" t)))
+       (eval-and-compile (require 'fringe-helper nil t)))
   "Non-nil means this Emacs version has support for programmable fringes.")
 
 (when brf-fringe-support-flag
@@ -206,7 +206,7 @@ This function is meant to be called from a command's interactive form."
 (defun brf-make-set-bookmark (number)
   "Generate a command to set bookmark NUMBER at point.
 If the command is given a prefix argument, then the bookmark is removed."
-  (defalias (intern (format "brf-set-bookmark-%s" (number-to-string number)))
+  (defalias (intern (format "brf-set-bookmark-%d" number))
     `(lambda (&optional arg)
        ,(format "Set bookmark %d at point.\nWith ARG, remove the bookmark instead." number)
        (interactive "P")
