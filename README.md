@@ -201,8 +201,8 @@ undo-able (& redo-able) action.
 * This works with both built-in Emacs Undo and also with the `Redo.el`
 & `Redo+.el` packages. I haven't tested it with the plethora of other Undo
 packages - it should work, but you never know!
-* It is turned off by default (unlike in Brief), but can enabled by Customise
-option `b-undo-enable`.
+* It is turned off by default (unlike in Brief), but can be enabled by customising
+option `brf-undo-enable`.
 
 | Key         | Action                                 |
 |-------------|----------------------------------------|
