@@ -1,3 +1,22 @@
+2020-06-22  Mike Woolley  <mike@bulsara.com>
+
+	* brf.el (brf-mode-menu): Added a menu to show the harder to
+	access features and help information. Fixed problem with no mode
+	menu on the mode-line "lighter".
+	(brf-version): Read Brf Version from the package info, if
+	`pkg-info' is installed.
+	(brf-mode-map): Added local bindings for the toolbar cut & paste
+	commands, so they run the Brf Mode versions.
+	(brf-mode): Override "Select and Paste" menu item to correctly
+	handle Line Mode.
+
+	* brf-marking.el (menu-bar-select-yank): Override "Select and
+	Paste" menu item to correctly handle Line Mode.
+	(brf-insert-text): Refactored all the pasting code to use this
+	fundamental function to handle Line & Column Mode pasting.
+	(brf-yank-pop): Fixed bug where text wasn't correctly removed when
+	`yank-pop'-ing a line-mode item followed by a column-mode item.
+
 2020-03-29  Mike Woolley  <mike@bulsara.com>
 
 	* brf-bookmark.el (brf-fringe-support-flag): Removed extraneous

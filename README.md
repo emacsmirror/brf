@@ -30,9 +30,14 @@ Moreover, functionality has been extended to those parts of Emacs
 that were never part of Brief.  For example, text cut/copied in
 line or column-mode can be saved/recalled in registers.
 
-Also some functionality was never part of Brief nor Emacs (for example
+Some functionality was neither part of Brief nor Emacs (for example
 [`List Bookmarks`](#list-bookmarks)) and the mode uses the prefix `C-c
 C-b` for such commands.
+
+Brf-mode puts a `Brf` sub-menu under `Edit`. In keeping with Brief's
+minimalist ethos, the menu only houses these more difficult to access
+commands and also links to preferences, help, the manual and project
+website.
 
 # Setup
 
@@ -224,3 +229,23 @@ option `brf-undo-enable`.
 | f4 [up, down, right, left] | Delete Window in Direction    |
 | C-f4                       | Delete Current Window         |
 | S-f4                       | Delete Other Windows          |
+
+## Known Issues
+
+Please report any issues at the [Brf-mode project website](https://bitbucket.org/MikeWoolley/brf-mode).
+
+There are a couple of known minor issues:
+
+1. XEmacs Compatibility
+
+Brf-mode no longer works in XEmacs. It's likely to be easy to fix the
+compatibility issues, but given the demise of XEmacs I don't have any
+current plans to do this.
+   
+2. Menu & Toolbar commands for Cut & Paste
+
+Brf-mode replaces the Cut & Paste menu and toolbar commands with
+versions that respect Line & Column Mode in the same way as the
+Brf-mode keyboard commands. However Emacs disables the menu and
+toolbar `Cut` & `Copy` items if there is no marked region, unlike the
+corresponding Brf-mode keyboard commands.

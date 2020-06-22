@@ -209,7 +209,7 @@ Emulates the Brief copy function."
     (brf-mark-default))
   (let ((beg (region-beginning))
 	(end (region-end)))
-    (copy-region-as-kill beg end t)	; It seems rectangle-mode needs the t arg, to process the regiona as a rectangle
+    (copy-region-as-kill beg end t)	; It seems rectangle-mode needs the t arg, to process the region as a rectangle
     (brf-emphasise-region beg end)	; Emphasise the region like `kill-ring-save' does
     (when (brf-line-marking-p)
       (brf-set-line-kill (car kill-ring))
@@ -285,29 +285,45 @@ This is restored after the yank.")
 (defvar brf-last-yank-was-line nil
   "Non-nil if the last yank was from a line-mode kill.")
 
+(defmacro brf-insert-text (text insert)
+  "Insert TEXT form into the current buffer using INSERT form.
+Return non-nil if the inserted text was a line-kill."
+  (declare (indent defun))
+  (let ((line-kill (make-symbol "line-kill")))
+    `(let ((,line-kill (brf-line-kill-p ,text)))
+       ;; Pre-insert handling of line-kills
+       (when ,line-kill
+	 (setq brf-yank-col (current-column))
+	 (beginning-of-line))
+       ;; Insert the text
+       ,insert
+       ;; Post-insert handling of line-kills
+       (when ,line-kill
+	 (let ((point (point))
+	       (mark (mark t)))
+	   ;; Remove the line-kill property from the inserted text
+	   (brf-clear-line-kill (min mark point))
+	   ;; Indent the text
+	   (when (brf-buffer-in-programming-mode-p)
+	     (indent-region (min mark point) (max mark point) nil)))
+	 ;; Restore the original column
+	 (move-to-column brf-yank-col))
+       ;; Return the value of line-kill
+       ,line-kill)))
+
 (defun brf-yank (&optional arg)
   "Similar to the normal `yank' ARG command.
 However, correctly insert text that was killed in line-mode and
 also indent it (if the buffer is in a programming mode)."
   (interactive "*P")
   (setq this-command 'yank)
-  (setq brf-yank-col (current-column))
-  (cond ((brf-line-kill-p (current-kill (cond ((listp arg) 0)
-					      ((eq arg '-) -1)
-					      (t (1- arg))) t))
-	 (beginning-of-line)
-	 (yank arg)
-	 (let ((point (point))
-	       (mark (mark t)))
-	   (brf-clear-line-kill (min mark point))
-	   (when (brf-buffer-in-programming-mode-p)
-	     (indent-region (min mark point) (max mark point) nil)))
-	 (setq brf-last-yank-was-line t)
-	 (move-to-column brf-yank-col))
-
-	(t				; Not line kill
-	 (yank arg)
-	 (setq brf-last-yank-was-line nil))))
+  (setq brf-last-yank-was-line
+	(brf-insert-text
+	  (current-kill (cond ((listp arg) 0)
+			      ((eq arg '-) -1)
+			      (t (1- arg)))
+			t)
+	  (yank arg))))
 
 (defun brf-yank-pop (arg)
   "Similar to the normal `yank-pop' ARG command.
@@ -317,50 +333,42 @@ also indent it."
   (unless (eq last-command 'yank)
     (user-error "Previous command was not a yank"))
   (setq this-command 'yank)
-  (cond ((brf-line-kill-p (current-kill arg t))
-	 (cond (brf-last-yank-was-line
-		(beginning-of-line))
-	       (t
-		(delete-region (point) (mark t))
-		(beginning-of-line)
-		(set-mark (point))
-		(setq brf-last-yank-was-line t)))
-	 (yank-pop arg)
-	 (let ((point (point))
-	       (mark (mark t)))
-	   (brf-clear-line-kill (min mark point))
-	   (when (brf-buffer-in-programming-mode-p)
-	     (indent-region (min mark point) (max mark point) nil)))
-	 (move-to-column brf-yank-col))
+  (let* ((text (current-kill arg t))
+	 (line-kill (brf-line-kill-p text)))
 
-	(t				; Not line kill
-	 (when brf-last-yank-was-line
-	   (beginning-of-line)
-	   (delete-region (point) (mark t))
-	   (move-to-column brf-yank-col)
-	   (set-mark (point))
-	   (setq brf-last-yank-was-line nil))
-	 (yank-pop arg))))
+    ;; Delete the last yank if `yank-pop' is not going to delete it correctly
+    ;; Make sure point & mark are in the correct places for `brf-insert-text'
+    (cond ((and brf-last-yank-was-line (not line-kill))
+	   (delete-region (brf-bol-position) (mark t))
+	   (set-mark (point)))
+	  ((and (not brf-last-yank-was-line) line-kill)
+	   (if (null yank-undo-function)
+	       (delete-region (point) (mark t))
+	     ;; Last yank was column-mode
+	     (funcall yank-undo-function (min (point) (mark t)) (max (point) (mark t)))
+	     (setq yank-undo-function nil))
+	   (set-mark (brf-bol-position))))
+
+    (setq brf-last-yank-was-line
+	  (brf-insert-text
+	    text
+	    (yank-pop arg)))))
 
 (defun brf-insert-register (register)
   "Similar to the normal `insert-register' REGISTER command.
 However, correctly insert text that was killed in line-mode and
 also indent it."
   (interactive "*cInsert Register:")
-  (let ((line-kill (brf-line-kill-p (get-register register))))
-    (when line-kill
-      (setq brf-yank-col (current-column))
-      (beginning-of-line))
+  (brf-insert-text
+    (get-register register)
+    (insert-register register (not current-prefix-arg))))
 
-    (insert-register register (not current-prefix-arg))
-
-    (when line-kill
-      (let ((point (point))
-	    (mark (mark t)))
-	(brf-clear-line-kill (min mark point))
-	(when (brf-buffer-in-programming-mode-p)
-	  (indent-region (min mark point) (max mark point) nil)))
-      (move-to-column brf-yank-col))))
+(defadvice menu-bar-select-yank (around brf-menu-bar-select-yank)
+  "Override `menu-bar-select-yank' command to correctly handle line-mode text."
+  (interactive "*")
+  (brf-insert-text
+    last-command-event
+    ad-do-it))
 
 ;;
 ;; Utilities

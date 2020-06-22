@@ -31,18 +31,17 @@ File: brf-mode.info,  Node: Brf-Mode,  Next: Setup,  Prev: Top,  Up: Top
 Brf-Mode adds functionality from the old DOS editor Brief
 (https://en.wikipedia.org/wiki/Brief_(text_editor)) to Emacs.
 
-   This package is not an emulation of Brief (there are plenty of
-those already), but rather provides an accurate implementation in
-Emacs of specific features that I miss from Brief.
+   This package is not an emulation of Brief (there are plenty of those
+already), but rather provides an accurate implementation in Emacs of
+specific features that I miss from Brief.
 
-   The emphasis is on accurately implementing these specific features
-in Emacs rather than doing what Brief emulations tend to do, which is
+   The emphasis is on accurately implementing these specific features in
+Emacs rather than doing what Brief emulations tend to do, which is
 mapping the Brief key-sequences to similar functions in Emacs.
 
    Principally these features are:
 
-   * *Note Line-mode cut and paste:
-     #line-and-column-mode-cut-and-paste.
+   * *Note Line-mode cut and paste: #line-and-column-mode-cut-and-paste.
 
    * *Note Column-mode cut and paste:
      #line-and-column-mode-cut-and-paste.
@@ -56,8 +55,8 @@ mapping the Brief key-sequences to similar functions in Emacs.
 
    * *Note Easy window management: #easy-window-management.
 
-   However they have been implemented in an Emacs-style. This means
-the functions respond to prefix args and where they override Emacs
+   However they have been implemented in an Emacs-style. This means the
+functions respond to prefix args and where they override Emacs
 functions, they live on the Emacs key bindings as well as the original
 Brief keys.
 
@@ -65,9 +64,14 @@ Brief keys.
 that were never part of Brief. For example, text cut/copied in line or
 column-mode can be saved/recalled in registers.
 
-   Also some functionality was never part of Brief nor Emacs (for
-example *Note `List Bookmarks': #list-bookmarks.) and the mode uses
-the prefix `C-c C-b' for such commands.
+   Some functionality was neither part of Brief nor Emacs (for example
+*Note `List Bookmarks': #list-bookmarks.) and the mode uses the prefix
+`C-c C-b' for such commands.
+
+   Brf-mode puts a `Brf' sub-menu under `Edit'. In keeping with Brief's
+minimalist ethos, the menu only houses these more difficult to access
+commands and also links to preferences, help, the manual and project
+website.
 
 
 File: brf-mode.info,  Node: Setup,  Next: Features,  Prev: Brf-Mode,  Up: Top
@@ -151,6 +155,7 @@ File: brf-mode.info,  Node: Features,  Prev: Setup,  Up: Top
 * List Bookmarks::
 * Cursor Motion Undo::
 * Easy Window Management::
+* Known Issues::
 
 
 File: brf-mode.info,  Node: Line and Column Mode Cut and Paste,  Next: Reversible Paging and Scrolling,  Up: Features
@@ -229,17 +234,17 @@ File: brf-mode.info,  Node: Temporary Bookmarks,  Next: List Bookmarks,  Prev: R
    * They are temporary in the sense they don't persist between
      invocations of Emacs.
 
-   * As an extension to Brief, bookmark lines are highlighted in
-     colour (customisable).
+   * As an extension to Brief, bookmark lines are highlighted in colour
+     (customisable).
 
-   * If the package `fringe-helper' is installed, the bookmark number
-     is put in the fringe (which otherwise shows as a tooltip).
+   * If the package `fringe-helper' is installed, the bookmark number is
+     put in the fringe (which otherwise shows as a tooltip).
 
    * Bookmarks can be listed & chosen from a menu, *Note see below:
      #list-bookmarks. This is also an extension to Brief.
 
-   * Other extensions are a command to allocate the next free
-     bookmark and one to delete all bookmarks.
+   * Other extensions are a command to allocate the next free bookmark
+     and one to delete all bookmarks.
 
 Key                   Action
 ------------------------------------------------------------- 
@@ -297,8 +302,8 @@ File: brf-mode.info,  Node: Cursor Motion Undo,  Next: Easy Window Management,  
      plethora of other Undo packages - it should work, but you never
      know!
 
-   * It is turned off by default (unlike in Brief), but can be
-     enabled by customising option `brf-undo-enable'.
+   * It is turned off by default (unlike in Brief), but can be enabled
+     by customising option `brf-undo-enable'.
 
 Key           Action
 ------------------------------------------------------- 
@@ -307,7 +312,7 @@ M-u           Undo
 M-r           Redo (if `redo' or `redo+' installed).
 
 
-File: brf-mode.info,  Node: Easy Window Management,  Prev: Cursor Motion Undo,  Up: Features
+File: brf-mode.info,  Node: Easy Window Management,  Next: Known Issues,  Prev: Cursor Motion Undo,  Up: Features
 
 3.6 Easy Window Management
 ==========================
@@ -325,31 +330,58 @@ f4 [up, down, right, left]   Delete Window in Direction
 C-f4                         Delete Current Window
 S-f4                         Delete Other Windows
 
+
+File: brf-mode.info,  Node: Known Issues,  Prev: Easy Window Management,  Up: Features
+
+3.7 Known Issues
+================
+
+Please report any issues at the Brf-mode project website
+(https://bitbucket.org/MikeWoolley/brf-mode).
+
+   There are a couple of known minor issues:
+
+  1. XEmacs Compatibility
+
+   Brf-mode no longer works in XEmacs. It's likely to be easy to fix the
+compatibility issues, but given the demise of XEmacs I don't have any
+current plans to do this.
+
+  2. Menu & Toolbar commands for Cut & Paste
+
+   Brf-mode replaces the Cut & Paste menu and toolbar commands with
+versions that respect Line & Column Mode in the same way as the Brf-mode
+keyboard commands. However Emacs disables the menu and toolbar `Cut' &
+`Copy' items if there is no marked region, unlike the corresponding
+Brf-mode keyboard commands.
+
 
 
 Tag Table:
 Node: Top290
 Node: Brf-Mode431
 Ref: #brf-mode530
-Node: Setup2077
-Ref: #setup2175
-Node: Installation2220
-Ref: #installation2333
-Node: Customisation2769
-Ref: #customisation2884
-Node: Features3339
-Ref: #features3426
-Node: Line and Column Mode Cut and Paste3604
-Ref: #line-and-column-mode-cut-and-paste3804
-Node: Reversible Paging and Scrolling4727
-Ref: #reversible-paging-and-scrolling4949
-Node: Temporary Bookmarks5360
-Ref: #temporary-bookmarks5538
-Node: List Bookmarks6810
-Ref: #list-bookmarks6965
-Node: Cursor Motion Undo7419
-Ref: #cursor-motion-undo7585
-Node: Easy Window Management8189
-Ref: #easy-window-management8340
+Node: Setup2290
+Ref: #setup2388
+Node: Installation2433
+Ref: #installation2546
+Node: Customisation2982
+Ref: #customisation3097
+Node: Features3552
+Ref: #features3639
+Node: Line and Column Mode Cut and Paste3834
+Ref: #line-and-column-mode-cut-and-paste4034
+Node: Reversible Paging and Scrolling4957
+Ref: #reversible-paging-and-scrolling5179
+Node: Temporary Bookmarks5590
+Ref: #temporary-bookmarks5768
+Node: List Bookmarks7040
+Ref: #list-bookmarks7195
+Node: Cursor Motion Undo7649
+Ref: #cursor-motion-undo7815
+Node: Easy Window Management8419
+Ref: #easy-window-management8591
+Node: Known Issues9165
+Ref: #known-issues9290
 
 End Tag Table

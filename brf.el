@@ -2,7 +2,7 @@
 
 ;; Copyright (C) 2000-2020 Mike Woolley
 ;; Author: Mike Woolley <mike@bulsara.com>
-;; Package-Version: 1.17
+;; Package-Version: 1.18
 ;; Package-Requires: ((fringe-helper "0.1.1") (emacs "24"))
 ;; Keywords: brief crisp emulations
 ;; URL: https://bitbucket.org/MikeWoolley/brf-mode
@@ -43,7 +43,7 @@
 
 ;;; Code:
 
-(require 'brf-compat)
+(require 'easymenu)
 
 (defgroup brf nil
   "Add functionality from the editor Brief."
@@ -59,17 +59,21 @@ Set this to nil to conserve valuable mode line space."
 ;;;
 ;;; Version number
 ;;;
-(defconst brf-version "1.17"
+(defconst brf-version "1.18"
   "Version number of Brf mode.")
 
 (defun brf-version ()
-  "Version number of Brf mode."
+  "Display version number of Brf mode."
   (interactive)
-  (message "Brf version %s" brf-version))
+  (let ((version (if (fboundp 'pkg-info-version-info)
+		     (pkg-info-version-info 'brf)
+		   brf-version)))
+    (message "Brf version %s" version)))
 
 ;;;
 ;;; Load the different features
 ;;;
+(require 'brf-compat)
 (require 'brf-bookmark)
 (require 'brf-editing)
 (require 'brf-marking)
@@ -111,11 +115,17 @@ Set this to nil to conserve valuable mode line space."
 
     ;; Also put them on the original Emacs key-mappings
     (substitute-key-definition 'kill-ring-save 'brf-copy-region map (current-global-map))
+    (define-key map [menu-bar edit copy] '(menu-item "Copy" brf-copy-region)) ; Override the OS-specific "Copy" menu item.
     (substitute-key-definition 'kill-region 'brf-kill-region map (current-global-map))
     (substitute-key-definition 'yank 'brf-yank map (current-global-map))
     (substitute-key-definition 'yank-pop 'brf-yank-pop map (current-global-map))
     (substitute-key-definition 'beginning-of-line 'brf-home map (current-global-map))
     (substitute-key-definition 'end-of-line 'brf-end map (current-global-map))
+
+    ;; Also override the Cut & Paste commands on the toolbar
+    (define-key map [tool-bar cut] 'brf-kill-region)
+    (define-key map [tool-bar copy] 'brf-copy-region)
+    (define-key map [tool-bar paste] 'brf-yank)
 
     ;; Function keys
     ;; F1 - Change window
@@ -178,6 +188,53 @@ Set this to nil to conserve valuable mode line space."
   "Local keymap for Brf mode.")
 
 ;;;
+;;; Menu
+;;;
+(easy-menu-define brf-mode-menu nil
+  "Menu for Brf mode."
+  '("Brf"
+    ["Enable Brf-mode" brf-mode
+     :style toggle :selected brf-mode
+     :Help "Enable Brf-mode"]
+    "---"
+    ["Copy to Register" brf-copy-to-register
+     :enable brf-mode
+     :help "Copy marked text to register"]
+    ["Insert Register" brf-insert-register
+     :enable (and brf-mode (not buffer-read-only))
+     :help "Insert text from register"]
+    "---"
+    ["Allocate Next Free Bookmark" brf-allocate-next-available-bookmark
+     :enable brf-mode
+     :help "Allocate Next Free Bookmark at Point"]
+    ["List Bookmarks" brf-list-bookmarks
+     :enable brf-mode
+     :help "List and manage bookmarks"]
+    ["Delete All Bookmarks" brf-kill-all-bookmarks
+     :enable brf-mode
+     :help "Remove all bookmarks"]
+    "---"
+    ["Preferences" (lambda () (interactive) (customize-group "brf"))
+     :enable brf-mode
+     :Help "Show Brf Mode preferences"]
+    "---"
+    ["Help" (lambda () (interactive) (describe-function 'brf-mode))
+     :help "Show mode help"]
+    ["Manual" (lambda () (interactive) (info "Brf-mode"))
+     :help "Show Info manual"]
+    ["Website" (lambda () (interactive) (browse-url "https://bitbucket.org/MikeWoolley/brf-mode"))
+     :help "Show the Brf project website in a browser"]
+    ["Version" brf-version
+     :help "Display version information"]))
+(easy-menu-add brf-mode-menu)
+(easy-menu-add-item nil '("Edit") "---")
+(easy-menu-add-item nil '("Edit") brf-mode-menu)
+(easy-menu-add-item nil '("Edit") "---")
+
+;; Make the menu available from the mode line "lighter"
+(define-key brf-mode-map [menu-bar edit brf] (cons "Brf" brf-mode-menu))
+
+;;;
 ;;; Brf minor mode
 ;;;
 (defvar brf-prev-mark-mode nil
@@ -228,9 +285,17 @@ Set this to nil to conserve valuable mode line space."
 	 (setq brf-prev-c-m (global-key-binding "\C-m"))
 	 (setq brf-prev-c-j (global-key-binding "\C-j"))
 	 (global-set-key "\C-m" 'newline-and-indent)
-	 (global-set-key "\C-j" 'newline))
+	 (global-set-key "\C-j" 'newline)
+
+	 ;; Override "Select and Paste" menu item
+	 (ad-enable-advice 'menu-bar-select-yank 'around 'brf-menu-bar-select-yank)
+	 (ad-activate 'menu-bar-select-yank))
 
 	(t ; brf-mode off
+	 ;; Disable override of "Select and Paste"
+	 (ad-disable-advice 'menu-bar-select-yank 'around 'brf-menu-bar-select-yank)
+	 (ad-activate 'menu-bar-select-yank)
+
 	 ;; Restore old settings
 	 (global-set-key "\C-j" brf-prev-c-j)
 	 (global-set-key "\C-m" brf-prev-c-m)
