@@ -1,5 +1,6 @@
 *.elc
 *~
+.cvsignore
 .DS_Store
 CVS/
 old/
