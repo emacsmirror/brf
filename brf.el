@@ -2,7 +2,7 @@
 
 ;; Copyright (C) 2000-2020 Mike Woolley
 ;; Author: Mike Woolley <mike@bulsara.com>
-;; Package-Version: 1.18
+;; Package-Version: 1.19
 ;; Package-Requires: ((fringe-helper "0.1.1") (emacs "24"))
 ;; Keywords: brief crisp emulations
 ;; URL: https://bitbucket.org/MikeWoolley/brf-mode
@@ -59,7 +59,7 @@ Set this to nil to conserve valuable mode line space."
 ;;;
 ;;; Version number
 ;;;
-(defconst brf-version "1.18"
+(defconst brf-version "1.19"
   "Version number of Brf mode.")
 
 (defun brf-version ()
@@ -88,8 +88,9 @@ Set this to nil to conserve valuable mode line space."
   (let ((map (make-sparse-keymap)))
     ;; Put the Brf mode overrides on the same keys as Brief
     (define-key map [(control return)] 'brf-insert-line)
+    (define-key map "\M-a" 'set-mark-command) ; Non-inclusive Mark (ie normal Emacs mark)
     (define-key map "\M-d" 'brf-delete-line)
-    (define-key map "\M-m" 'set-mark-command)
+    (define-key map "\M-m" 'set-mark-command) ; Inclusive Mark (not implemented - use normal mark)
     (define-key map "\M-l" 'brf-mark-line)
     (when (fboundp 'rectangle-mark-mode)
       (define-key map "\M-c" 'rectangle-mark-mode))
@@ -136,12 +137,8 @@ Set this to nil to conserve valuable mode line space."
       (define-key f1-prefix [(right)] 'brf-change-window-right)
       (define-key map [(f1)] f1-prefix))
     ;; F2 - Resize window
-    (let ((f2-prefix (make-sparse-keymap "Choose direction to resize (use cursor keys)")))
-      (define-key f2-prefix [(up)] 'brf-resize-window-up)
-      (define-key f2-prefix [(down)] 'brf-resize-window-down)
-      (define-key f2-prefix [(left)] 'brf-resize-window-left)
-      (define-key f2-prefix [(right)] 'brf-resize-window-right)
-      (define-key map [(f2)] f2-prefix))
+    (define-key map [(f2)] 'brf-resize-window-start)
+    (define-key map [(meta f2)] 'brf-zoom-window)
     ;; F3 - Create window
     (let ((f3-prefix (make-sparse-keymap "Select side for new window (use cursor keys)")))
       (define-key f3-prefix [(up)] 'brf-create-window-up)

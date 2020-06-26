@@ -29,7 +29,7 @@ File: brf-mode.info,  Node: Brf-Mode,  Next: Setup,  Prev: Top,  Up: Top
 **********
 
 Brf-Mode adds functionality from the old DOS editor Brief
-(https://en.wikipedia.org/wiki/Brief_(text_editor)) to Emacs.
+(https://en.wikipedia.org/wiki/Brief_%28text_editor%29) to Emacs.
 
    This package is not an emulation of Brief (there are plenty of those
 already), but rather provides an accurate implementation in Emacs of
@@ -37,9 +37,9 @@ specific features that I miss from Brief.
 
    The emphasis is on accurately implementing these specific features in
 Emacs rather than doing what Brief emulations tend to do, which is
-mapping the Brief key-sequences to similar functions in Emacs.
+mapping the Brief key-sequences to somewhat similar functions in Emacs.
 
-   Principally these features are:
+   Principally the features are:
 
    * *Note Line-mode cut and paste: #line-and-column-mode-cut-and-paste.
 
@@ -55,7 +55,7 @@ mapping the Brief key-sequences to similar functions in Emacs.
 
    * *Note Easy window management: #easy-window-management.
 
-   However they have been implemented in an Emacs-style. This means the
+   They have been implemented in an Emacs-style. This means the
 functions respond to prefix args and where they override Emacs
 functions, they live on the Emacs key bindings as well as the original
 Brief keys.
@@ -65,13 +65,13 @@ that were never part of Brief. For example, text cut/copied in line or
 column-mode can be saved/recalled in registers.
 
    Some functionality was neither part of Brief nor Emacs (for example
-*Note `List Bookmarks': #list-bookmarks.) and the mode uses the prefix
-`C-c C-b' for such commands.
+*Note `List Bookmarks': #list-bookmarks.) and the mode generally uses
+the prefix `C-c C-b' for such commands.
 
    Brf-mode puts a `Brf' sub-menu under `Edit'. In keeping with Brief's
 minimalist ethos, the menu only houses these more difficult to access
-commands and also links to preferences, help, the manual and project
-website.
+commands and also has links to preferences, help, the manual and
+project website.
 
 
 File: brf-mode.info,  Node: Setup,  Next: Features,  Prev: Brf-Mode,  Up: Top
@@ -99,14 +99,23 @@ File: brf-mode.info,  Node: Installation,  Next: Customisation,  Up: Setup
 
    * Manual
 
-   Download the package to a directory, add it to your `load-path' and
-enable `brf-mode'.
+   Download the package to a directory and add it to your `load-path':
 
 
    (add-to-list 'load-path <install directory>)
-   (brf-mode) ;; or enable brf-mode via customize
 
-   Install the Info manual with `install-info' (optional).
+   [Optional] Install the Info manual with `install-info'.
+
+   * Enable Brf-Mode
+
+   This can be done via *Note Customize: #customisation. or adding code
+to your startup file:
+
+
+   (brf-mode)
+
+   Choosing "Enable Brf-Mode" from the "Brf" menu, toggles the mode on
+or off for the current session.
 
 
 File: brf-mode.info,  Node: Customisation,  Prev: Installation,  Up: Setup
@@ -114,10 +123,9 @@ File: brf-mode.info,  Node: Customisation,  Prev: Installation,  Up: Setup
 2.2 Customisation
 =================
 
+`M-x customize-group brf'
+
    * Options
-
-
-   (customize-group 'brf)
 
    Customisable options are:
 
@@ -134,12 +142,19 @@ File: brf-mode.info,  Node: Customisation,  Prev: Installation,  Up: Setup
    * Key mapping
 
    Default key mappings can be changed by modifying `brf-mode-map' in
-the mode hook:
+the mode hook.
+
+   As an example, here's what I'm using myself:
 
 
-   (add-hook 'brf-mode-hook
-     (lambda ()
-       (define-key brf-mode-map ...)))
+(add-hook 'brf-mode-hook
+  (lambda ()
+    (define-key brf-mode-map "\M-r" 'redo)                ; Redo from redo+.el
+    (define-key brf-mode-map "\M-a" nil)                  ; Don't use Brief Alt-a for marking
+    (define-key brf-mode-map "\M-m" nil)                  ; Don't use Brief Alt-m for marking
+    (define-key brf-mode-map "\C-xl" 'downcase-word)      ; Shadowed by Alt-l
+    (define-key brf-mode-map "\C-xu" 'upcase-word)        ; Shadowed by Alt-u
+    (define-key brf-mode-map "\C-xw" 'capitalize-word)))  ; Shadowed by Alt-c
 
 
 File: brf-mode.info,  Node: Features,  Prev: Setup,  Up: Top
@@ -155,6 +170,7 @@ File: brf-mode.info,  Node: Features,  Prev: Setup,  Up: Top
 * List Bookmarks::
 * Cursor Motion Undo::
 * Easy Window Management::
+* Differences From Brief::
 * Known Issues::
 
 
@@ -175,10 +191,11 @@ File: brf-mode.info,  Node: Line and Column Mode Cut and Paste,  Next: Reversibl
      registers, as well as the kill-ring.
 
 Key           Action
--------------------------------------- 
+---------------------------------------- 
 M-l           Start line marking
 M-c           Start column marking
-M-m           Start normal marking
+M-m           Start character marking
+M-a           Start character marking
 kp-add        Copy Line or Region
 M-w           Copy Line or Region
 kp-subtract   Kill Line or Region
@@ -234,8 +251,8 @@ File: brf-mode.info,  Node: Temporary Bookmarks,  Next: List Bookmarks,  Prev: R
    * They are temporary in the sense they don't persist between
      invocations of Emacs.
 
-   * As an extension to Brief, bookmark lines are highlighted in colour
-     (customisable).
+   * As an extension to Brief, bookmark lines are highlighted in
+     colour. This is *Note customisable: #customisation.
 
    * If the package `fringe-helper' is installed, the bookmark number is
      put in the fringe (which otherwise shows as a tooltip).
@@ -312,7 +329,7 @@ M-u           Undo
 M-r           Redo (if `redo' or `redo+' installed).
 
 
-File: brf-mode.info,  Node: Easy Window Management,  Next: Known Issues,  Prev: Cursor Motion Undo,  Up: Features
+File: brf-mode.info,  Node: Easy Window Management,  Next: Differences From Brief,  Prev: Cursor Motion Undo,  Up: Features
 
 3.6 Easy Window Management
 ==========================
@@ -325,15 +342,38 @@ Key                          Action
 S- [up, down, right, left]   Switch to Window in Direction
 f1 [up, down, right, left]   Switch to window in Direction
 f2 [up, down, right, left]   Resize Window in Direction
+M-f2                         Zoom Window
 f3 [up, down, right, left]   Create Window in Direction
 f4 [up, down, right, left]   Delete Window in Direction
 C-f4                         Delete Current Window
 S-f4                         Delete Other Windows
 
 
-File: brf-mode.info,  Node: Known Issues,  Prev: Easy Window Management,  Up: Features
+File: brf-mode.info,  Node: Differences From Brief,  Next: Known Issues,  Prev: Easy Window Management,  Up: Features
 
-3.7 Known Issues
+3.7 Differences From Brief
+==========================
+
+   * Inclusive Mark (Alt-m)
+
+   "Inclusive" character marking in Brief includes the character under
+the cursor, whereas in Brf-Mode (and Emacs in general) the marked region
+stops on the character before the cursor. This behaviour is actually
+Brief's "Non-inclusive Mark" and is the only kind supported in Brf-Mode.
+I don't think it makes any practical difference and so "Inclusive Mark"
+has not been implemented in Brf-Mode.
+
+   * Window Resizing (F2)
+
+   When resizing a window in Brief, the user has to hit Enter to end
+resizing and all other keys are ignored. In Brf-Mode, any key or click
+that is not a cursor key ends resizing, which I personally think is
+better.
+
+
+File: brf-mode.info,  Node: Known Issues,  Prev: Differences From Brief,  Up: Features
+
+3.8 Known Issues
 ================
 
 Please report any issues at the Brf-mode project website
@@ -341,13 +381,13 @@ Please report any issues at the Brf-mode project website
 
    There are a couple of known minor issues:
 
-  1. XEmacs Compatibility
+   * XEmacs Compatibility
 
    Brf-mode no longer works in XEmacs. It's likely to be easy to fix the
 compatibility issues, but given the demise of XEmacs I don't have any
 current plans to do this.
 
-  2. Menu & Toolbar commands for Cut & Paste
+   * Menu & Toolbar commands for Cut & Paste
 
    Brf-mode replaces the Cut & Paste menu and toolbar commands with
 versions that respect Line & Column Mode in the same way as the Brf-mode
@@ -361,27 +401,29 @@ Tag Table:
 Node: Top290
 Node: Brf-Mode431
 Ref: #brf-mode530
-Node: Setup2290
-Ref: #setup2388
-Node: Installation2433
-Ref: #installation2546
-Node: Customisation2982
-Ref: #customisation3097
-Node: Features3552
-Ref: #features3639
-Node: Line and Column Mode Cut and Paste3834
-Ref: #line-and-column-mode-cut-and-paste4034
-Node: Reversible Paging and Scrolling4957
-Ref: #reversible-paging-and-scrolling5179
-Node: Temporary Bookmarks5590
-Ref: #temporary-bookmarks5768
-Node: List Bookmarks7040
-Ref: #list-bookmarks7195
-Node: Cursor Motion Undo7649
-Ref: #cursor-motion-undo7815
-Node: Easy Window Management8419
-Ref: #easy-window-management8591
-Node: Known Issues9165
-Ref: #known-issues9290
+Node: Setup2307
+Ref: #setup2405
+Node: Installation2450
+Ref: #installation2563
+Node: Customisation3167
+Ref: #customisation3282
+Node: Features4241
+Ref: #features4328
+Node: Line and Column Mode Cut and Paste4550
+Ref: #line-and-column-mode-cut-and-paste4750
+Node: Reversible Paging and Scrolling5716
+Ref: #reversible-paging-and-scrolling5938
+Node: Temporary Bookmarks6349
+Ref: #temporary-bookmarks6527
+Node: List Bookmarks7828
+Ref: #list-bookmarks7983
+Node: Cursor Motion Undo8437
+Ref: #cursor-motion-undo8603
+Node: Easy Window Management9207
+Ref: #easy-window-management9389
+Node: Differences From Brief10004
+Ref: #differences-from-brief10180
+Node: Known Issues10850
+Ref: #known-issues10975
 
 End Tag Table

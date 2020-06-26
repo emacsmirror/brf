@@ -1,3 +1,18 @@
+2020-06-26  Mike Woolley  <mike@bulsara.com>
+
+	* brf-window.el (brf-resize-window-start):
+	* brf.el (brf-mode-map): Changed Window Resize (F2) to work like
+	in real Brief, where the user first picks an edge and then uses
+	the cursor keys to move that edge.
+
+	* brf-window.el (brf-zoom-window):
+	* brf.el (brf-mode-map):
+	Added implementation of Brief's "Zoom Window Toggle" on M-F2.
+
+	* brf.el (brf-mode-map):
+	Added key for Non-Inclusive Mark (M-a), although in Emacs marking
+	is always Non-Inclusive, so M-m has the same effect as M-a.
+
 2020-06-22  Mike Woolley  <mike@bulsara.com>
 
 	* brf.el (brf-mode-menu): Added a menu to show the harder to
