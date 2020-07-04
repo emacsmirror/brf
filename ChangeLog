@@ -12,14 +12,15 @@
 	* brf.el (brf-mode-map):
 	Added key for Non-Inclusive Mark (M-a), although in Emacs marking
 	is always Non-Inclusive, so M-m has the same effect as M-a.
+	(brf-version): Increased version to 1.19.
 
 2020-06-22  Mike Woolley  <mike@bulsara.com>
 
 	* brf.el (brf-mode-menu): Added a menu to show the harder to
 	access features and help information. Fixed problem with no mode
 	menu on the mode-line "lighter".
-	(brf-version): Read Brf Version from the package info, if
-	`pkg-info' is installed.
+	(brf-version): Increased version to 1.18.
+	Read Brf Version from the package info, if `pkg-info' is installed.
 	(brf-mode-map): Added local bindings for the toolbar cut & paste
 	commands, so they run the Brf Mode versions.
 	(brf-mode): Override "Select and Paste" menu item to correctly
@@ -65,6 +66,8 @@
 	* brf.el (brf-mode): Forgot to add autoload marker.
 
 	* brf-bookmark.el: Removed extraneous `format' calls in error messages.
+
+	This the first version available as a MELPA package (as version 1.16).
 
 2020-03-13  Mike Woolley  <mike@bulsara.com>
 
