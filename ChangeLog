@@ -1,3 +1,13 @@
+2020-08-11  Mike Woolley  <mike@bulsara.com>
+
+	* brf.el:
+	* brf-movement.el:
+	* brf-menu.el:
+	* brf-compat.el:
+	* brf-bookmark.el:
+	Migrated use of `cl' to `cl-lib' now that Emacs 27 has deprecated `cl'.
+	This now means Emacs 24.3 becomes the minimum package requirement.
+
 2020-06-26  Mike Woolley  <mike@bulsara.com>
 
 	* brf-window.el (brf-resize-window-start):

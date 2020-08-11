@@ -28,8 +28,7 @@
 ;;; Code:
 
 (require 'brf-compat)
-(eval-when-compile
-  (require 'cl))
+(eval-when-compile (require 'cl-lib))
 
 (defvar brf-temporary-goal-column 0
   "Original column of the start of a sequence Brf scrolling commands.")
@@ -45,9 +44,9 @@
     (cond ((floatp line-spacing)
 	   (setq line-height (* line-height (1+ line-spacing))))
 	  ((integerp line-spacing)
-	   (incf line-height line-spacing))
+	   (cl-incf line-height line-spacing))
 	  (t
-	   (assert (null line-spacing) nil "Unknown line-spacing type!")))
+	   (cl-assert (null line-spacing) nil "Unknown line-spacing type!")))
     (round window-height line-height)))
 
 (defun brf-page-down (&optional arg)
@@ -64,7 +63,7 @@ The optional ARG specifies the number of pages to scroll."
 			1)))
 	(while (and (> pages 0) (not (pos-visible-in-window-p (point-max))))
 	  (brf-scroll-screen lines)
-	  (decf pages))))))
+	  (cl-decf pages))))))
 (put 'brf-page-down 'brf-scroll-command t)
 
 (defun brf-page-up (&optional arg)
@@ -81,7 +80,7 @@ The optional ARG specifies the number of pages to scroll."
 			-1)))
 	(while (and (> pages 0) (not (pos-visible-in-window-p (point-min))))
 	  (brf-scroll-screen lines)
-	  (decf pages))))))
+	  (cl-decf pages))))))
 (put 'brf-page-up 'brf-scroll-command t)
 
 (defun brf-scroll-screen (lines)

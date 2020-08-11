@@ -3,7 +3,7 @@
 ;; Copyright (C) 2000-2020 Mike Woolley
 ;; Author: Mike Woolley <mike@bulsara.com>
 ;; Package-Version: 1.19
-;; Package-Requires: ((fringe-helper "0.1.1") (emacs "24"))
+;; Package-Requires: ((fringe-helper "0.1.1") (emacs "24.3"))
 ;; Keywords: brief crisp emulations
 ;; URL: https://bitbucket.org/MikeWoolley/brf-mode
 

@@ -26,7 +26,7 @@
 
 (require 'brf-compat)
 (require 'brf-menu)
-(eval-when-compile (require 'cl))
+(eval-when-compile (require 'cl-lib))
 
 (defface brf-bookmark-face '((t (:background "khaki")))
   "Face used to show bookmark."
@@ -148,7 +148,7 @@
 ;; Remove fringe bitmap with:
 ;; (destroy-fringe-bitmap 'brf-bookmark-bitmap-n)
 
-(defstruct brf-bookmark
+(cl-defstruct brf-bookmark
   "Bookmark."
   (number nil :read-only t)
   (marker nil :read-only t)
@@ -170,9 +170,9 @@ This is used as the start point for the next/prev bookmark commands.")
 
 (defun brf-get-bookmark (number)
   "Return bookmark at NUMBER."
-  (assert (brf-valid-bookmark-number-p number))
+  (cl-assert (brf-valid-bookmark-number-p number))
   (let ((bookmark (aref brf-bookmarks number)))
-    (assert (or (null bookmark) (= (brf-bookmark-number bookmark) number)))
+    (cl-assert (or (null bookmark) (= (brf-bookmark-number bookmark) number)))
     bookmark))
 
 (defun brf-valid-bookmark-p (bookmark)
@@ -186,10 +186,10 @@ This function is meant to be called from a command's interactive form."
   (cl-labels ((digitp (char)
 		      (and (>= char ?0) (<= char ?9)))
 	      (read-digit (prompt)
-			  (do* ((cursor-in-echo-area t)
-				(char (ignore-errors (read-char prompt))
-				      (ignore-errors (read-char
-						      (format "%s(single digit) " prompt)))))
+			  (cl-do* ((cursor-in-echo-area t)
+				   (char (ignore-errors (read-char prompt))
+					 (ignore-errors (read-char
+							 (format "%s(single digit) " prompt)))))
 			      ((and char (digitp char)) char)
 			    (unless (characterp char)
 			      ;; Swallow the offending non-character event which is still pending
@@ -273,7 +273,7 @@ If the command is given a prefix argument, then the bookmark is removed."
   (let ((number 0))
     (while (and (brf-valid-bookmark-number-p number)
 		(brf-valid-bookmark-p (brf-get-bookmark number)))
-      (incf number))
+      (cl-incf number))
     (if (brf-valid-bookmark-number-p number)
 	(brf-set-bookmark number)
       (user-error "All bookmarks allocated"))))
@@ -322,7 +322,7 @@ If the command is given a prefix argument, then the bookmark is removed."
   "Jump to the next bookmark.
 With ARG jump to the previous one."
   (interactive "P")
-  (block brf-next-bookmark	  	; Annoying that this is necessary...
+  (cl-block brf-next-bookmark	  	; Annoying that this is necessary...
     (when brf-current-bookmark
       ;; Work out if we're going forwards or backwards through the bookmarks
       (let ((dir-fn (if arg #'- #'+)))
@@ -332,7 +332,7 @@ With ARG jump to the previous one."
 		 (bookmark (brf-get-bookmark number)))
 	    (when (brf-valid-bookmark-p bookmark)
 	      (brf-jump-to-bookmark number)
-	      (return-from brf-next-bookmark))))))
+	      (cl-return-from brf-next-bookmark))))))
     (user-error "No bookmarks have been set")))
 
 (defun brf-prev-bookmark (&optional arg)
@@ -358,7 +358,7 @@ With ARG jump to the next one."
       :mode-name "Bookmarks"
       :header-line "Bookmarks: [SELECT] Jump to bookmark, [d] Delete, [k] Delete All, [q] Quit."
       :regexp-start-position (format "^[* ][ \t]+%d" brf-current-bookmark)
-      :items (loop for idx from 0 to (1- brf-max-bookmarks) collect idx)
+      :items (cl-loop for idx from 0 to (1- brf-max-bookmarks) collect idx)
       :keymap map
       :font-lock-keywords #'brf-bookmark-menu-font-lock
       :select-function #'brf-bookmark-menu-select

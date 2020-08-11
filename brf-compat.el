@@ -24,9 +24,6 @@
 
 ;;; Code:
 
-(eval-when-compile
-  (require 'cl))
-
 (eval-and-compile
   (defconst brf-xemacs-flag (featurep 'xemacs)
     "Non-nil means this version of Emacs is XEmacs."))

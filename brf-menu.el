@@ -26,7 +26,7 @@
 ;;; Code:
 
 (require 'brf-compat)
-(eval-when-compile (require 'cl))
+(eval-when-compile (require 'cl-lib))
 
 (defvar-local brf-menu-parameters-alist nil
   "Menu parameters.")
@@ -205,9 +205,9 @@ arguments or `:regexp-start-position', a regular expression.
     (insert header "\n")
 
     ;; Insert each item on a new line, up to the maximum number
-    (loop for item in items
-	  for i from 1 to (brf-menu-num-items)
-	  do (insert (funcall insert-fun item) "\n"))
+    (cl-loop for item in items
+	     for i from 1 to (brf-menu-num-items)
+	     do (insert (funcall insert-fun item) "\n"))
     (backward-delete-char 1)
 
     (when (brf-menu-parameter :font-lock-keywords)
