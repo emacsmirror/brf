@@ -132,10 +132,11 @@ With ARG, do it that many times."
       (setq brf-line-mark-max (point))
       (cond ((bolp)			; Normal case
 	     (forward-line (1- lines))
-	     (push-mark brf-line-mark-min nil t))
+	     (push-mark brf-line-mark-min t t))
 	    (t			  ; Case where last line is incomplete
 	     (goto-char brf-line-mark-min)
-	     (push-mark brf-line-mark-max nil t))))))
+	     (push-mark brf-line-mark-max t t)))
+      (message "Mark set (line mode)"))))
 
 (defun brf-mark-default ()
   "Mark the default unit in the buffer.
@@ -190,7 +191,7 @@ of this sample text; it defaults to 40."
 ;;
 (defun brf-column-marking-p ()
   "Return non-nil if the buffer is in column marking mode."
-  (and (boundp 'rectangle-mark-mode) rectangle-mark-mode))
+  (bound-and-true-p rectangle-mark-mode))
 
 (defun brf-stop-column-marking ()
   "Stops column-marking mode."
@@ -232,7 +233,8 @@ If there is no active region then the current line is copied."
     (if (brf-column-marking-p)
 	(copy-rectangle-to-register register beg end delete-flag)
       (copy-to-register register beg end delete-flag))
-    (brf-emphasise-region beg end)
+    (unless delete-flag
+      (brf-emphasise-region beg end))
     (when (brf-line-marking-p)
       (brf-set-line-kill (get-register register))
       (brf-stop-line-marking)

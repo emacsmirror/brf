@@ -1,5 +1,10 @@
 2021-03-25  Mike Woolley  <mike@bulsara.com>
 
+	* brf-marking.el (brf-copy-to-register): Don't emphasise the
+	region when deleting.
+	(brf-column-marking-p): Simplified with `bound-and-true-p'.
+	(brf-mark-line): Changed message to "Mark set (line mode)".
+
 	* brf-movement.el (brf-scroll-screen, brf-scroll-line):
 	* brf.el (brf-mode): Removed global setting of
 	`scroll-preserve-screen-position' to t and instead bind it to 1
