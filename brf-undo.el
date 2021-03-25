@@ -1,6 +1,6 @@
 ;;; brf-undo.el --- Brief Cursor Motion Undo -*- lexical-binding: t -*-
 
-;; Copyright (C) 2000-2020 Mike Woolley
+;; Copyright (C) 1999-2021 Mike Woolley
 ;; Author: Mike Woolley <mike@bulsara.com>
 
 ;; This file is not part of GNU Emacs

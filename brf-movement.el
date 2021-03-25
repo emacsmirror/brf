@@ -1,6 +1,6 @@
 ;;; brf-movement.el --- Paging & Scrolling features of brf-mode -*- lexical-binding: t -*-
 
-;; Copyright (C) 2000-2020 Mike Woolley
+;; Copyright (C) 1999-2021 Mike Woolley
 ;; Author: Mike Woolley <mike@bulsara.com>
 
 ;; This file is not part of GNU Emacs
@@ -35,7 +35,7 @@
 
 (defun brf-emacs-scrolling-p ()
   "Return non-nil if we're using Emacs scrolling rather than our scrolling."
-  (bound-and-true-p scroll-preserve-screen-position))
+  (boundp 'scroll-preserve-screen-position))
 
 (defun brf-window-height ()
   "Return the window height in lines, respecting the current line spacing."
@@ -91,7 +91,8 @@ It should still work in the presence of hidden lines."
     (setq brf-temporary-goal-column (current-column)))
   (if (brf-emacs-scrolling-p)
       ;; Scroll using the core C Emacs functions
-      (if (< lines 0) (scroll-down) (scroll-up))
+      (let ((scroll-preserve-screen-position 1))
+	(if (< lines 0) (scroll-down) (scroll-up)))
     ;; Use our method of scrolling, which is less accurate when there
     ;; are mixed height fonts etc
     (let ((point (point)))
@@ -123,7 +124,8 @@ ARG specifies the number of lines to scroll, defaulting to 1."
 This is a helper function used by brf-row-up/down."
   (unless (brf-scroll-command-p last-command)
     (setq brf-temporary-goal-column (current-column)))
-  (scroll-down lines)
+  (let ((scroll-preserve-screen-position nil))
+    (scroll-down lines))
   (move-to-column brf-temporary-goal-column))
 
 (defun brf-scroll-command-p (cmd)

@@ -1,3 +1,13 @@
+2021-03-25  Mike Woolley  <mike@bulsara.com>
+
+	* brf-movement.el (brf-scroll-screen, brf-scroll-line):
+	* brf.el (brf-mode): Removed global setting of
+	`scroll-preserve-screen-position' to t and instead bind it to 1
+	when paging and nil when scrolling. This was necessary because the
+	"t" setting doesn't always preserve the screen position when paging.
+
+	* *.el: Updated Copyright years.
+
 2020-08-11  Mike Woolley  <mike@bulsara.com>
 
 	* brf.el:
@@ -132,82 +142,8 @@
 
 	* *.el: Updated GPL to version 3.
 
-	* b.el: Archived the ChangeLog section to here:
-
-	Version 1.16 2020-02-29 Mike Woolley <mike@bulsara.com>
-	* Changed the code to use the core C Emacs scrolling functions for
-	paging if `scroll-preserve-screen-position' is available, as the
-	builtin functions are more accurate when dealing with mixed font
-	heights, hidden lines etc.
-	* Added new command to delete all windows other than the current one.
-
-	Version 1.15 2020-02-19 Mike Woolley <mike@bulsara.com>
-	* Force conservative scrolling in B mode.
-	* Minor fixes.
-
-	Version 1.14 2020-02-12 Mike Woolley <mike@bulsara.com>
-	* Implemented Brief-style Window Management.
-
-	Version 1.13 2020-02-11 Mike Woolley <mike@bulsara.com>
-	* Finally finished implementing Cursor Motion Undo (20 years after I started it!)
-	* Brought the Copyright statements up-to-date.
-
-	Version 1.12 2020-01-31 Mike Woolley <mike@bulsara.com>
-	* Use the new Gnu Emacs `rectangle-mark-mode' to implement Brief Column Marking.
-	* Also finished implementing the existing register functions.
-
-	Version 1.11 2019-05-05 Mike Woolley <mike@bulsara.com>
-	* Now use the Fringe to show bookmark numbers rather than the Margin.
-	* Cleaned up remaining compiler warnings.
-
-	Version 1.10 2019-02-28 Mike Woolley <mike@bulsara.com>
-	* Added new command to allocate the next available free bookmark.
-	* Fixes to doc strings and compiler warnings.
-
-	Version 1.09 2019-02-02 Mike Woolley <mike@bulsara.com>
-	* Fixed some minor problems that had crept in and made sure it
-	works & compiles clean on Emacs 26.
-
-	Version 1.08 2002-01-08 Mike Woolley <mike@bulsara.com>
-	* Split into separate files for ease of working.
-
-	Version 1.07 2001-08-12 Mike Woolley <mike@bulsara.com>
-	* Lots of small changes and bug fixes.
-
-	Version 1.06 2001-08-02 Mike Woolley <mike@bulsara.com>
-	* Renamed to b-mode, due to the large number of `brief.el's out
-	there and particularly because this mode is not really an emulation
-	of Brief, more a homage to Brief in Emacs.
-	* Added new commands to cycle backwards and forwards through the
-	bookmarks and to list them.
-	* Added new prefix key \C-c\c-b for infrequently used commands for
-	this mode.
-
-	Version 1.05 2001-05-21 Mike Woolley <mike@bulsara.com>
-	* Fixed some minor problems in the bookmark code.
-	* Now displays the bookmark number in the overlay.
-	* Turned `brief-protect-overlay' into a closure.
-	* Add command to remove bookmarks.
-
-	Version 1.04 2001-03-12 Mike Woolley <mike@bulsara.com>
-	* Added bookmarks.
-	* Moved the XEmacs specific code into functions.
-	* Removed the byte compiler warnings.
-
-	Version 1.03 2001-02-22 Mike Woolley <mike@bulsara.com>
-	* Added tab key handling.
-	* newline-and-indent setup in global map.
-	* Tidied up doc strings.
-
-	Version 1.02 2001-02-15 Mike Woolley <mike@bulsara.com>
-	* Changed M-d to delete a line rather than kill a line.
-
-	Version 1.01 - Mike Woolley <mike@bulsara.com>
-	* Added Brief-style Home and End key handling
-
-	Version 1.00 - Mike Woolley <mike@bulsara.com>
-	* Initial version.
-	* Cursor motion undo not working yet.
+	* b.el: Removed the ChangeLog section as it was getting too long.
+	Archived the older entries to the end of this file.
 
 2020-03-05  Mike Woolley  <mike@bulsara.com>
 
@@ -388,7 +324,7 @@
 	* b-marking.el (b-copy-region): Behaviour of `kill-ring-save' has
 	changed in 21.3.50, so code adjusted to emphasise region by hand.
 
-2004-02-04  Mike Woolley  <mike@arielcommunications.co.uk>
+2004-02-04  Mike Woolley  <mike@bulsara.com>
 
 	* b-compat.el: Disable use of margins in CVS Emacs, as there are
 	many display bugs.
@@ -397,3 +333,66 @@
 
 	* b-marking.el (b-yank): Only indent line mode yank if buffer is
 	in a programming mode.
+
+2002-01-08 Mike Woolley <mike@bulsara.com>
+
+	* Version 1.08
+	* Split into separate files for ease of working.
+
+2001-08-12 Mike Woolley <mike@bulsara.com>
+
+	* Version 1.07
+	* Lots of small changes and bug fixes.
+
+2001-08-02 Mike Woolley <mike@bulsara.com>
+
+	* Version 1.06
+	* Renamed to b-mode, due to the large number of `brief.el's out
+	there and particularly because this mode is not really an
+	emulation of Brief, more a homage to Brief in Emacs.
+	* Added new commands to cycle backwards and forwards through the
+	bookmarks and to list them.
+	* Added new prefix key \C-c\c-b for infrequently used commands for
+	this mode.
+
+2001-05-21 Mike Woolley <mike@bulsara.com>
+
+	* Version 1.05
+	* Fixed some minor problems in the bookmark code.
+	* Now displays the bookmark number in the overlay.
+	* Turned `brief-protect-overlay' into a closure.
+	* Add command to remove bookmarks.
+
+2001-03-12 Mike Woolley <mike@bulsara.com>
+
+	* Version 1.04
+	* Added bookmarks.
+	* Moved the XEmacs specific code into functions.
+	* Removed the byte compiler warnings.
+
+2001-02-22 Mike Woolley <mike@bulsara.com>
+
+	* Version 1.03
+	* Added tab key handling.
+	* newline-and-indent setup in global map.
+	* Tidied up doc strings.
+
+2001-02-15 Mike Woolley <mike@bulsara.com>
+
+	* Version 1.02
+	* Changed M-d to delete a line rather than kill a line.
+
+2000-01-01 Mike Woolley <mike@bulsara.com>
+
+	* Version 1.01
+	* Added Brief-style Home and End key handling
+
+2000-01-01 Mike Woolley <mike@bulsara.com>
+
+	* Version 1.00
+	* Initial version.
+	* Cursor motion undo not working yet.
+
+1999-10-14 Mike Woolley <mike@bulsara.com>
+
+	* Initial version of the code that would become `brief.el'.

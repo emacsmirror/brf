@@ -1,6 +1,6 @@
 ;;; brf.el --- Add functionality from the editor Brief -*- lexical-binding: t -*-
 
-;; Copyright (C) 2000-2020 Mike Woolley
+;; Copyright (C) 1999-2021 Mike Woolley
 ;; Author: Mike Woolley <mike@bulsara.com>
 ;; Package-Version: 1.19
 ;; Package-Requires: ((fringe-helper "0.1.1") (emacs "24.3"))
@@ -244,8 +244,6 @@ Set this to nil to conserve valuable mode line space."
   "Previous value of `hscroll-margin'.")
 (defvar brf-prev-hscroll-step nil
   "Previous value of `hscroll-step'.")
-(defvar brf-prev-scroll-preserve-screen-position nil
-  "Previous value of `scroll-preserve-screen-position'.")
 (defvar brf-prev-c-m nil
   "Previous global binding of CR.")
 (defvar brf-prev-c-j nil
@@ -272,12 +270,6 @@ Set this to nil to conserve valuable mode line space."
 	 (setq hscroll-margin 1)	  ; Scroll when we get to the end of the line
 	 (setq hscroll-step 1)		  ; Scroll one column at a time
 
-	 ;; Use Emacs scrolling to page up/dn when it supports the new
-	 ;; position-preserving behaviour
-	 (when (boundp 'scroll-preserve-screen-position)
-	   (setq brf-prev-scroll-preserve-screen-position scroll-preserve-screen-position)
-	   (setq scroll-preserve-screen-position t))
-
 	 ;; Setup return (in the global map) to always indent
 	 (setq brf-prev-c-m (global-key-binding "\C-m"))
 	 (setq brf-prev-c-j (global-key-binding "\C-j"))
@@ -296,8 +288,6 @@ Set this to nil to conserve valuable mode line space."
 	 ;; Restore old settings
 	 (global-set-key "\C-j" brf-prev-c-j)
 	 (global-set-key "\C-m" brf-prev-c-m)
-	 (when (boundp 'scroll-preserve-screen-position)
-	   (setq scroll-preserve-screen-position brf-prev-scroll-preserve-screen-position))
 	 (setq hscroll-step brf-prev-hscroll-step)
 	 (setq hscroll-margin brf-prev-hscroll-margin)
 	 (setq scroll-step brf-prev-scroll-step)
