@@ -1,3 +1,8 @@
+2021-04-10  Mike Woolley  <mike@bulsara.com>
+
+	* brf-marking.el: Fixed compiler warning "the function `(setf
+	get-register)' is not known to be defined".
+
 2021-04-10  Michael Woolley  <mike@bulsara.com>
 
 	* brf-marking.el (brf-mark-line): Changed line-marking so that

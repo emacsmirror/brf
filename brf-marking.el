@@ -25,6 +25,7 @@
 ;;; Code:
 
 (require 'brf-compat)
+(eval-when-compile (require 'cl-lib))
 
 (defvar brf-line-mark-min nil
   "The minimum position of the mark in line marking mode.
