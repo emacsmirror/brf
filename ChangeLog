@@ -1,3 +1,11 @@
+2021-04-10  Michael Woolley  <mike@bulsara.com>
+
+	* brf-marking.el (brf-mark-line): Changed line-marking so that
+	invoking it again cancels line-marking (just like in real Brief).
+	(brf-stop-line-marking): Refactored line-marking so that all the
+	code associated with the termination of line-marking is in this
+	function.
+
 2021-03-25  Mike Woolley  <mike@bulsara.com>
 
 	* brf-marking.el (brf-copy-to-register): Don't emphasise the
