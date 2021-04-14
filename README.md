@@ -27,6 +27,20 @@ Brf-mode puts a `Brf` sub-menu under `Edit`. In keeping with Brief's minimalist 
 # Setup
 
 
+<a id="compatibility"></a>
+
+## Compatibility
+
+The MELPA package (Brf-mode version "v1.16-MELPA" onward) requires Gnu Emacs 24.3, due to the requirements of being a package.
+
+Earlier versions of Brf-mode however will work on older versions of Gnu Emacs and also on XEmacs:
+
+-   Use "v1.16" for Gnu Emacs versions 21 -> 24.2.
+-   Use "v1.08" for XEmacs and Gnu Emacs 20 & earlier.
+
+These and any other versions can be download from the [Brf-mode website](https://bitbucket.org/MikeWoolley/brf-mode/downloads/?tab=tags) and installed manually.
+
+
 ## Installation
 
 -   Melpa Package
@@ -256,13 +270,15 @@ When resizing a window in Brief, the user has to hit Enter to end resizing and a
 
 ## Known Issues
 
-Please report any issues at the [Brf-mode project website](https://bitbucket.org/MikeWoolley/brf-mode).
+Please report any issues at the [Brf-mode website bug tracker](https://bitbucket.org/MikeWoolley/brf-mode/issues).
 
 There are a couple of known minor issues:
 
 -   XEmacs Compatibility
 
-Brf-mode no longer works in XEmacs. It's likely to be easy to fix the compatibility issues, but given the demise of XEmacs I don't have any current plans to do this.
+Brf-mode no longer works in XEmacs. It's likely to be fairly easy to fix the compatibility issues, but given the demise of XEmacs I don't have any current plans to do this.
+
+Anyone wanting to run Brf-mode on XEmacs should install an older version, as described in [Compatibility](#compatibility).
 
 -   Menu & Toolbar commands for Cut & Paste
 

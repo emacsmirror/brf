@@ -26,6 +26,7 @@ Brf Mode
 
 Setup
 
+* Compatibility::
 * Installation::
 * Customisation::
 
@@ -95,13 +96,33 @@ File: brf-mode.info,  Node: Setup,  Next: Features,  Prev: Brf-Mode,  Up: Top
 
 * Menu:
 
+* Compatibility::
 * Installation::
 * Customisation::
 
 
-File: brf-mode.info,  Node: Installation,  Next: Customisation,  Up: Setup
+File: brf-mode.info,  Node: Compatibility,  Next: Installation,  Up: Setup
 
-2.1 Installation
+2.1 Compatibility
+=================
+
+The MELPA package (Brf-mode version "v1.16-MELPA" onward) requires Gnu
+Emacs 24.3, due to the requirements of being a package.
+
+   Earlier versions of Brf-mode however will work on older versions of
+Gnu Emacs and also on XEmacs:
+
+   • Use "v1.16" for Gnu Emacs versions 21 -> 24.2.
+   • Use "v1.08" for XEmacs and Gnu Emacs 20 & earlier.
+
+   These and any other versions can be download from the Brf-mode
+website (https://bitbucket.org/MikeWoolley/brf-mode/downloads/?tab=tags)
+and installed manually.
+
+
+File: brf-mode.info,  Node: Installation,  Next: Customisation,  Prev: Compatibility,  Up: Setup
+
+2.2 Installation
 ================
 
    • Melpa Package
@@ -132,7 +153,7 @@ or off for the current session.
 
 File: brf-mode.info,  Node: Customisation,  Prev: Installation,  Up: Setup
 
-2.2 Customisation
+2.3 Customisation
 =================
 
 ‘M-x customize-group brf’
@@ -147,7 +168,7 @@ File: brf-mode.info,  Node: Customisation,  Prev: Installation,  Up: Setup
   4. Mode-line string (including hiding)
   5. Enable *note Cursor Motion Undo::
 
-  6. Key mapping
+   • Key mapping
 
    Default key mappings can be changed by modifying ‘brf-mode-map’ in
 the mode hook.
@@ -374,16 +395,19 @@ File: brf-mode.info,  Node: Known Issues,  Prev: Differences From Brief,  Up: Fe
 3.8 Known Issues
 ================
 
-Please report any issues at the Brf-mode project website
-(https://bitbucket.org/MikeWoolley/brf-mode).
+Please report any issues at the Brf-mode website bug tracker
+(https://bitbucket.org/MikeWoolley/brf-mode/issues).
 
    There are a couple of known minor issues:
 
    • XEmacs Compatibility
 
-   Brf-mode no longer works in XEmacs.  It’s likely to be easy to fix
-the compatibility issues, but given the demise of XEmacs I don’t have
-any current plans to do this.
+   Brf-mode no longer works in XEmacs.  It’s likely to be fairly easy to
+fix the compatibility issues, but given the demise of XEmacs I don’t
+have any current plans to do this.
+
+   Anyone wanting to run Brf-mode on XEmacs should install an older
+version, as described in *note Compatibility::.
 
    • Menu & Toolbar commands for Cut & Paste
 
@@ -397,19 +421,20 @@ Brf-mode keyboard commands.
 
 Tag Table:
 Node: Top275
-Node: Brf-Mode706
-Node: Setup2570
-Node: Installation2713
-Node: Customisation3490
-Node: Features4593
-Node: Line and Column Mode Cut and Paste4902
-Node: Reversible Paging and Scrolling6235
-Node: Temporary Bookmarks6870
-Node: List Bookmarks8443
-Node: Cursor Motion Undo9142
-Node: Easy Window Management9938
-Node: Differences From Brief10736
-Node: Known Issues11677
+Node: Brf-Mode724
+Node: Setup2588
+Node: Compatibility2749
+Node: Installation3371
+Node: Customisation4170
+Node: Features5275
+Node: Line and Column Mode Cut and Paste5584
+Node: Reversible Paging and Scrolling6917
+Node: Temporary Bookmarks7552
+Node: List Bookmarks9125
+Node: Cursor Motion Undo9824
+Node: Easy Window Management10620
+Node: Differences From Brief11418
+Node: Known Issues12359
 
 End Tag Table
 

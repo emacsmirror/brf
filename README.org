@@ -42,6 +42,20 @@ difficult to access commands and also has links to preferences, help, the manual
 :CUSTOM_ID: setup
 :END:
 
+** Compatibility
+   :PROPERTIES:
+   :CUSTOM_ID: compatibility
+   :END:
+
+   The MELPA package (Brf-mode version "v1.16-MELPA" onward) requires Gnu Emacs 24.3, due to the requirements of being a package.
+
+   Earlier versions of Brf-mode however will work on older versions of Gnu Emacs and also on XEmacs:
+   
+   - Use "v1.16" for Gnu Emacs versions 21 -> 24.2.
+   - Use "v1.08" for XEmacs and Gnu Emacs 20 & earlier.
+
+   These and any other versions can be download from the [[https://bitbucket.org/MikeWoolley/brf-mode/downloads/?tab=tags][Brf-mode website]] and installed manually.
+   
 ** Installation
 :PROPERTIES:
 :CUSTOM_ID: installation
@@ -89,6 +103,7 @@ Customisable options are:
 3. Enable Brf-Mode
 4. Mode-line string (including hiding)
 5. Enable [[#cursor-motion-undo][Cursor Motion Undo]]
+
 
 - Key mapping
 
@@ -290,14 +305,16 @@ any key or click that is not a cursor key ends resizing, which I personally thin
 :CUSTOM_ID: known-issues
 :END:
 
-Please report any issues at the [[https://bitbucket.org/MikeWoolley/brf-mode][Brf-mode project website]].
+Please report any issues at the [[https://bitbucket.org/MikeWoolley/brf-mode/issues][Brf-mode website bug tracker]].
 
 There are a couple of known minor issues:
 
 - XEmacs Compatibility
 
-Brf-mode no longer works in XEmacs. It's likely to be easy to fix the compatibility issues, but given the demise of
+Brf-mode no longer works in XEmacs. It's likely to be fairly easy to fix the compatibility issues, but given the demise of
 XEmacs I don't have any current plans to do this.
+
+Anyone wanting to run Brf-mode on XEmacs should install an older version, as described in [[#compatibility][Compatibility]].
 
 - Menu & Toolbar commands for Cut & Paste
 
