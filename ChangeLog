@@ -1,3 +1,15 @@
+2021-04-14  Mike Woolley  <mike@bulsara.com>
+
+	* brf-marking.el (brf-mark-line-hook): Fixes to line-marking mode:
+	+ Work better in the presence of hidden lines (e.g. in Org mode).
+	+ Consistent behaviour of right/left cursor movement.
+	+ Handle incomplete last line better, avoiding the chaos caused by
+	`temporary-goal-column'.
+	+ Cancel line-marking if the user issues a command that reset the
+	mark, like `mark-defun' or `mark-whole-buffer'.
+
+	* brf.el (brf-version): Increased version to 1.20.
+
 2021-04-10  Mike Woolley  <mike@bulsara.com>
 
 	* brf-marking.el: Fixed compiler warning "the function `(setf

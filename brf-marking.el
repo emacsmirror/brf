@@ -36,6 +36,9 @@ The mark is positioned here if point is above or on this line.")
 (defvar brf-line-mark-col nil
   "The original column where line marking was initiated.
 This is restored after saving/killing the region.")
+(defvar brf-line-mark-old-point nil
+  "The location of point after a command is executed when line-marking.")
+(make-variable-buffer-local 'brf-line-mark-old-point)
 
 ;;
 ;; Line kill helper functions
@@ -77,16 +80,21 @@ line is terminated with a newline."
   (when (and (fboundp 'make-local-hook)
 	     (or brf-xemacs-flag (< emacs-major-version 21)))
     (make-local-hook 'post-command-hook)) ;; Not needed since Emacs 21
-  (add-hook 'post-command-hook #'brf-mark-line-hook nil t))
+  (add-hook 'post-command-hook #'brf-mark-line-hook nil t)
+  (setq brf-line-mark-old-point nil))
 
 (defun brf-stop-line-marking (&optional delete-flag)
-  "Stops line-marking mode.
+  "Stop line-marking mode, restoring point to the original column.
 DELETE-FLAG indicates the line-marked region was deleted or killed."
-  (remove-hook 'post-command-hook #'brf-mark-line-hook t)
+  (brf-abort-line-marking)
   (unless delete-flag
     (when (> (point) (mark))
       (forward-line -1)))
   (move-to-column brf-line-mark-col))
+
+(defun brf-abort-line-marking ()
+  "Stop line-marking mode without adjusting point."
+  (remove-hook 'post-command-hook #'brf-mark-line-hook t))
 
 (defun brf-line-marking-p ()
   "Return non-nil if the buffer is in line marking mode."
@@ -94,34 +102,49 @@ DELETE-FLAG indicates the line-marked region was deleted or killed."
 
 (defun brf-mark-line-hook ()
   "Ensure point and mark are correctly positioned for line-marking after cursor motion commands."
-  (cond ((and (brf-region-active-p) (not (brf-column-marking-p)))
-	 ;; Marking - emulate Brief "line mode"
-	 (let ((point (point))
-	       (mark (mark)))
-	   ;; Ensure we're at the beginning of the line
-	   (unless (bolp)
-	     (beginning-of-line)
-	     (when (> point mark)
-	       (forward-line)))
+  (when brf-line-mark-old-point
+    ;; Check if line-marking has been implicitly ended by another command
+    (cond ((or (brf-column-marking-p)
+	       (and (brf-region-active-p)
+		    (/= (mark) brf-line-mark-max) (/= (mark) brf-line-mark-min)))
+	   (brf-abort-line-marking))
 
-	   ;; Ensure mark and point are straddling the original line
-	   (cond ((< point mark)
-		  (when (/= mark brf-line-mark-max)
-		    (set-mark brf-line-mark-max)))
-		 ((> point mark)
-		  (when (/= mark brf-line-mark-min)
-		    (set-mark brf-line-mark-min)))
-		 ;; point = mark
-		 ((= point brf-line-mark-max) ; point = mark-max
-		  (forward-line 1)
-		  (set-mark brf-line-mark-min))
-		 (t			; point = mark-min
-		  (forward-line -1)
-		  (set-mark brf-line-mark-max)))
+	  ;; Line-marking
+	  ;; Emulate Brief "line mode"
+	  ((brf-region-active-p)
+	   ;; No need to do anything if point hasn't moved
+	   (when (/= (point) brf-line-mark-old-point)
+	     ;; Stop `temporary-goal-column' interfering with the current column on [up]/[down] cursor movement
+	     (setq temporary-goal-column 0)
+	     ;; Ensure we're at the beginning of the line
+	     (unless (bolp)
+	       (beginning-of-line)
+	       (when (>= (point) brf-line-mark-old-point)
+		 (forward-line)))
+	     ;; Ensure mark and point are straddling the original line
+	     (let ((point (point))
+		   (mark (mark)))
+	       (cond ((< point mark)
+		      (when (/= mark brf-line-mark-max)
+			(set-mark brf-line-mark-max)))
+		     ((> point mark)
+		      (when (/= mark brf-line-mark-min)
+			(set-mark brf-line-mark-min)))
+		     ;; point = mark
+		     ((= point brf-line-mark-max) ; point = mark-max
+		      (forward-line 1)
+		      (set-mark brf-line-mark-min))
+		     (t				; point = mark-min
+		      (forward-line -1)
+		      (set-mark brf-line-mark-max)))
+	       (brf-activate-region))))
 
-	   (brf-activate-region)))
-	(t				; Not marking
-	 (brf-stop-line-marking))))
+	  ;; Not marking
+	  (t
+	   (brf-stop-line-marking))))
+
+  ;; Save point for next time
+  (setq brf-line-mark-old-point (point)))
 
 (defun brf-mark-line (&optional arg)
   "Mark the current line from anywhere on the line.
