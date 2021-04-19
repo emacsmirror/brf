@@ -27,20 +27,6 @@ Brf-mode puts a `Brf` sub-menu under `Edit`. In keeping with Brief's minimalist 
 # Setup
 
 
-<a id="compatibility"></a>
-
-## Compatibility
-
-The MELPA package (Brf-mode version "v1.16-MELPA" onward) requires Gnu Emacs 24.3, due to the requirements of being a package.
-
-Earlier versions of Brf-mode however will work on older versions of Gnu Emacs and also on XEmacs:
-
--   Use "v1.16" for Gnu Emacs versions 21 -> 24.2.
--   Use "v1.08" for XEmacs and Gnu Emacs 20 & earlier.
-
-These and any other versions can be download from the [Brf-mode website](https://bitbucket.org/MikeWoolley/brf-mode/downloads/?tab=tags) and installed manually.
-
-
 ## Installation
 
 -   Melpa Package
@@ -102,6 +88,28 @@ As an example, here's what I'm using myself:
     (define-key brf-mode-map "\C-xu" 'upcase-word)        ; Shadowed by Alt-u
     (define-key brf-mode-map "\C-xw" 'capitalize-word)))  ; Shadowed by Alt-c
 ```
+
+
+## Dependencies
+
+Brf-mode doesn't have any hard dependencies, but installing the following optional packages enables some extra capabilities:
+
+-   [fringe-helper](https://melpa.org/#/fringe-helper): When installed, bookmark numbers show in the fringe. Installing Brf-mode via `package-install` automatically installs `fringe-helper`.
+-   [pkg-info](https://melpa.org/#/pkg-info): When installed, `(brf-version)` shows the package version as well as the Brf-mode version.
+
+
+<a id="compatibility"></a>
+
+## Compatibility
+
+The MELPA package (Brf-mode version "v1.16-MELPA" onward) requires Gnu Emacs 24.3, due to the requirements of being a package.
+
+Earlier versions of Brf-mode will however work on older versions of Gnu Emacs and also on XEmacs:
+
+-   Use "v1.16" for Gnu Emacs versions 21 -> 24.2.
+-   Use "v1.08" for XEmacs and Gnu Emacs 20 & earlier.
+
+These and any other versions can be download from the [Brf-mode website](https://bitbucket.org/MikeWoolley/brf-mode/downloads/?tab=tags) and installed manually.
 
 
 # Features

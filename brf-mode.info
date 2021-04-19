@@ -26,9 +26,10 @@ Brf Mode
 
 Setup
 
-* Compatibility::
 * Installation::
 * Customisation::
+* Dependencies::
+* Compatibility::
 
 Features
 
@@ -96,33 +97,15 @@ File: brf-mode.info,  Node: Setup,  Next: Features,  Prev: Brf-Mode,  Up: Top
 
 * Menu:
 
-* Compatibility::
 * Installation::
 * Customisation::
+* Dependencies::
+* Compatibility::
 
 
-File: brf-mode.info,  Node: Compatibility,  Next: Installation,  Up: Setup
+File: brf-mode.info,  Node: Installation,  Next: Customisation,  Up: Setup
 
-2.1 Compatibility
-=================
-
-The MELPA package (Brf-mode version "v1.16-MELPA" onward) requires Gnu
-Emacs 24.3, due to the requirements of being a package.
-
-   Earlier versions of Brf-mode however will work on older versions of
-Gnu Emacs and also on XEmacs:
-
-   • Use "v1.16" for Gnu Emacs versions 21 -> 24.2.
-   • Use "v1.08" for XEmacs and Gnu Emacs 20 & earlier.
-
-   These and any other versions can be download from the Brf-mode
-website (https://bitbucket.org/MikeWoolley/brf-mode/downloads/?tab=tags)
-and installed manually.
-
-
-File: brf-mode.info,  Node: Installation,  Next: Customisation,  Prev: Compatibility,  Up: Setup
-
-2.2 Installation
+2.1 Installation
 ================
 
    • Melpa Package
@@ -151,9 +134,9 @@ to your startup file:
 or off for the current session.
 
 
-File: brf-mode.info,  Node: Customisation,  Prev: Installation,  Up: Setup
+File: brf-mode.info,  Node: Customisation,  Next: Dependencies,  Prev: Installation,  Up: Setup
 
-2.3 Customisation
+2.2 Customisation
 =================
 
 ‘M-x customize-group brf’
@@ -183,6 +166,41 @@ the mode hook.
          (define-key brf-mode-map "\C-xl" 'downcase-word)      ; Shadowed by Alt-l
          (define-key brf-mode-map "\C-xu" 'upcase-word)        ; Shadowed by Alt-u
          (define-key brf-mode-map "\C-xw" 'capitalize-word)))  ; Shadowed by Alt-c
+
+
+File: brf-mode.info,  Node: Dependencies,  Next: Compatibility,  Prev: Customisation,  Up: Setup
+
+2.3 Dependencies
+================
+
+Brf-mode doesn’t have any hard dependencies, but installing the
+following optional packages enables some extra capabilities:
+
+   • fringe-helper (https://melpa.org/#/fringe-helper): When installed,
+     bookmark numbers show in the fringe.  Installing Brf-mode via
+     ‘package-install’ automatically installs ‘fringe-helper’.
+   • pkg-info (https://melpa.org/#/pkg-info): When installed,
+     ‘(brf-version)’ shows the package version as well as the Brf-mode
+     version.
+
+
+File: brf-mode.info,  Node: Compatibility,  Prev: Dependencies,  Up: Setup
+
+2.4 Compatibility
+=================
+
+The MELPA package (Brf-mode version "v1.16-MELPA" onward) requires Gnu
+Emacs 24.3, due to the requirements of being a package.
+
+   Earlier versions of Brf-mode will however work on older versions of
+Gnu Emacs and also on XEmacs:
+
+   • Use "v1.16" for Gnu Emacs versions 21 -> 24.2.
+   • Use "v1.08" for XEmacs and Gnu Emacs 20 & earlier.
+
+   These and any other versions can be download from the Brf-mode
+website (https://bitbucket.org/MikeWoolley/brf-mode/downloads/?tab=tags)
+and installed manually.
 
 
 File: brf-mode.info,  Node: Features,  Prev: Setup,  Up: Top
@@ -421,20 +439,21 @@ Brf-mode keyboard commands.
 
 Tag Table:
 Node: Top275
-Node: Brf-Mode724
-Node: Setup2588
-Node: Compatibility2749
-Node: Installation3371
-Node: Customisation4170
-Node: Features5275
-Node: Line and Column Mode Cut and Paste5584
-Node: Reversible Paging and Scrolling6917
-Node: Temporary Bookmarks7552
-Node: List Bookmarks9125
-Node: Cursor Motion Undo9824
-Node: Easy Window Management10620
-Node: Differences From Brief11418
-Node: Known Issues12359
+Node: Brf-Mode741
+Node: Setup2605
+Node: Installation2783
+Node: Customisation3560
+Node: Dependencies4686
+Node: Compatibility5315
+Node: Features5937
+Node: Line and Column Mode Cut and Paste6246
+Node: Reversible Paging and Scrolling7579
+Node: Temporary Bookmarks8214
+Node: List Bookmarks9787
+Node: Cursor Motion Undo10486
+Node: Easy Window Management11282
+Node: Differences From Brief12080
+Node: Known Issues13021
 
 End Tag Table
 
