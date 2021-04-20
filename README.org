@@ -47,21 +47,33 @@ difficult to access commands and also has links to preferences, help, the manual
 :CUSTOM_ID: installation
 :END:
 
-- Melpa Package
+- Installation from MELPA
 
 [[https://melpa.org/#/brf][https://melpa.org/packages/brf-badge.svg]]
 
-Make sure [[https://melpa.org/#/getting-started][melpa is in your package archives list]], and ~M-x package-install brf~
+   1. Make sure [[https://melpa.org/#/getting-started][melpa is in your package archives list]].
+   2. ~M-x package-install brf~
 
-- Manual
 
-Download the package to a directory and add it to your ~load-path~:
+- Manual Installation
+
+
+1. Download the package to a directory and add it to your ~load-path~:
 
 #+BEGIN_SRC emacs-lisp
      (add-to-list 'load-path <install directory>)
 #+END_SRC
 
-[Optional] Install the Info manual with ~install-info~.
+2. [@2]Install the Info manual [optional].
+
+#+BEGIN_SRC shell
+  $ cd <install directory>
+  $ install-info brf-mode.info
+#+END_SRC
+
+#+BEGIN_SRC emacs-lisp
+  (add-to-list 'Info-directory-list <install directory>)
+#+END_SRC
 
 - Enable Brf-Mode
 

@@ -29,21 +29,31 @@ Brf-mode puts a `Brf` sub-menu under `Edit`. In keeping with Brief's minimalist 
 
 ## Installation
 
--   Melpa Package
+-   Installation from MELPA
 
 [![img](https://melpa.org/packages/brf-badge.svg)](https://melpa.org/#/brf)
 
-Make sure [melpa is in your package archives list](https://melpa.org/#/getting-started), and `M-x package-install brf`
+1.  Make sure [melpa is in your package archives list](https://melpa.org/#/getting-started).
+2.  `M-x package-install brf`
 
--   Manual
+-   Manual Installation
 
-Download the package to a directory and add it to your `load-path`:
+1.  Download the package to a directory and add it to your `load-path`:
 
 ```emacs-lisp
 (add-to-list 'load-path <install directory>)
 ```
 
-[Optional] Install the Info manual with `install-info`.
+2.  Install the Info manual [optional].
+
+```shell
+$ cd <install directory>
+$ install-info brf-mode.info
+```
+
+```emacs-lisp
+(add-to-list 'Info-directory-list <install directory>)
+```
 
 -   Enable Brf-Mode
 
