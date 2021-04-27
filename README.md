@@ -1,6 +1,6 @@
 # Brf-mode
 
-Brf-mode adds functionality from the legendary DOS editor [Brief](https://en.wikipedia.org/wiki/Brief_%28text_editor%29) to Emacs.
+Brf-mode adds functionality from the legendary programmer's editor [Brief](https://en.wikipedia.org/wiki/Brief_%28text_editor%29) to Emacs.
 
 This package is not an emulation of Brief (there are plenty of those already), but rather provides an accurate implementation in Emacs of specific features that I miss from Brief.
 
@@ -29,12 +29,11 @@ Brf-mode puts a `Brf` sub-menu under `Edit`. In keeping with Brief's minimalist 
 
 ## Installation
 
+[![img](https://melpa.org/packages/brf-badge.svg)](https://melpa.org/#/brf) [![img](https://stable.melpa.org/packages/brf-badge.svg)](https://stable.melpa.org/#/brf)
+
 The easiest way is to install the `brf` package from MELPA, however Brf-mode can also be installed manually if desired:
 
 -   Installation from MELPA
-    
-    [![img](https://melpa.org/packages/brf-badge.svg)](https://melpa.org/#/brf) [![img](https://stable.melpa.org/packages/brf-badge.svg)](https://stable.melpa.org/#/brf)
-    
     1.  Make sure [melpa is in your package archives list](https://melpa.org/#/getting-started).
     2.  `M-x package-install brf`
 

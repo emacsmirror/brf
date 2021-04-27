@@ -49,7 +49,7 @@ File: brf-mode.info,  Node: Brf-mode,  Next: Setup,  Prev: Top,  Up: Top
 1 Brf-mode
 **********
 
-Brf-mode adds functionality from the legendary DOS editor Brief
+Brf-mode adds functionality from the legendary programmer’s editor Brief
 (https://en.wikipedia.org/wiki/Brief_%28text_editor%29) to Emacs.
 
    This package is not an emulation of Brief (there are plenty of those
@@ -108,14 +108,14 @@ File: brf-mode.info,  Node: Installation,  Next: Customisation,  Up: Setup
 2.1 Installation
 ================
 
-The easiest way is to install the ‘brf’ package from MELPA, however
+https://melpa.org/packages/brf-badge.svg (https://melpa.org/#/brf)
+https://stable.melpa.org/packages/brf-badge.svg
+(https://stable.melpa.org/#/brf)
+
+   The easiest way is to install the ‘brf’ package from MELPA, however
 Brf-mode can also be installed manually if desired:
 
    • Installation from MELPA
-
-     https://melpa.org/packages/brf-badge.svg (https://melpa.org/#/brf)
-     https://stable.melpa.org/packages/brf-badge.svg
-     (https://stable.melpa.org/#/brf)
 
        1. Make sure melpa is in your package archives list
           (https://melpa.org/#/getting-started).
@@ -454,20 +454,20 @@ Please report any issues at the Brf-mode website bug tracker
 Tag Table:
 Node: Top275
 Node: Brf-mode741
-Node: Setup2611
-Node: Installation2789
-Node: Customisation4015
-Node: Dependencies5273
-Node: Compatibility5903
-Node: Features6524
-Node: Line and Column Mode Cut and Paste6833
-Node: Reversible Paging and Scrolling8166
-Node: Temporary Bookmarks8801
-Node: List Bookmarks10374
-Node: Cursor Motion Undo11073
-Node: Easy Window Management11869
-Node: Differences From Brief12667
-Node: Known Issues13658
+Node: Setup2622
+Node: Installation2800
+Node: Customisation4014
+Node: Dependencies5272
+Node: Compatibility5902
+Node: Features6523
+Node: Line and Column Mode Cut and Paste6832
+Node: Reversible Paging and Scrolling8165
+Node: Temporary Bookmarks8800
+Node: List Bookmarks10373
+Node: Cursor Motion Undo11072
+Node: Easy Window Management11868
+Node: Differences From Brief12666
+Node: Known Issues13657
 
 End Tag Table
 
