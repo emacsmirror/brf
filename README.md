@@ -1,6 +1,6 @@
-# Brf-Mode
+# Brf-mode
 
-Brf-Mode adds functionality from the old DOS editor [Brief](https://en.wikipedia.org/wiki/Brief_%28text_editor%29) to Emacs.
+Brf-mode adds functionality from the legendary DOS editor [Brief](https://en.wikipedia.org/wiki/Brief_%28text_editor%29) to Emacs.
 
 This package is not an emulation of Brief (there are plenty of those already), but rather provides an accurate implementation in Emacs of specific features that I miss from Brief.
 
@@ -29,41 +29,42 @@ Brf-mode puts a `Brf` sub-menu under `Edit`. In keeping with Brief's minimalist 
 
 ## Installation
 
+The easiest way is to install the `brf` package from MELPA, however Brf-mode can also be installed manually if desired:
+
 -   Installation from MELPA
-
-[![img](https://melpa.org/packages/brf-badge.svg)](https://melpa.org/#/brf)
-
-1.  Make sure [melpa is in your package archives list](https://melpa.org/#/getting-started).
-2.  `M-x package-install brf`
+    
+    [![img](https://melpa.org/packages/brf-badge.svg)](https://melpa.org/#/brf) [![img](https://stable.melpa.org/packages/brf-badge.svg)](https://stable.melpa.org/#/brf)
+    
+    1.  Make sure [melpa is in your package archives list](https://melpa.org/#/getting-started).
+    2.  `M-x package-install brf`
 
 -   Manual Installation
+    1.  Download the package to a directory and add it to your `load-path`:
+        
+        ```emacs-lisp
+        (add-to-list 'load-path <install directory>)
+        ```
+    
+    2.  Install the Info manual [optional].
+        
+        ```shell
+        $ cd <install directory>
+        $ install-info brf-mode.info
+        ```
+        
+        ```emacs-lisp
+        (add-to-list 'Info-directory-list <install directory>)
+        ```
 
-1.  Download the package to a directory and add it to your `load-path`:
-
-```emacs-lisp
-(add-to-list 'load-path <install directory>)
-```
-
-2.  Install the Info manual [optional].
-
-```shell
-$ cd <install directory>
-$ install-info brf-mode.info
-```
-
-```emacs-lisp
-(add-to-list 'Info-directory-list <install directory>)
-```
-
--   Enable Brf-Mode
-
-This can be done via [Customize](#customisation) or adding code to your startup file:
-
-```emacs-lisp
-(brf-mode)
-```
-
-Choosing "Enable Brf-Mode" from the "Brf" menu, toggles the mode on or off for the current session.
+-   Enable Brf-mode
+    
+    This can be done via [Customize](#customisation) or adding code to your startup file:
+    
+    ```emacs-lisp
+    (brf-mode)
+    ```
+    
+    Choosing "Enable Brf-mode" from the "Brf" menu, toggles the mode on or off for the current session.
 
 
 <a id="customisation"></a>
@@ -73,31 +74,31 @@ Choosing "Enable Brf-Mode" from the "Brf" menu, toggles the mode on or off for t
 `M-x customize-group brf`
 
 -   Options
-
-Customisable options are:
-
-1.  Bookmark Face
-2.  Bookmark Number face (when shown in Fringe)
-3.  Enable Brf-Mode
-4.  Mode-line string (including hiding)
-5.  Enable [Cursor Motion Undo](#cursor-motion-undo)
+    
+    Customisable options are:
+    
+    1.  Bookmark Face
+    2.  Bookmark Number face (when shown in Fringe)
+    3.  Enable Brf-mode
+    4.  Mode-line string (including hiding)
+    5.  Enable [Cursor Motion Undo](#cursor-motion-undo)
 
 -   Key mapping
-
-Default key mappings can be changed by modifying `brf-mode-map` in the mode hook.
-
-As an example, here's what I'm using myself:
-
-```emacs-lisp
-(add-hook 'brf-mode-hook
-  (lambda ()
-    (define-key brf-mode-map "\M-r" 'redo)                ; Redo from redo+.el
-    (define-key brf-mode-map "\M-a" nil)                  ; Don't use Brief Alt-a for marking
-    (define-key brf-mode-map "\M-m" nil)                  ; Don't use Brief Alt-m for marking
-    (define-key brf-mode-map "\C-xl" 'downcase-word)      ; Shadowed by Alt-l
-    (define-key brf-mode-map "\C-xu" 'upcase-word)        ; Shadowed by Alt-u
-    (define-key brf-mode-map "\C-xw" 'capitalize-word)))  ; Shadowed by Alt-c
-```
+    
+    Default key mappings can be changed by modifying `brf-mode-map` in the mode hook.
+    
+    As an example, here's what I'm using myself:
+    
+    ```emacs-lisp
+    (add-hook 'brf-mode-hook
+    	  (lambda ()
+    	    (define-key brf-mode-map "\M-r" 'redo)                ; Redo from redo+.el
+    	    (define-key brf-mode-map "\M-a" nil)                  ; Don't use Brief Alt-a for marking
+    	    (define-key brf-mode-map "\M-m" nil)                  ; Don't use Brief Alt-m for marking
+    	    (define-key brf-mode-map "\C-xl" 'downcase-word)      ; Shadowed by Alt-l
+    	    (define-key brf-mode-map "\C-xu" 'upcase-word)        ; Shadowed by Alt-u
+    	    (define-key brf-mode-map "\C-xw" 'capitalize-word)))  ; Shadowed by Alt-c
+    ```
 
 
 ## Dependencies
@@ -105,6 +106,7 @@ As an example, here's what I'm using myself:
 Brf-mode doesn't have any hard dependencies, but installing the following optional packages enables some extra capabilities:
 
 -   [fringe-helper](https://melpa.org/#/fringe-helper): When installed, bookmark numbers show in the fringe. Installing Brf-mode via `package-install` automatically installs `fringe-helper`.
+
 -   [pkg-info](https://melpa.org/#/pkg-info): When installed, `(brf-version)` shows the package version as well as the Brf-mode version.
 
 
@@ -119,7 +121,7 @@ Earlier versions of Brf-mode will however work on older versions of Gnu Emacs an
 -   Use "v1.16" for Gnu Emacs versions 21 -> 24.2.
 -   Use "v1.08" for XEmacs and Gnu Emacs 20 & earlier.
 
-These and any other versions can be download from the [Brf-mode website](https://bitbucket.org/MikeWoolley/brf-mode/downloads/?tab=tags) and installed manually.
+These and any other version can be download from the [Brf-mode website](https://bitbucket.org/MikeWoolley/brf-mode/downloads/?tab=tags) and installed manually.
 
 
 # Features
@@ -278,12 +280,12 @@ These and any other versions can be download from the [Brf-mode website](https:/
 ![img](https://bitbucket.org/MikeWoolley/brf-mode/raw/master/images/BRIEF-Screenshot.png "Screenshot of the original BRIEF")
 
 -   Inclusive Mark (Alt-m)
-
-"Inclusive" character marking in Brief includes the character under the cursor, whereas in Brf-Mode (and Emacs in general) the marked region stops on the character before the cursor. This behaviour is actually Brief's "Non-inclusive Mark" and is the only kind supported in Brf-Mode. I don't think it makes any practical difference and so "Inclusive Mark" has not been implemented in Brf-Mode.
+    
+    "Inclusive" character marking in Brief includes the character under the cursor, whereas in Brf-mode (and Emacs in general) the marked region stops on the character before the cursor. This behaviour is actually Brief's "Non-inclusive Mark" and is the only kind supported in Brf-mode. I don't think it makes any practical difference and so "Inclusive Mark" has not been implemented in Brf-mode.
 
 -   Window Resizing (F2)
-
-When resizing a window in Brief, the user has to hit Enter to end resizing and all other keys are ignored. In Brf-Mode, any key or click that is not a cursor key ends resizing, which I personally think is better.
+    
+    When resizing a window in Brief, the user has to hit Enter to end resizing and all other keys are ignored. In Brf-mode, any key or click that is not a cursor key ends resizing, which I personally think is better.
 
 
 ## Known Issues
@@ -293,11 +295,11 @@ Please report any issues at the [Brf-mode website bug tracker](https://bitbucket
 There are a couple of known minor issues:
 
 -   XEmacs Compatibility
-
-Brf-mode no longer works in XEmacs. It's likely to be fairly easy to fix the compatibility issues, but given the demise of XEmacs I don't have any current plans to do this.
-
-Anyone wanting to run Brf-mode on XEmacs should install an older version, as described in [Compatibility](#compatibility).
+    
+    Brf-mode no longer works in XEmacs. It's likely to be fairly easy to fix the compatibility issues, but given the demise of XEmacs I don't have any current plans to do this.
+    
+    Anyone wanting to run Brf-mode on XEmacs should install an older version, as described in [Compatibility](#compatibility).
 
 -   Menu & Toolbar commands for Cut & Paste
-
-Brf-mode replaces the Cut & Paste menu and toolbar commands with versions that respect Line & Column Mode in the same way as the Brf-mode keyboard commands. However Emacs disables the menu and toolbar `Cut` & `Copy` items if there is no marked region, unlike the corresponding Brf-mode keyboard commands.
+    
+    Brf-mode replaces the Cut & Paste menu and toolbar commands with versions that respect Line & Column Mode in the same way as the Brf-mode keyboard commands. However Emacs disables the menu and toolbar `Cut` & `Copy` items if there is no marked region, unlike the corresponding Brf-mode keyboard commands.

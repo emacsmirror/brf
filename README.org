@@ -3,12 +3,12 @@
 #+EMAIL: mike@bulsara.com
 #+OPTIONS: toc:nil
 
-* Brf-Mode
+* Brf-mode
 :PROPERTIES:
 :CUSTOM_ID: brf-mode
 :END:
 
-Brf-Mode adds functionality from the old DOS editor [[https://en.wikipedia.org/wiki/Brief_%28text_editor%29][Brief]] to Emacs.
+Brf-mode adds functionality from the legendary DOS editor [[https://en.wikipedia.org/wiki/Brief_%28text_editor%29][Brief]] to Emacs.
 
 This package is not an emulation of Brief (there are plenty of those already), but rather provides an accurate
 implementation in Emacs of specific features that I miss from Brief.
@@ -43,82 +43,82 @@ difficult to access commands and also has links to preferences, help, the manual
 :END:
 
 ** Installation
-:PROPERTIES:
-:CUSTOM_ID: installation
-:END:
+   :PROPERTIES:
+   :CUSTOM_ID: installation
+   :END:
 
-- Installation from MELPA
+   The easiest way is to install the ~brf~ package from MELPA, however Brf-mode can also be installed manually if desired:
+   
+   - Installation from MELPA
 
-[[https://melpa.org/#/brf][https://melpa.org/packages/brf-badge.svg]]
+     [[https://melpa.org/#/brf][https://melpa.org/packages/brf-badge.svg]]
+     [[https://stable.melpa.org/#/brf][https://stable.melpa.org/packages/brf-badge.svg]]
 
-   1. Make sure [[https://melpa.org/#/getting-started][melpa is in your package archives list]].
-   2. ~M-x package-install brf~
+     1. Make sure [[https://melpa.org/#/getting-started][melpa is in your package archives list]].
+     2. ~M-x package-install brf~
 
+   - Manual Installation
 
-- Manual Installation
+     1. Download the package to a directory and add it to your ~load-path~:
 
+        #+BEGIN_SRC emacs-lisp
+	  (add-to-list 'load-path <install directory>)
+	#+END_SRC
 
-1. Download the package to a directory and add it to your ~load-path~:
+     2. Install the Info manual [optional].
 
-#+BEGIN_SRC emacs-lisp
-     (add-to-list 'load-path <install directory>)
-#+END_SRC
+        #+BEGIN_SRC shell
+	  $ cd <install directory>
+	  $ install-info brf-mode.info
+        #+END_SRC
 
-2. [@2]Install the Info manual [optional].
+        #+BEGIN_SRC emacs-lisp
+	  (add-to-list 'Info-directory-list <install directory>)
+        #+END_SRC
 
-#+BEGIN_SRC shell
-  $ cd <install directory>
-  $ install-info brf-mode.info
-#+END_SRC
+   - Enable Brf-mode
 
-#+BEGIN_SRC emacs-lisp
-  (add-to-list 'Info-directory-list <install directory>)
-#+END_SRC
+     This can be done via [[#customisation][Customize]] or adding code to your startup file:
 
-- Enable Brf-Mode
+     #+BEGIN_SRC emacs-lisp
+       (brf-mode)
+     #+END_SRC
 
-This can be done via [[#customisation][Customize]] or adding code to your startup file:
-
-#+BEGIN_SRC emacs-lisp
-     (brf-mode)
-#+END_SRC
-
-Choosing "Enable Brf-Mode" from the "Brf" menu, toggles the mode on or off for the current session.
+     Choosing "Enable Brf-mode" from the "Brf" menu, toggles the mode on or off for the current session.
 
 ** Customisation
-:PROPERTIES:
+   :PROPERTIES:
 :CUSTOM_ID: customisation
 :END:
 
-~M-x customize-group brf~
+   ~M-x customize-group brf~
 
-- Options
+   - Options
 
-Customisable options are:
+     Customisable options are:
 
-1. Bookmark Face
-2. Bookmark Number face (when shown in Fringe)
-3. Enable Brf-Mode
-4. Mode-line string (including hiding)
-5. Enable [[#cursor-motion-undo][Cursor Motion Undo]]
+     1. Bookmark Face
+     2. Bookmark Number face (when shown in Fringe)
+     3. Enable Brf-mode
+     4. Mode-line string (including hiding)
+     5. Enable [[#cursor-motion-undo][Cursor Motion Undo]]
 
+   - Key mapping
 
-- Key mapping
+     Default key mappings can be changed by modifying ~brf-mode-map~ in the mode hook.
 
-Default key mappings can be changed by modifying ~brf-mode-map~ in the mode hook.
+     As an example, here's what I'm using myself:
 
-As an example, here's what I'm using myself:
-
-#+BEGIN_SRC emacs-lisp
-  (add-hook 'brf-mode-hook
-    (lambda ()
-      (define-key brf-mode-map "\M-r" 'redo)                ; Redo from redo+.el
-      (define-key brf-mode-map "\M-a" nil)                  ; Don't use Brief Alt-a for marking
-      (define-key brf-mode-map "\M-m" nil)                  ; Don't use Brief Alt-m for marking
-      (define-key brf-mode-map "\C-xl" 'downcase-word)      ; Shadowed by Alt-l
-      (define-key brf-mode-map "\C-xu" 'upcase-word)        ; Shadowed by Alt-u
-      (define-key brf-mode-map "\C-xw" 'capitalize-word)))  ; Shadowed by Alt-c
-#+END_SRC
+     #+BEGIN_SRC emacs-lisp
+       (add-hook 'brf-mode-hook
+		 (lambda ()
+		   (define-key brf-mode-map "\M-r" 'redo)                ; Redo from redo+.el
+		   (define-key brf-mode-map "\M-a" nil)                  ; Don't use Brief Alt-a for marking
+		   (define-key brf-mode-map "\M-m" nil)                  ; Don't use Brief Alt-m for marking
+		   (define-key brf-mode-map "\C-xl" 'downcase-word)      ; Shadowed by Alt-l
+		   (define-key brf-mode-map "\C-xu" 'upcase-word)        ; Shadowed by Alt-u
+		   (define-key brf-mode-map "\C-xw" 'capitalize-word)))  ; Shadowed by Alt-c
+     #+END_SRC
 
 ** Dependencies
    :PROPERTIES:
@@ -130,6 +130,7 @@ As an example, here's what I'm using myself:
 
    - [[https://melpa.org/#/fringe-helper][fringe-helper]]: When installed, bookmark numbers show in the fringe.
      Installing Brf-mode via ~package-install~ automatically installs ~fringe-helper~.
+
    - [[https://melpa.org/#/pkg-info][pkg-info]]: When installed, ~(brf-version)~ shows the package version as well as the Brf-mode version.
 
 ** Compatibility
@@ -144,7 +145,7 @@ As an example, here's what I'm using myself:
    - Use "v1.16" for Gnu Emacs versions 21 -> 24.2.
    - Use "v1.08" for XEmacs and Gnu Emacs 20 & earlier.
 
-   These and any other versions can be download from the [[https://bitbucket.org/MikeWoolley/brf-mode/downloads/?tab=tags][Brf-mode website]] and installed manually.
+   These and any other version can be download from the [[https://bitbucket.org/MikeWoolley/brf-mode/downloads/?tab=tags][Brf-mode website]] and installed manually.
    
 * Features
 :PROPERTIES:
@@ -152,204 +153,204 @@ As an example, here's what I'm using myself:
 :END:
 
 ** Line and Column Mode Cut and Paste
-:PROPERTIES:
+   :PROPERTIES:
 :CUSTOM_ID: line-and-column-mode-cut-and-paste
 :END:
 
-- Mark regions by whole line or column.
-- If no region is marked, the copy and kill commands operate on the current line.
-- Yanked text is inserted in line or column mode, if that's how it was marked.
-- Text in Line or Column mode can be stored and recalled from registers, as well as the kill-ring.
+   - Mark regions by whole line or column.
+   - If no region is marked, the copy and kill commands operate on the current line.
+   - Yanked text is inserted in line or column mode, if that's how it was marked.
+   - Text in Line or Column mode can be stored and recalled from registers, as well as the kill-ring.
 
-#+CAPTION: Line Mode
-[[https://bitbucket.org/MikeWoolley/brf-mode/raw/master/images/line-mode.png]]
+   #+CAPTION: Line Mode
+   [[https://bitbucket.org/MikeWoolley/brf-mode/raw/master/images/line-mode.png]]
 
-#+CAPTION: Column Mode
-[[https://bitbucket.org/MikeWoolley/brf-mode/raw/master/images/column-mode.png]]
+   #+CAPTION: Column Mode
+   [[https://bitbucket.org/MikeWoolley/brf-mode/raw/master/images/column-mode.png]]
 
-| Key         | Action                  |
-|-------------+-------------------------|
-| M-l         | Start line marking      |
-| M-c         | Start column marking    |
-| M-m         | Start character marking |
-| M-a         | Start character marking |
-| kp-add      | Copy Line or Region     |
-| M-w         | Copy Line or Region     |
-| kp-subtract | Kill Line or Region     |
-| C-w         | Kill Line or Region     |
-| kp-ins      | Yank                    |
-| C-y         | Yank                    |
-| M-y         | Yank Pop                |
-|             |                         |
-| C-c C-b C-w | Copy to Register        |
-| C-c C-b C-y | Insert Register         |
-|             |                         |
-| M-d         | Delete Line             |
-| delete      | Delete Region or Char   |
-|             |                         |
-| RET         | Newline and Indent      |
-| C-j         | Newline                 |
-| C-RET       | Open New Line           |
-| Tab         | Indent                  |
+   | Key         | Action                  |
+   |-------------+-------------------------|
+   | M-l         | Start line marking      |
+   | M-c         | Start column marking    |
+   | M-m         | Start character marking |
+   | M-a         | Start character marking |
+   | kp-add      | Copy Line or Region     |
+   | M-w         | Copy Line or Region     |
+   | kp-subtract | Kill Line or Region     |
+   | C-w         | Kill Line or Region     |
+   | kp-ins      | Yank                    |
+   | C-y         | Yank                    |
+   | M-y         | Yank Pop                |
+   |             |                         |
+   | C-c C-b C-w | Copy to Register        |
+   | C-c C-b C-y | Insert Register         |
+   |             |                         |
+   | M-d         | Delete Line             |
+   | delete      | Delete Region or Char   |
+   |             |                         |
+   | RET         | Newline and Indent      |
+   | C-j         | Newline                 |
+   | C-RET       | Open New Line           |
+   | Tab         | Indent                  |
 
 ** Reversible Paging and Scrolling
-:PROPERTIES:
+   :PROPERTIES:
 :CUSTOM_ID: reversible-paging-and-scrolling
 :END:
 
-- Paging and scrolling respect relative screen row and absolute column.
-- Paging up and then down again returns point to the same original position.
+   - Paging and scrolling respect relative screen row and absolute column.
+   - Paging up and then down again returns point to the same original position.
 
-| Key    | Action                        |
-|--------+-------------------------------|
-| next   | page-down                     |
-| C-v    | page-down                     |
-| prior  | page-up                       |
-| M-v    | page-up                       |
-| M-down | scroll-down                   |
-| M-up   | scroll-up                     |
-| home   | Beginning of Line/Page/Buffer |
-| end    | End of Line/Page/Buffer       |
+   | Key    | Action                        |
+   |--------+-------------------------------|
+   | next   | page-down                     |
+   | C-v    | page-down                     |
+   | prior  | page-up                       |
+   | M-v    | page-up                       |
+   | M-down | scroll-down                   |
+   | M-up   | scroll-up                     |
+   | home   | Beginning of Line/Page/Buffer |
+   | end    | End of Line/Page/Buffer       |
 
 ** Temporary Bookmarks
-:PROPERTIES:
+   :PROPERTIES:
 :CUSTOM_ID: temporary-bookmarks
 :END:
 
-- 10 bookmarks can be set and navigated between.
-- They can also be moved and deleted.
-- They are temporary in the sense they don't persist between invocations of Emacs.
-- As an extension to Brief, bookmark lines are highlighted in colour. This is [[#customisation][customisable]].
-- If the package ~fringe-helper~ is installed, the bookmark number is put in the fringe (which otherwise shows as a tooltip).
-- Bookmarks can be listed & chosen from a menu, [[#list-bookmarks][see below]]. This is also an extension to Brief.
-- Other extensions are a command to allocate the next free bookmark and one to delete all bookmarks.
+   - 10 bookmarks can be set and navigated between.
+   - They can also be moved and deleted.
+   - They are temporary in the sense they don't persist between invocations of Emacs.
+   - As an extension to Brief, bookmark lines are highlighted in colour. This is [[#customisation][customisable]].
+   - If the package ~fringe-helper~ is installed, the bookmark number is put in the fringe (which otherwise shows as a tooltip).
+   - Bookmarks can be listed & chosen from a menu, [[#list-bookmarks][see below]]. This is also an extension to Brief.
+   - Other extensions are a command to allocate the next free bookmark and one to delete all bookmarks.
 
-#+CAPTION: Bookmarks
-[[https://bitbucket.org/MikeWoolley/brf-mode/raw/master/images/bookmarks.png]]
+   #+CAPTION: Bookmarks
+   [[https://bitbucket.org/MikeWoolley/brf-mode/raw/master/images/bookmarks.png]]
 
-| Key                 | Action                               |
-|---------------------+--------------------------------------|
-| M-0 to M-9          | Drop bookmark 0-9 at point           |
-| With prefix arg C-u | Removes bookmark.                    |
-| M-=                 | Goto Next Bookmark                   |
-| M-kp-add            | Goto Next Bookmark                   |
-| M-kp-subtract       | Goto Previous Bookmark               |
-| M--                 | Goto Previous Bookmark               |
-| M-j                 | Jump-to-Bookmark                     |
-|                     |                                      |
-| C-c C-b C-k         | Delete All Bookmarks                 |
-| C-c C-b C-l         | List Bookmarks                       |
-| C-c C-b C-n         | Goto Next Bookmark                   |
-| C-c C-b C-p         | Goto Previous Bookmark               |
-| C-c C-b =           | Allocate Next Free Bookmark at Point |
+   | Key                 | Action                               |
+   |---------------------+--------------------------------------|
+   | M-0 to M-9          | Drop bookmark 0-9 at point           |
+   | With prefix arg C-u | Removes bookmark.                    |
+   | M-=                 | Goto Next Bookmark                   |
+   | M-kp-add            | Goto Next Bookmark                   |
+   | M-kp-subtract       | Goto Previous Bookmark               |
+   | M--                 | Goto Previous Bookmark               |
+   | M-j                 | Jump-to-Bookmark                     |
+   |                     |                                      |
+   | C-c C-b C-k         | Delete All Bookmarks                 |
+   | C-c C-b C-l         | List Bookmarks                       |
+   | C-c C-b C-n         | Goto Next Bookmark                   |
+   | C-c C-b C-p         | Goto Previous Bookmark               |
+   | C-c C-b =           | Allocate Next Free Bookmark at Point |
 
 ** List Bookmarks
-:PROPERTIES:
+   :PROPERTIES:
 :CUSTOM_ID: list-bookmarks
 :END:
 
-- Invoke the List Bookmarks menu with ~C-c C-b C-l~.
-- This allows you to view and manage all the current bookmarks.
+   - Invoke the List Bookmarks menu with ~C-c C-b C-l~.
+   - This allows you to view and manage all the current bookmarks.
 
-#+CAPTION: List Bookmarks
-[[https://bitbucket.org/MikeWoolley/brf-mode/raw/master/images/list-bookmarks.png]]
+   #+CAPTION: List Bookmarks
+   [[https://bitbucket.org/MikeWoolley/brf-mode/raw/master/images/list-bookmarks.png]]
 
-| key  | Action                    |
-|------+---------------------------|
-| RET  | Jump to bookmark at point |
-| SPC  | Jump to bookmark at point |
-| d    | Delete bookmark at point  |
-| k    | Delete All bookmarks      |
-|      |                           |
-| down | Move point down           |
-| up   | Move point up             |
-| <    | Move to start of buffer   |
-| >    | Move to end of buffer     |
-|      |                           |
-| ?    | Help                      |
-| h    | Describe Mode             |
-| q    | Quit                      |
+   | key  | Action                    |
+   |------+---------------------------|
+   | RET  | Jump to bookmark at point |
+   | SPC  | Jump to bookmark at point |
+   | d    | Delete bookmark at point  |
+   | k    | Delete All bookmarks      |
+   |      |                           |
+   | down | Move point down           |
+   | up   | Move point up             |
+   | <    | Move to start of buffer   |
+   | >    | Move to end of buffer     |
+   |      |                           |
+   | ?    | Help                      |
+   | h    | Describe Mode             |
+   | q    | Quit                      |
 
 ** Cursor Motion Undo
-:PROPERTIES:
-:CUSTOM_ID: cursor-motion-undo
-:END:
+   :PROPERTIES:
+   :CUSTOM_ID: cursor-motion-undo
+   :END:
 
-- Cursor motion, without any buffer changes, is recorded as an undo-able (& redo-able) action.
-- This works with both built-in Emacs Undo and also with the ~Redo.el~ & ~Redo+.el~ packages. I haven't tested it with
-  the plethora of other Undo packages - it should work, but you never know!
-- It is turned off by default (unlike in Brief), but can be enabled by customising option ~brf-undo-enable~.
+   - Cursor motion, without any buffer changes, is recorded as an undo-able (& redo-able) action.
+   - This works with both built-in Emacs Undo and also with the ~Redo.el~ & ~Redo+.el~ packages. I haven't tested it with
+     the plethora of other Undo packages - it should work, but you never know!
+   - It is turned off by default (unlike in Brief), but can be enabled by customising option ~brf-undo-enable~.
 
-| Key         | Action                                 |
-|-------------+----------------------------------------|
-| kp-multiply | Undo                                   |
-| M-u         | Undo                                   |
-| M-r         | Redo (if ~redo~ or ~redo+~ installed). |
+   | Key         | Action                                 |
+   |-------------+----------------------------------------|
+   | kp-multiply | Undo                                   |
+   | M-u         | Undo                                   |
+   | M-r         | Redo (if ~redo~ or ~redo+~ installed).     |
 
 ** Easy Window Management
-:PROPERTIES:
+   :PROPERTIES:
 :CUSTOM_ID: easy-window-management
 :END:
 
-- Create, Switch, Resize and Delete arbitrary windows with simple keystrokes.
+   - Create, Switch, Resize and Delete arbitrary windows with simple keystrokes.
 
-| Key                        | Action                        |
-|----------------------------+-------------------------------|
-| S- [up, down, right, left] | Switch to Window in Direction |
-| f1 [up, down, right, left] | Switch to window in Direction |
-| f2 [up, down, right, left] | Resize Window in Direction    |
-| M-f2                       | Zoom Window                   |
-| f3 [up, down, right, left] | Create Window in Direction    |
-| f4 [up, down, right, left] | Delete Window in Direction    |
-| C-f4                       | Delete Current Window         |
-| S-f4                       | Delete Other Windows          |
+   | Key                        | Action                        |
+   |----------------------------+-------------------------------|
+   | S- [up, down, right, left] | Switch to Window in Direction |
+   | f1 [up, down, right, left] | Switch to window in Direction |
+   | f2 [up, down, right, left] | Resize Window in Direction    |
+   | M-f2                       | Zoom Window                   |
+   | f3 [up, down, right, left] | Create Window in Direction    |
+   | f4 [up, down, right, left] | Delete Window in Direction    |
+   | C-f4                       | Delete Current Window         |
+   | S-f4                       | Delete Other Windows          |
 
 ** Differences From Brief
-:PROPERTIES:
+   :PROPERTIES:
 :CUSTOM_ID: differences-from-brief
 :END:
 
-#+CAPTION: Screenshot of the original BRIEF
-[[https://bitbucket.org/MikeWoolley/brf-mode/raw/master/images/BRIEF-Screenshot.png]]
+   #+CAPTION: Screenshot of the original BRIEF
+   [[https://bitbucket.org/MikeWoolley/brf-mode/raw/master/images/BRIEF-Screenshot.png]]
 
-- Inclusive Mark (Alt-m)
+   - Inclusive Mark (Alt-m)
 
-"Inclusive" character marking in Brief includes the character under the cursor, whereas in Brf-Mode (and Emacs in
-general) the marked region stops on the character before the cursor. This behaviour is actually Brief's "Non-inclusive
-Mark" and is the only kind supported in Brf-Mode. I don't think it makes any practical difference and so "Inclusive
-Mark" has not been implemented in Brf-Mode.
+     "Inclusive" character marking in Brief includes the character under the cursor, whereas in Brf-mode (and Emacs in
+     general) the marked region stops on the character before the cursor. This behaviour is actually Brief's
+     "Non-inclusive Mark" and is the only kind supported in Brf-mode. I don't think it makes any practical difference
+     and so "Inclusive Mark" has not been implemented in Brf-mode.
 
-- Window Resizing (F2)
+   - Window Resizing (F2)
 
-When resizing a window in Brief, the user has to hit Enter to end resizing and all other keys are ignored. In Brf-Mode,
-any key or click that is not a cursor key ends resizing, which I personally think is better.
+     When resizing a window in Brief, the user has to hit Enter to end resizing and all other keys are ignored. In
+     Brf-mode, any key or click that is not a cursor key ends resizing, which I personally think is better.
 
 ** Known Issues
-:PROPERTIES:
+   :PROPERTIES:
 :CUSTOM_ID: known-issues
 :END:
 
-Please report any issues at the [[https://bitbucket.org/MikeWoolley/brf-mode/issues][Brf-mode website bug tracker]].
+   Please report any issues at the [[https://bitbucket.org/MikeWoolley/brf-mode/issues][Brf-mode website bug tracker]].
 
-There are a couple of known minor issues:
+   There are a couple of known minor issues:
 
-- XEmacs Compatibility
+   - XEmacs Compatibility
 
-Brf-mode no longer works in XEmacs. It's likely to be fairly easy to fix the compatibility issues, but given the demise of
-XEmacs I don't have any current plans to do this.
+     Brf-mode no longer works in XEmacs. It's likely to be fairly easy to fix the compatibility issues, but given the
+     demise of XEmacs I don't have any current plans to do this.
 
-Anyone wanting to run Brf-mode on XEmacs should install an older version, as described in [[#compatibility][Compatibility]].
+     Anyone wanting to run Brf-mode on XEmacs should install an older version, as described in [[#compatibility][Compatibility]].
 
-- Menu & Toolbar commands for Cut & Paste
+   - Menu & Toolbar commands for Cut & Paste
 
-Brf-mode replaces the Cut & Paste menu and toolbar commands with versions that respect Line & Column Mode in the same
-way as the Brf-mode keyboard commands. However Emacs disables the menu and toolbar ~Cut~ & ~Copy~ items if there is no
-marked region, unlike the corresponding Brf-mode keyboard commands.
+     Brf-mode replaces the Cut & Paste menu and toolbar commands with versions that respect Line & Column Mode in the
+     same way as the Brf-mode keyboard commands. However Emacs disables the menu and toolbar ~Cut~ & ~Copy~ items if there
+     is no marked region, unlike the corresponding Brf-mode keyboard commands.
 
 # Info File Settings
 #+TEXINFO_FILENAME: brf-mode.info
 #+TEXINFO_HEADER: @ifinfo
-#+TEXINFO_HEADER: This is the manual for Brf-Mode.@*
+#+TEXINFO_HEADER: This is the manual for Brf-mode.@*
 #+TEXINFO_HEADER: @*
 #+TEXINFO_HEADER: Copyright @copyright{} 2000-2020 Mike Woolley
 #+TEXINFO_HEADER: @end ifinfo
