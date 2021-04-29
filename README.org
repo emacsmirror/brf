@@ -352,7 +352,7 @@ difficult to access commands and also has links to preferences, help, the manual
 #+TEXINFO_HEADER: @ifinfo
 #+TEXINFO_HEADER: This is the manual for Brf-mode.@*
 #+TEXINFO_HEADER: @*
-#+TEXINFO_HEADER: Copyright @copyright{} 2000-2020 Mike Woolley
+#+TEXINFO_HEADER: Copyright @copyright{} 1999-2021 Mike Woolley
 #+TEXINFO_HEADER: @end ifinfo
 #+TEXINFO_DIR_CATEGORY: Emacs
 #+TEXINFO_DIR_TITLE: Brf-mode: (brf-mode)
