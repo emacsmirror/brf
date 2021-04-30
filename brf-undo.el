@@ -27,6 +27,7 @@
 ;;; Code:
 
 (require 'brf-compat)
+(eval-when-compile (require 'cl-lib))
 
 (defcustom brf-undo-enable nil
   "Enable cursor motion undo."
@@ -68,7 +69,7 @@
 		     (/= point brf-undo-point) 		; Point has moved
 		     (or (eq head brf-undo-list-head) 	; and a change has not been made
 			 (and (integerp head)		; or previous change was cursor motion
-			      (null (caddr buffer-undo-list)))))
+			      (null (cl-caddr buffer-undo-list)))))
 	    (setq buffer-undo-list (cons brf-undo-point buffer-undo-list))
 	    ;; If we're undoing then the cursor motion was a redo, so mark it as such
 	    (when (eq this-command 'undo)

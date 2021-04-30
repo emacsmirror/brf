@@ -1,3 +1,10 @@
+2021-04-30  Mike Woolley  <mike@bulsara.com>
+
+	* brf-undo.el (brf-undo-post-command-hook): Changed `caddr' to
+	`cl-caddr', as `caddr' is (rather strangely) not defined in Emacs < 26
+	other than in `cl' and so `brf-undo' got broken in these older
+	versions by the forced migration from `cl` to `cl-lib`.
+
 2021-04-14  Mike Woolley  <mike@bulsara.com>
 
 	* brf-marking.el (brf-mark-line-hook): Fixes to line-marking mode:
