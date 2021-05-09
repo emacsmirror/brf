@@ -39,6 +39,9 @@ This is restored after saving/killing the region.")
 (defvar brf-line-mark-old-point nil
   "The location of point after a command is executed when line-marking.")
 (make-variable-buffer-local 'brf-line-mark-old-point)
+(defvar brf-line-mark-old-mark nil
+  "The location of mark after a command is executed when line-marking.")
+(make-variable-buffer-local 'brf-line-mark-old-mark)
 
 ;;
 ;; Line kill helper functions
@@ -106,7 +109,7 @@ DELETE-FLAG indicates the line-marked region was deleted or killed."
     ;; Check if line-marking has been implicitly ended by another command
     (cond ((or (brf-column-marking-p)
 	       (and (brf-region-active-p)
-		    (/= (mark) brf-line-mark-max) (/= (mark) brf-line-mark-min)))
+		    (/= (mark) brf-line-mark-old-mark)))
 	   (brf-abort-line-marking))
 
 	  ;; Line-marking
@@ -143,8 +146,9 @@ DELETE-FLAG indicates the line-marked region was deleted or killed."
 	  (t
 	   (brf-stop-line-marking))))
 
-  ;; Save point for next time
-  (setq brf-line-mark-old-point (point)))
+  ;; Save point & mark for next time
+  (setq brf-line-mark-old-point (point))
+  (setq brf-line-mark-old-mark (mark)))
 
 (defun brf-mark-line (&optional arg)
   "Mark the current line from anywhere on the line.
