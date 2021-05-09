@@ -1,3 +1,10 @@
+2021-05-09  Mike Woolley  <mike@bulsara.com>
+
+	* brf-undo.el (brf-undo-point): Fixed problem where an initial cursor movement
+	after opening a file couldn't be undone.
+	* brf-marking.el (brf-mark-line-hook): Fixed problem where the
+	user setting the mark didn't always end line-marking.
+
 2021-04-30  Mike Woolley  <mike@bulsara.com>
 
 	* brf-undo.el (brf-undo-post-command-hook): Changed `caddr' to

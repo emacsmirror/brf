@@ -40,7 +40,7 @@
   :initialize 'custom-initialize-default
   :group 'brf)
 
-(defvar brf-undo-point 0
+(defvar brf-undo-point (point-min)
   "The location of point after a command is executed.")
 (make-variable-buffer-local 'brf-undo-point)
 (defvar brf-undo-list-head nil
@@ -65,8 +65,7 @@
 	(setq head (cadr buffer-undo-list))		; Real head is the second item
 	(unless (eq this-command 'redo)			; ie (redo) from Redo(+).el
 	  ;; Check if there was cursor motion with no other changes
-	  (when (and (/= brf-undo-point 0)
-		     (/= point brf-undo-point) 		; Point has moved
+	  (when (and (/= point brf-undo-point) 		; Point has moved
 		     (or (eq head brf-undo-list-head) 	; and a change has not been made
 			 (and (integerp head)		; or previous change was cursor motion
 			      (null (cl-caddr buffer-undo-list)))))
