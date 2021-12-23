@@ -37,6 +37,8 @@ prefix ~C-c C-b~ for such commands.
 Brf-mode puts a ~Brf~ sub-menu under ~Edit~. In keeping with Brief's minimalist ethos, the menu only houses these more
 difficult to access commands and also has links to preferences, help, the manual and project website.
 
+There a few small, deliberate differences from the original Brief behaviour, which are discussed here: [[#differences-from-brief][Differences From Brief]].
+
 * Setup
 :PROPERTIES:
 :CUSTOM_ID: setup
@@ -324,6 +326,13 @@ difficult to access commands and also has links to preferences, help, the manual
 
      When resizing a window in Brief, the user has to hit Enter to end resizing and all other keys are ignored. In
      Brf-mode, any key or click that is not a cursor key ends resizing, which I personally think is better.
+
+   - Backspace behaviour while marking (⌫)
+
+     Hitting backspace (⌫) in Brf-mode (and Emacs in general) kills the active region, which I believe is the modern
+     expectation.  In Brief, backspace while marking deletes the previous character and adjusts the marked area to
+     encompass the change. In general, any buffer modifications terminate marking in Brf-mode & Emacs, whereas Brief
+     adjusts the marked area.
 
 ** Known Issues
    :PROPERTIES:

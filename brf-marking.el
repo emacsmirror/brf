@@ -20,7 +20,7 @@
 
 ;;; Commentary:
 
-;; See the README.md file for further details.
+;; See README.org or Info manual for further details.
 
 ;;; Code:
 
@@ -108,6 +108,7 @@ DELETE-FLAG indicates the line-marked region was deleted or killed."
   (when brf-line-mark-old-point
     ;; Check if line-marking has been implicitly ended by another command
     (cond ((or (brf-column-marking-p)
+	       deactivate-mark	; The last command wants to deactivate the mark
 	       (and (brf-region-active-p)
 		    (/= (mark) brf-line-mark-old-mark)))
 	   (brf-abort-line-marking))

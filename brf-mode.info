@@ -89,6 +89,9 @@ minimalist ethos, the menu only houses these more difficult to access
 commands and also has links to preferences, help, the manual and project
 website.
 
+   There a few small, deliberate differences from the original Brief
+behaviour, which are discussed here: *note Differences From Brief::.
+
 
 File: brf-mode.info,  Node: Setup,  Next: Features,  Prev: Brf-mode,  Up: Top
 
@@ -421,6 +424,15 @@ File: brf-mode.info,  Node: Differences From Brief,  Next: Known Issues,  Prev: 
      click that is not a cursor key ends resizing, which I personally
      think is better.
 
+   • Backspace behaviour while marking (⌫)
+
+     Hitting backspace (⌫) in Brf-mode (and Emacs in general) kills the
+     active region, which I believe is the modern expectation.  In
+     Brief, backspace while marking deletes the previous character and
+     adjusts the marked area to encompass the change.  In general, any
+     buffer modifications terminate marking in Brf-mode & Emacs, whereas
+     Brief adjusts the marked area.
+
 
 File: brf-mode.info,  Node: Known Issues,  Prev: Differences From Brief,  Up: Features
 
@@ -454,20 +466,20 @@ Please report any issues at the Brf-mode website bug tracker
 Tag Table:
 Node: Top275
 Node: Brf-mode741
-Node: Setup2622
-Node: Installation2800
-Node: Customisation4014
-Node: Dependencies5272
-Node: Compatibility5902
-Node: Features6523
-Node: Line and Column Mode Cut and Paste6832
-Node: Reversible Paging and Scrolling8165
-Node: Temporary Bookmarks8800
-Node: List Bookmarks10373
-Node: Cursor Motion Undo11072
-Node: Easy Window Management11868
-Node: Differences From Brief12666
-Node: Known Issues13657
+Node: Setup2761
+Node: Installation2939
+Node: Customisation4153
+Node: Dependencies5411
+Node: Compatibility6041
+Node: Features6662
+Node: Line and Column Mode Cut and Paste6971
+Node: Reversible Paging and Scrolling8304
+Node: Temporary Bookmarks8939
+Node: List Bookmarks10512
+Node: Cursor Motion Undo11211
+Node: Easy Window Management12007
+Node: Differences From Brief12805
+Node: Known Issues14237
 
 End Tag Table
 

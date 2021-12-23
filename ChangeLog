@@ -1,3 +1,13 @@
+2021-12-23  Mike Woolley  <mike@bulsara.com>
+
+	* brf-marking.el (brf-mark-line-hook): Fixed bug in line-marking
+	which caused backspace to emphasise a bogus region.
+
+	* brf.el: Changed package summary text.
+	(brf-version): Increased version to 1.21.
+
+	* *.el: Changed references of README.md to README.org.
+
 2021-05-09  Mike Woolley  <mike@bulsara.com>
 
 	* brf-undo.el (brf-undo-point): Fixed problem where an initial cursor movement

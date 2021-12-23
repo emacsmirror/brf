@@ -20,7 +20,7 @@
 
 ;;; Commentary:
 
-;; See the README.md file for further details.
+;; See README.org or Info manual for further details.
 
 ;;; Code:
 
