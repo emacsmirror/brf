@@ -365,4 +365,4 @@ There a few small, deliberate differences from the original Brief behaviour, whi
 #+TEXINFO_HEADER: @end ifinfo
 #+TEXINFO_DIR_CATEGORY: Emacs
 #+TEXINFO_DIR_TITLE: Brf-mode: (brf-mode)
-#+TEXINFO_DIR_DESC: Add functionality from the editor Brief
+#+TEXINFO_DIR_DESC: Brf-mode provides features from the legendary programmer's editor Brief

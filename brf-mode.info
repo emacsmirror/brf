@@ -3,7 +3,7 @@ README.texi.
 
 INFO-DIR-SECTION Emacs
 START-INFO-DIR-ENTRY
-* Brf-mode: (brf-mode). Add functionality from the editor Brief.
+* Brf-mode: (brf-mode). Brf-mode provides features from the legendary programmer’s editor Brief.
 END-INFO-DIR-ENTRY
 
 This is the manual for Brf-mode.
@@ -464,22 +464,22 @@ Please report any issues at the Brf-mode website bug tracker
 
 
 Tag Table:
-Node: Top275
-Node: Brf-mode741
-Node: Setup2761
-Node: Installation2939
-Node: Customisation4153
-Node: Dependencies5411
-Node: Compatibility6041
-Node: Features6662
-Node: Line and Column Mode Cut and Paste6971
-Node: Reversible Paging and Scrolling8304
-Node: Temporary Bookmarks8939
-Node: List Bookmarks10512
-Node: Cursor Motion Undo11211
-Node: Easy Window Management12007
-Node: Differences From Brief12805
-Node: Known Issues14237
+Node: Top309
+Node: Brf-mode775
+Node: Setup2795
+Node: Installation2973
+Node: Customisation4187
+Node: Dependencies5445
+Node: Compatibility6075
+Node: Features6696
+Node: Line and Column Mode Cut and Paste7005
+Node: Reversible Paging and Scrolling8338
+Node: Temporary Bookmarks8973
+Node: List Bookmarks10546
+Node: Cursor Motion Undo11245
+Node: Easy Window Management12041
+Node: Differences From Brief12839
+Node: Known Issues14271
 
 End Tag Table
 
