@@ -28,7 +28,7 @@
 (require 'brf-menu)
 (eval-when-compile (require 'cl-lib))
 
-(defface brf-bookmark-face '((t (:background "khaki")))
+(defface brf-bookmark-face '((t (:background "khaki" :extend t)))
   "Face used to show bookmark."
   :group 'brf)
 
