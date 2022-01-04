@@ -1,6 +1,6 @@
 ;;; brf-bookmark.el --- Bookmark feature of brf-mode -*- lexical-binding: t -*-
 
-;; Copyright (C) 1999-2021 Mike Woolley
+;; Copyright (C) 1999-2022 Mike Woolley
 ;; Author: Mike Woolley <mike@bulsara.com>
 
 ;; This file is not part of GNU Emacs

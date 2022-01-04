@@ -1,6 +1,6 @@
 ;;; brf.el --- Brf-mode provides features from the legendary editor Brief -*- lexical-binding: t -*-
 
-;; Copyright (C) 1999-2021 Mike Woolley
+;; Copyright (C) 1999-2022 Mike Woolley
 ;; Author: Mike Woolley <mike@bulsara.com>
 ;; Package-Version: 1.22
 ;; Package-Requires: ((fringe-helper "0.1.1") (emacs "24.3"))

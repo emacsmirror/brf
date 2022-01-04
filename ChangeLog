@@ -7,6 +7,8 @@
 
 	* brf.el (brf-version): Increased version to 1.22.
 
+	* *.el: Updated Copyright years.
+
 2021-12-23  Mike Woolley  <mike@bulsara.com>
 
 	* brf-marking.el (brf-mark-line-hook): Fixed bug in line-marking
