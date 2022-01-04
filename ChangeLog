@@ -1,3 +1,12 @@
+2022-01-04  Mike Woolley  <mike@bulsara.com>
+
+	* brf-bookmark.el (brf-bookmark-face): Fixed problem where the
+	bookmark highlight doesn't extend to the right margin on Emacs 27.
+	It seems Emacs 27 requires the new face attribute `:extend' for
+	this to happen.
+
+	* brf.el (brf-version): Increased version to 1.22.
+
 2021-12-23  Mike Woolley  <mike@bulsara.com>
 
 	* brf-marking.el (brf-mark-line-hook): Fixed bug in line-marking
