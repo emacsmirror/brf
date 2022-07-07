@@ -1,3 +1,12 @@
+2022-07-07  Mike Woolley  <mike@bulsara.com>
+
+	* brf-marking.el (brf-mark-line-hook): Incorrectly moves 2 lines forward instead of a single one when org-indent-mode is enabled.
+	+ Modified the code in 'brf-mark-line-hook' so that moving forward a line after having to move to the beginning of the
+	line is only done when point hasn't already implicitly moved forward a line.
+	+ Also fixed this issue for the case where the last line of the file is incomplete (ie doesn't end in EOL).
+
+	* brf.el (brf-version): Increased version to 1.23.
+
 2022-01-04  Mike Woolley  <mike@bulsara.com>
 
 	* brf-bookmark.el (brf-bookmark-face): Fixed problem where the
