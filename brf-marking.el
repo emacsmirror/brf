@@ -124,10 +124,9 @@ DELETE-FLAG indicates the line-marked region was deleted or killed."
 	     (unless (bolp)
 	       (beginning-of-line)
 	       ;; Move forward a line if moving to the beginning nullified the user's cursor movement
-	       (when (or
-		      (and (>= (point) brf-line-mark-old-point)
-			   (eq (count-lines brf-line-mark-old-point (point) t) 0))
-		      (eq brf-line-mark-old-point (point-max))) ; Handle incomplete last line
+	       (when (and (eq (count-lines brf-line-mark-old-point (point) t) 0)
+			  (or (>= (point) brf-line-mark-old-point)
+			      (eq brf-line-mark-old-point (point-max)))) ; Handle incomplete last line
 		 (forward-line)))
 	     ;; Ensure mark and point are straddling the original line
 	     (let ((point (point))
