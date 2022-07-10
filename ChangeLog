@@ -1,3 +1,12 @@
+2022-07-10  Mike Woolley  <mike@bulsara.com>
+
+	* brf-marking.el (brf-mark-line-hook): Removed 3rd argument to
+	`count-lines' in the previous change, which is only supported on
+	Gnu Emacs >= 28.
+
+	* brf.el:
+	* brf-marking.el: Fixed compiler warnings on Gnu Emacs 28.
+
 2022-07-07  Mike Woolley  <mike@bulsara.com>
 
 	* brf-marking.el (brf-mark-line-hook): Incorrectly moves 2 lines forward instead of a single one when org-indent-mode is enabled.

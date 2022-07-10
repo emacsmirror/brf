@@ -225,7 +225,7 @@ Set this to nil to conserve valuable mode line space."
      :help "Show the Brf project website in a browser"]
     ["Version" brf-version
      :help "Display version information"]))
-(easy-menu-add brf-mode-menu)
+;; (easy-menu-add brf-mode-menu) Uncomment this if we ever have to support XEmacs again...
 (easy-menu-add-item nil '("Edit") "---")
 (easy-menu-add-item nil '("Edit") brf-mode-menu)
 (easy-menu-add-item nil '("Edit") "---")

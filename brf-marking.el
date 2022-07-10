@@ -104,7 +104,7 @@ DELETE-FLAG indicates the line-marked region was deleted or killed."
   (memq 'brf-mark-line-hook post-command-hook))
 
 (defun brf-mark-line-hook ()
-  "Ensure point and mark are correctly positioned for line-marking after cursor motion commands."
+  "Ensure point and mark are correctly positioned after cursor motion commands."
   (when brf-line-mark-old-point
     ;; Check if line-marking has been implicitly ended by another command
     (cond ((or (brf-column-marking-p)
@@ -124,7 +124,7 @@ DELETE-FLAG indicates the line-marked region was deleted or killed."
 	     (unless (bolp)
 	       (beginning-of-line)
 	       ;; Move forward a line if moving to the beginning nullified the user's cursor movement
-	       (when (and (eq (count-lines brf-line-mark-old-point (point) t) 0)
+	       (when (and (eq (count-lines brf-line-mark-old-point (point)) 0)
 			  (or (>= (point) brf-line-mark-old-point)
 			      (eq brf-line-mark-old-point (point-max)))) ; Handle incomplete last line
 		 (forward-line)))
