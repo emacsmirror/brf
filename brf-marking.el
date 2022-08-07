@@ -42,6 +42,9 @@ This is restored after saving/killing the region.")
 (defvar brf-line-mark-old-mark nil
   "The location of mark after a command is executed when line-marking.")
 (make-variable-buffer-local 'brf-line-mark-old-mark)
+(defvar brf-line-mark-prev-goal-column nil
+  "The current `goal-column' when line-marking is started.")
+(make-variable-buffer-local 'brf-line-mark-prev-goal-column)
 
 ;;
 ;; Line kill helper functions
@@ -82,9 +85,12 @@ line is terminated with a newline."
   (setq brf-line-mark-col (current-column))
   (when (and (fboundp 'make-local-hook)
 	     (or brf-xemacs-flag (< emacs-major-version 21)))
-    (make-local-hook 'post-command-hook)) ;; Not needed since Emacs 21
+    (make-local-hook 'post-command-hook)) ; Not needed since Emacs 21
   (add-hook 'post-command-hook #'brf-mark-line-hook nil t)
-  (setq brf-line-mark-old-point nil))
+  (setq brf-line-mark-old-point nil)
+  ;; Try to make Emacs cursor movement keep to the beginning of the line
+  (setq brf-line-mark-prev-goal-column goal-column)
+  (setq goal-column 0))
 
 (defun brf-stop-line-marking (&optional delete-flag)
   "Stop line-marking mode, restoring point to the original column.
@@ -97,6 +103,7 @@ DELETE-FLAG indicates the line-marked region was deleted or killed."
 
 (defun brf-abort-line-marking ()
   "Stop line-marking mode without adjusting point."
+  (setq goal-column brf-line-mark-prev-goal-column)
   (remove-hook 'post-command-hook #'brf-mark-line-hook t))
 
 (defun brf-line-marking-p ()
@@ -123,10 +130,7 @@ DELETE-FLAG indicates the line-marked region was deleted or killed."
 	     ;; Ensure we're at the beginning of the line
 	     (unless (bolp)
 	       (beginning-of-line)
-	       ;; Move forward a line if moving to the beginning nullified the user's cursor movement
-	       (when (and (eq (count-lines brf-line-mark-old-point (point)) 0)
-			  (or (>= (point) brf-line-mark-old-point)
-			      (eq brf-line-mark-old-point (point-max)))) ; Handle incomplete last line
+	       (when (>= (point) brf-line-mark-old-point)
 		 (forward-line)))
 	     ;; Ensure mark and point are straddling the original line
 	     (let ((point (point))

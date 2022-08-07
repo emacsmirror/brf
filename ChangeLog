@@ -1,3 +1,17 @@
+2022-08-07  Mike Woolley  <mike@bulsara.com>
+
+	* brf-marking.el (brf-start-line-marking): Better fix for the
+	'org-indent-mode' moving 2 lines issue.
+	+ The previous fix was not the right fix, as in general we *do*
+	want point to be moved forward a line when the user moves point to
+	somewhere that's not at the start of a line (eg line-marking a
+	function with M-l + C-M-e).
+	+ The actual problem is 'next-line' at BOL in 'org-indent-mode'
+	doesn't necessarily go to BOL on the next line.  So I've attacked
+	the problem directly by setting 'goal-column' to 0 during
+	line-marking, to force Emacs to try to keep to the start of the
+	line.
+
 2022-07-10  Mike Woolley  <mike@bulsara.com>
 
 	* brf-marking.el (brf-mark-line-hook): Removed 3rd argument to
@@ -9,10 +23,13 @@
 
 2022-07-07  Mike Woolley  <mike@bulsara.com>
 
-	* brf-marking.el (brf-mark-line-hook): Incorrectly moves 2 lines forward instead of a single one when org-indent-mode is enabled.
-	+ Modified the code in 'brf-mark-line-hook' so that moving forward a line after having to move to the beginning of the
-	line is only done when point hasn't already implicitly moved forward a line.
-	+ Also fixed this issue for the case where the last line of the file is incomplete (ie doesn't end in EOL).
+	* brf-marking.el (brf-mark-line-hook): Incorrectly moves 2 lines
+	forward instead of a single one when org-indent-mode is enabled.
+	+ Modified the code in 'brf-mark-line-hook' so that moving forward
+	a line after having to move to the beginning of the line is only
+	done when point hasn't already implicitly moved forward a line.
+	+ Also fixed this issue for the case where the last line of the
+	file is incomplete (ie doesn't end in EOL).
 
 	* brf.el (brf-version): Increased version to 1.23.
 
