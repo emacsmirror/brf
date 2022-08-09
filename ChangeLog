@@ -419,6 +419,26 @@
 	* b-movement.el (b-window-height): Fixed bug causing paging to
 	move too far when line-spacing was set to something.
 
+2016-09-24  Mike Woolley  <mike@bulsara.com>
+
+	* b-movement.el (b-scroll-screen): Emacs 25 changes -
+	changed programmatic use of `forward-line' to `next-line' to
+	silence warning.
+
+2013-10-13  Mike Woolley  <mike@bulsara.com>
+
+	* b-marking.el (b-lisp-mode-p): Fixed bit rot by formatting the
+	mode name first before looking to see if it contains "lisp".
+
+2013-01-19  Mike Woolley  <mike@bulsara.com>
+
+	* b.el (b-start-line-marking): Changes for Emacs 24.
+
+2009-10-21  Mike Woolley  <mike@bulsara.com>
+
+	* b.el (b-mode-map): Added separate keymapping for kp-delete,
+	which seems to be necessary in Emacs 23.
+
 2004-02-14  Mike Woolley  <mike@bulsara.com>
 
 	* b-marking.el (b-copy-region): Behaviour of `kill-ring-save' has
