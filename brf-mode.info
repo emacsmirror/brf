@@ -160,11 +160,13 @@ File: brf-mode.info,  Node: Customisation,  Next: Dependencies,  Prev: Installat
 
      Customisable options are:
 
-       1. Bookmark Face
-       2. Bookmark Number face (when shown in Fringe)
-       3. Enable Brf-mode
-       4. Mode-line string (including hiding)
-       5. Enable *note Cursor Motion Undo::
+       1. Enable Brf-mode
+       2. Enable *note Cursor Motion Undo::
+       3. Bookmark Face
+       4. Bookmark Number face (when shown in Fringe)
+       5. Mode-line string (including hiding)
+       6. Mark enclosing SEXP by default in Lisp modes rather than the
+          current line.
 
    • Key mapping
 
@@ -412,7 +414,7 @@ File: brf-mode.info,  Node: Differences From Brief,  Next: Known Issues,  Prev: 
      "Inclusive" character marking in Brief includes the character under
      the cursor, whereas in Brf-mode (and Emacs in general) the marked
      region stops on the character before the cursor.  This behaviour is
-     actually Brief’s "Non-inclusive Mark" and is the only kind
+     actually Brief’s "Non-inclusive Mark" (Alt-a) and is the only kind
      supported in Brf-mode.  I don’t think it makes any practical
      difference and so "Inclusive Mark" has not been implemented in
      Brf-mode.
@@ -432,6 +434,11 @@ File: brf-mode.info,  Node: Differences From Brief,  Next: Known Issues,  Prev: 
      adjusts the marked area to encompass the change.  In general, any
      buffer modifications terminate marking in Brf-mode & Emacs, whereas
      Brief adjusts the marked area.
+
+   • Switching between marking modes (Alt-l Alt-c Alt-m Alt-a)
+
+     Switching between marking modes in Brief adjusts the current region
+     to suite the new mode, whereas Brf-mode starts marking afresh.
 
 
 File: brf-mode.info,  Node: Known Issues,  Prev: Differences From Brief,  Up: Features
@@ -469,17 +476,17 @@ Node: Brf-mode775
 Node: Setup2795
 Node: Installation2973
 Node: Customisation4187
-Node: Dependencies5445
-Node: Compatibility6075
-Node: Features6696
-Node: Line and Column Mode Cut and Paste7005
-Node: Reversible Paging and Scrolling8338
-Node: Temporary Bookmarks8973
-Node: List Bookmarks10546
-Node: Cursor Motion Undo11245
-Node: Easy Window Management12041
-Node: Differences From Brief12839
-Node: Known Issues14271
+Node: Dependencies5540
+Node: Compatibility6170
+Node: Features6791
+Node: Line and Column Mode Cut and Paste7100
+Node: Reversible Paging and Scrolling8433
+Node: Temporary Bookmarks9068
+Node: List Bookmarks10641
+Node: Cursor Motion Undo11340
+Node: Easy Window Management12136
+Node: Differences From Brief12934
+Node: Known Issues14582
 
 End Tag Table
 

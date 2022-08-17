@@ -27,6 +27,14 @@
 (require 'brf-compat)
 (eval-when-compile (require 'cl-lib))
 
+(defcustom brf-default-mark-sexp nil
+  "Mark enclosing SEXP by default in Lisp modes.
+Copying & cutting operations default to the current line when the
+region is inactive.  Setting this option to non-nil changes the
+default to the surrounding SEXP when in Lisp modes."
+  :type 'boolean
+  :group 'brf)
+
 (defvar brf-line-mark-min nil
   "The minimum position of the mark in line marking mode.
 The mark is positioned here if point is below this line.")
@@ -186,7 +194,8 @@ With ARG, do it that many times."
 (defun brf-mark-default ()
   "Mark the default unit in the buffer.
 Normally this is the current line, but in Lisp modes it is the containing sexp."
-  (cond ((brf-lisp-mode-p)
+  (cond ((and (brf-lisp-mode-p)
+	      brf-default-mark-sexp)
 	 (condition-case nil
 	     (progn
 	       (unless (= (following-char) ?\()
@@ -195,11 +204,6 @@ Normally this is the current line, but in Lisp modes it is the containing sexp."
 	   (error (brf-mark-line))))
 	(t				; Non-lisp mode
 	 (brf-mark-line))))
-
-(defun brf-lisp-mode-p ()
-  "Return non-nil if the current major mode is a Lisp mode.
-This is determined heuristically by looking for `lisp' in the mode name."
-  (string-match "lisp" (format-mode-line mode-name)))
 
 (defun brf-emphasise-region (beg end &optional message-len)
   "Emphasise the region BEG END, like `kill-ring-save' does.
@@ -414,6 +418,11 @@ also indent it."
 ;;
 ;; Utilities
 ;;
+(defun brf-lisp-mode-p ()
+  "Return non-nil if the current major mode is a Lisp mode.
+This is determined heuristically by looking for `lisp' in the mode name."
+  (string-match "lisp" (format-mode-line mode-name)))
+
 (defun brf-buffer-in-programming-mode-p ()
   "Return non-nil if the current buffer is in a programming major mode."
   (not (or (eq indent-line-function 'indent-to-left-margin)

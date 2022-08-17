@@ -78,11 +78,12 @@ The easiest way is to install the `brf` package from MELPA, however Brf-mode can
     
     Customisable options are:
     
-    1.  Bookmark Face
-    2.  Bookmark Number face (when shown in Fringe)
-    3.  Enable Brf-mode
-    4.  Mode-line string (including hiding)
-    5.  Enable [Cursor Motion Undo](#cursor-motion-undo)
+    1.  Enable Brf-mode
+    2.  Enable [Cursor Motion Undo](#cursor-motion-undo)
+    3.  Bookmark Face
+    4.  Bookmark Number face (when shown in Fringe)
+    5.  Mode-line string (including hiding)
+    6.  Mark enclosing SEXP by default in Lisp modes rather than the current line.
 
 -   Key mapping
     
@@ -284,7 +285,7 @@ These and any other version can be download from the [Brf-mode website](https://
 
 -   Inclusive Mark (Alt-m)
     
-    "Inclusive" character marking in Brief includes the character under the cursor, whereas in Brf-mode (and Emacs in general) the marked region stops on the character before the cursor. This behaviour is actually Brief's "Non-inclusive Mark" and is the only kind supported in Brf-mode. I don't think it makes any practical difference and so "Inclusive Mark" has not been implemented in Brf-mode.
+    "Inclusive" character marking in Brief includes the character under the cursor, whereas in Brf-mode (and Emacs in general) the marked region stops on the character before the cursor. This behaviour is actually Brief's "Non-inclusive Mark" (Alt-a) and is the only kind supported in Brf-mode. I don't think it makes any practical difference and so "Inclusive Mark" has not been implemented in Brf-mode.
 
 -   Window Resizing (F2)
     
@@ -293,6 +294,10 @@ These and any other version can be download from the [Brf-mode website](https://
 -   Backspace behaviour while marking (⌫)
     
     Hitting backspace (⌫) in Brf-mode (and Emacs in general) kills the active region, which I believe is the modern expectation. In Brief, backspace while marking deletes the previous character and adjusts the marked area to encompass the change. In general, any buffer modifications terminate marking in Brf-mode & Emacs, whereas Brief adjusts the marked area.
+
+-   Switching between marking modes (Alt-l Alt-c Alt-m Alt-a)
+    
+    Switching between marking modes in Brief adjusts the current region to suite the new mode, whereas Brf-mode starts marking afresh.
 
 
 ## Known Issues

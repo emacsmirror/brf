@@ -1,3 +1,11 @@
+2022-08-17  Mike Woolley  <mike@bulsara.com>
+
+	* brf-marking.el (brf-mark-default): Added custom option to enable
+	the pre-existing feature of marking the enclosing SEXP by default in
+	Lisp modes rather than the current line.
+
+	* brf.el (brf-version): Increased version to 1.24.
+
 2022-08-07  Mike Woolley  <mike@bulsara.com>
 
 	* brf-marking.el (brf-start-line-marking): Better fix for the
