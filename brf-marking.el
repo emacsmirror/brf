@@ -88,9 +88,6 @@ line is terminated with a newline."
 ;;
 (defun brf-start-line-marking ()
   "Start line-marking mode."
-  (when (brf-column-marking-p)
-    (brf-stop-column-marking))
-  (setq brf-line-mark-col (current-column))
   (when (and (fboundp 'make-local-hook)
 	     (or brf-xemacs-flag (< emacs-major-version 21)))
     (make-local-hook 'post-command-hook)) ; Not needed since Emacs 21
@@ -153,7 +150,7 @@ DELETE-FLAG indicates the line-marked region was deleted or killed."
 		     ((= point brf-line-mark-max) ; point = mark-max
 		      (forward-line 1)
 		      (set-mark brf-line-mark-min))
-		     (t				; point = mark-min
+		     (t				  ; point = mark-min
 		      (forward-line -1)
 		      (set-mark brf-line-mark-max)))
 	       (brf-activate-region))))
@@ -168,28 +165,57 @@ DELETE-FLAG indicates the line-marked region was deleted or killed."
 
 (defun brf-mark-line (&optional arg)
   "Mark the current line from anywhere on the line.
-Emulates the Brief mark-line function.
-With ARG, do it that many times."
+With ARG, do it that many times.
+If there is an active region, use that instead.
+Emulates the Brief \"Line Mark\" feature."
   (interactive "P")
-  (if (not (brf-line-marking-p))
-      ;; Line mark ARG lines
-      (let ((lines (prefix-numeric-value arg)))
-	(when (/= lines 0)
-	  (brf-start-line-marking)
-	  (beginning-of-line)
-	  (setq brf-line-mark-min (point))
-	  (forward-line)
-	  (setq brf-line-mark-max (point))
-	  (cond ((bolp)			; Normal case
-		 (forward-line (1- lines))
-		 (push-mark brf-line-mark-min t t))
-		(t			; Case where last line is incomplete
-		 (goto-char brf-line-mark-min)
-		 (push-mark brf-line-mark-max t t)))
-	  (message "Mark set (line mode)")))
-    ;; Stop line-marking
-    (brf-stop-line-marking)
-    (brf-deactivate-region t)))
+  (cond ((brf-line-marking-p)
+	 ;; Stop line-marking
+	 (brf-stop-line-marking)
+	 (brf-deactivate-region t))
+
+	(t ; Start line-marking
+	 (setq brf-line-mark-col (current-column))
+	 (let ((lines (prefix-numeric-value arg)))
+	   (when (brf-region-active-p)
+	     (when (brf-column-marking-p)
+	       (brf-stop-column-marking))
+	     ;; Use current region
+	     (setq lines (max (count-lines (mark) (point)) 1))
+	     (let ((backwards (< (point) (mark))))
+	       (goto-char (mark))
+	       (when backwards
+		 (when (bolp)
+		   (backward-char))	; When mark is at the beginning of the line, don't include this line
+		 (setq lines (- lines)))))
+	   ;; Mark lines forward from point
+	   (brf-mark-lines-at-point lines)))))
+
+(defun brf-mark-lines-at-point (lines)
+  "Line mark LINES forwards from point.
+Mark backwards if LINES is negative.
+Do nothing if LINES is zero."
+  (unless (= lines 0)
+    (brf-start-line-marking)
+    (beginning-of-line)
+    (setq brf-line-mark-min (point))
+    (forward-line)
+    (setq brf-line-mark-max (point))
+    (cond ((bolp)			; Normal case
+	   (cond ((< lines 0)
+		  ;; Marking backwards
+		  (forward-line lines)
+		  (push-mark brf-line-mark-max t t))
+		 (t			; lines > 0
+		  ;; Marking forwards
+		  (forward-line (1- lines))
+		  (push-mark brf-line-mark-min t t))))
+	  (t				; Case where last line is incomplete
+	   (goto-char brf-line-mark-min)
+	   (when (< lines 0)
+	     (forward-line (1+ lines)))
+	   (push-mark brf-line-mark-max t t)))
+    (message "Mark set (line mode)")))
 
 (defun brf-mark-default ()
   "Mark the default unit in the buffer.
@@ -238,14 +264,91 @@ of this sample text; it defaults to 40."
 ;;
 ;; Now `rectangle-mark-mode' has been added to Gnu Emacs, I'm just using that for column marking :-)
 ;;
+(defun brf-column-marking-supported-p ()
+  "Return non-nil if column marking is supported."
+  (fboundp 'rectangle-mark-mode))
+
+(defun brf-mark-column (&optional arg)
+  "Mark the current column.
+With ARG, do it that many times.
+If there is an active region, use that instead.
+Emulates the Brief \"Column Mark\" feature."
+  (interactive "P")
+  (cond ((brf-line-marking-p)
+	 ;; Currently line marking - stop line marking and start column marking
+	 (brf-stop-line-marking)
+	 (brf-start-column-marking))
+
+	((brf-column-marking-p)
+	 ;; Currently column marking - stop column marking
+	 (brf-stop-column-marking)
+	 (brf-deactivate-region t))
+
+	((brf-region-active-p)
+	 ;; Currently character marking - stop character marking and start column marking
+	 (brf-start-column-marking))
+
+	(t ;; Just start column marking
+	 (let ((cols (prefix-numeric-value arg)))
+	   (when (< cols 0)
+	     ;; Stop at the beginning of the line
+	     (setq cols (max cols (- (brf-bol-position) (point)))))
+	   (brf-start-column-marking)
+	   (forward-char cols)))))
+
 (defun brf-column-marking-p ()
   "Return non-nil if the buffer is in column marking mode."
   (bound-and-true-p rectangle-mark-mode))
 
+(defun brf-start-column-marking ()
+  "Start column marking."
+  (when (brf-column-marking-supported-p)
+    (rectangle-mark-mode 1)))
+
 (defun brf-stop-column-marking ()
-  "Stops column-marking mode."
-  (when (fboundp 'rectangle-mark-mode)
+  "Stop column marking."
+  (when (brf-column-marking-supported-p)
     (rectangle-mark-mode -1)))
+
+;;
+;; Character Marking Mode
+;;
+(defun brf-mark (&optional arg)
+  "Mark the current character.
+With ARG, do it that many times.
+If there is an active region, use that instead.
+Emulates the Brief \"(Inclusive) Mark\" feature."
+  (interactive "P")
+  (cond ((brf-line-marking-p)
+	 ;; Currently line marking - stop line marking and start character marking
+	 (brf-abort-line-marking)
+	 (message "Line marking ended"))
+
+	((brf-column-marking-p)
+	 ;; Currently column marking - stop column marking and start character marking
+	 (brf-stop-column-marking)
+	 (message "Column marking ended"))
+
+	((brf-region-active-p)
+	 ;; Currently character marking - stop character marking
+	 (brf-deactivate-region t))
+
+	(t ;; Just start character marking
+	 (let ((chars (prefix-numeric-value arg)))
+	   (push-mark (point) nil t)
+	   (forward-char chars)))))
+
+
+(defun brf-noninclusive-mark (&optional arg)
+  "Mark the current character non-inclusively.
+With ARG, do it that many times.
+If there is an active region, use that instead.
+Emulates the Brief \"Non-inclusive Mark\" feature."
+  (interactive "P")
+  ;; Simulate non-inclusive mark by marking one less char
+  (let ((chars (prefix-numeric-value arg)))
+    (setq chars (if (< chars 0) (1+ chars) (1- chars)))
+  (brf-mark chars)))
 
 ;;
 ;; Brief copy-region command
@@ -253,7 +356,7 @@ of this sample text; it defaults to 40."
 (defun brf-copy-region ()
   "Copy the current active region to the kill ring.
 If there is no active region then the current line is copied.
-Emulates the Brief copy function."
+Emulates the Brief \"Copy to Scrap\" function."
   (interactive)
   (unless (brf-region-active-p)
     (brf-mark-default))
@@ -292,7 +395,7 @@ If there is no active region then the current line is copied."
 (defun brf-kill-region ()
   "Kill the current active region.
 If there is no active region then the current line is killed.
-Emulates the Brief cut function."
+Emulates the Brief \"Cut to Scrap\" function."
   (interactive "*")
   (unless (brf-region-active-p)
     (brf-mark-default))
@@ -307,7 +410,7 @@ Emulates the Brief cut function."
 (defun brf-delete (&optional arg)
   "Delete the current active region.
 If there is no active region then ARG characters following point are deleted.
-Emulates the Brief delete function."
+Emulates the Brief \"Delete Block\" function."
   (interactive "*P")
   (cond ((brf-region-active-p)
 	 ;; Delete the rectangle if one is active
