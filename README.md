@@ -23,7 +23,7 @@ Some functionality was neither part of Brief nor Emacs (for example [List Bookma
 
 Brf-mode puts a `Brf` sub-menu under `Edit`. In keeping with Brief's minimalist ethos, the menu only houses these more difficult to access commands and also has links to preferences, help, the manual and project website.
 
-There a few small, deliberate differences from the original Brief behaviour, which are discussed here: [Differences From Brief](#differences-from-brief).
+There are a few small, deliberate differences from the original Brief behaviour, which are discussed here: [Differences From Brief](#differences-from-brief).
 
 
 # Setup
@@ -38,6 +38,12 @@ The easiest way is to install the `brf` package from MELPA, however Brf-mode can
 -   Installation from MELPA
     1.  Make sure [melpa is in your package archives list](https://melpa.org/#/getting-started).
     2.  `M-x package-install brf`
+    3.  If `use-package` is installed you can automatically install & load the elisp package by adding the following form to your startup file:
+        
+        ```emacs-lisp
+        (use-package brf
+          :ensure t)
+        ```
 
 -   Manual Installation
     1.  Download the package to a directory and add it to your `load-path`:
@@ -92,14 +98,25 @@ The easiest way is to install the `brf` package from MELPA, however Brf-mode can
     As an example, here's what I'm using myself:
     
     ```emacs-lisp
+    ;; Adjust the brf-mode keymap to put the otherwise shadowed M-<letter> keys on a C-c prefix
     (add-hook 'brf-mode-hook
     	  (lambda ()
-    	    (define-key brf-mode-map "\M-r" 'redo)                ; Redo from redo+.el
-    	    (define-key brf-mode-map "\M-a" nil)                  ; Don't use Brief Alt-a for marking
-    	    (define-key brf-mode-map "\M-m" nil)                  ; Don't use Brief Alt-m for marking
-    	    (define-key brf-mode-map "\C-xl" 'downcase-word)      ; Shadowed by Alt-l
-    	    (define-key brf-mode-map "\C-xu" 'upcase-word)        ; Shadowed by Alt-u
-    	    (define-key brf-mode-map "\C-xw" 'capitalize-word)))  ; Shadowed by Alt-c
+    	    (define-key brf-mode-map "\C-cm" 'back-to-indentation) ; Shadowed by M-m
+    	    (define-key brf-mode-map "\C-cl" 'downcase-word)       ; Shadowed by M-l
+    	    (define-key brf-mode-map "\C-cu" 'upcase-word)         ; Shadowed by M-u
+    	    (define-key brf-mode-map "\C-cc" 'capitalize-word)))   ; Shadowed by M-c
+    ```
+    
+    Alternatively with `use-package`:
+    
+    ```emacs-lisp
+    (use-package brf
+      :ensure t
+      :bind (:map brf-mode-map
+    	      ("C-c m" . back-to-indentation)
+    	      ("C-c l" . downcase-word)
+    	      ("C-c u" . upcase-word)
+    	      ("C-c c" . capitalize-word)))
     ```
 
 
@@ -152,7 +169,7 @@ These and any other version can be download from the [Brf-mode website](https://
 | M-w         | Copy Line or Region     |
 | kp-subtract | Kill Line or Region     |
 | C-w         | Kill Line or Region     |
-| kp-ins      | Yank                    |
+| insert      | Yank                    |
 | C-y         | Yank                    |
 | M-y         | Yank Pop                |
 |             |                         |
@@ -285,7 +302,7 @@ These and any other version can be download from the [Brf-mode website](https://
 
 -   Inclusive Mark (Alt-m)
     
-    "Inclusive" character marking in Brief includes the character under the cursor, whereas in Brf-mode (and Emacs in general) the marked region stops on the character before the cursor. This behaviour is actually Brief's "Non-inclusive Mark" (Alt-a) and is the only kind supported in Brf-mode. I don't think it makes any practical difference and so "Inclusive Mark" has not been implemented in Brf-mode.
+    "Inclusive" character marking in Brief includes the character under the cursor, whereas in Emacs the marked region stops on the character before the cursor. This behaviour is actually Brief's "Non-inclusive Mark" (Alt-a). "Inclusive Mark" is simulated in Brf-mode by moving point one more position to include the initial character.
 
 -   Window Resizing (F2)
     
@@ -294,10 +311,6 @@ These and any other version can be download from the [Brf-mode website](https://
 -   Backspace behaviour while marking (⌫)
     
     Hitting backspace (⌫) in Brf-mode (and Emacs in general) kills the active region, which I believe is the modern expectation. In Brief, backspace while marking deletes the previous character and adjusts the marked area to encompass the change. In general, any buffer modifications terminate marking in Brf-mode & Emacs, whereas Brief adjusts the marked area.
-
--   Switching between marking modes (Alt-l Alt-c Alt-m Alt-a)
-    
-    Switching between marking modes in Brief adjusts the current region to suite the new mode, whereas Brf-mode starts marking afresh.
 
 
 ## Known Issues

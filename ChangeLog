@@ -1,3 +1,10 @@
+2023-02-02  Mike Woolley  <mike@bulsara.com>
+
+	* brf.el (brf-mode-map): Keymap changes to reflect what it
+	actually says in the documentation 😊
+	● Map M-r to `redo' if a function of that name is available.
+	● Map Insert keys to paste.
+
 2023-01-31  Mike Woolley  <mike@bulsara.com>
 
 	* brf-marking.el: Big changes to marking:
