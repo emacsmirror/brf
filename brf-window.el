@@ -1,6 +1,6 @@
 ;;; brf-window.el --- Brief-style Window Management -*- lexical-binding: t -*-
 
-;; Copyright (C) 1999-2022 Mike Woolley
+;; Copyright (C) 1999-2023 Mike Woolley
 ;; Author: Mike Woolley <mike@bulsara.com>
 
 ;; This file is not part of GNU Emacs
