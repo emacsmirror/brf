@@ -276,7 +276,8 @@ Set this to nil to conserve valuable mode line space."
 	 (setq hscroll-margin 1)	  ; Scroll when we get to the end of the line
 	 (setq hscroll-step 1)		  ; Scroll one column at a time
 
-	 ;; Setup return (in the global map) to always indent
+	 ;; Setup return (in the global map) to always indent. This is in the global map because otherwise `brf-mode'
+	 ;; would shadow major-modes remapping newline, eg `shell-mode'
 	 (setq brf-prev-c-m (global-key-binding "\C-m"))
 	 (setq brf-prev-c-j (global-key-binding "\C-j"))
 	 (global-set-key "\C-m" 'newline-and-indent)
