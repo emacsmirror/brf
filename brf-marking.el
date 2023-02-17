@@ -294,7 +294,8 @@ Emulates the Brief \"Column Mark\" feature."
 	     ;; Stop at the beginning of the line
 	     (setq cols (max cols (- (brf-bol-position) (point)))))
 	   (brf-start-column-marking)
-	   (forward-char cols)))))
+	   (ignore-errors
+	     (forward-char cols))))))
 
 (defun brf-column-marking-p ()
   "Return non-nil if the buffer is in column marking mode."
@@ -336,7 +337,8 @@ Emulates the Brief \"(Inclusive) Mark\" feature."
 	(t ;; Just start character marking
 	 (let ((chars (prefix-numeric-value arg)))
 	   (push-mark (point) nil t)
-	   (forward-char chars)))))
+	   (ignore-errors
+	     (forward-char chars))))))
 
 
 (defun brf-noninclusive-mark (&optional arg)
