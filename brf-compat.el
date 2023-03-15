@@ -52,9 +52,21 @@
        (defalias 'brf-bol-position #'point-at-bol))
       (t ; Supply our own definition
        (defun brf-bol-position (&optional n)
-	 "Return the index of the character at the start of the line."
+	 "Return the character position of the start of the line."
 	 (save-excursion
 	   (beginning-of-line n)
+	   (point)))))
+
+;; Function to get the position of the end of the line
+(cond ((fboundp 'line-end-position)
+       (defalias 'brf-eol-position #'line-end-position))
+      ((fboundp 'point-at-bol)
+       (defalias 'brf-eol-position #'point-at-eol))
+      (t ; Supply our own definition
+       (defun brf-eol-position (&optional n)
+	 "Return the character position of the end of the line."
+	 (save-excursion
+	   (end-of-line n)
 	   (point)))))
 
 ;;;

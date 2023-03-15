@@ -336,6 +336,9 @@ Emulates the Brief \"(Inclusive) Mark\" feature."
 
 	(t ;; Just start character marking
 	 (let ((chars (prefix-numeric-value arg)))
+	   (when (> chars 0)
+	     ;; Stop at the end of the line
+	     (setq chars (min chars (- (brf-eol-position) (point)))))
 	   (push-mark (point) nil t)
 	   (ignore-errors
 	     (forward-char chars))))))
