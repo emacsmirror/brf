@@ -4,9 +4,9 @@ Brf-mode adds functionality from the legendary programmer's editor [Brief](https
 
 This package is not an emulation of Brief (there are plenty of those already), but rather provides an accurate implementation in Emacs of specific features that I miss from Brief.
 
-The emphasis is on accurately implementing these specific features in Emacs rather than doing what Brief emulations tend to do, which is mapping the Brief key-sequences to somewhat similar functions in Emacs.
+The emphasis is on accurately implementing these features in Emacs rather than doing what Brief emulations tend to do, which is mapping the Brief key-sequences to somewhat similar functions in Emacs.
 
-The features are:
+The provided features are:
 
 -   [Line-mode cut and paste](#line-and-column-mode-cut-and-paste)
 -   [Column-mode cut and paste](#line-and-column-mode-cut-and-paste)
@@ -33,45 +33,76 @@ There are a few small, deliberate differences from the original Brief behaviour,
 
 [![img](https://melpa.org/packages/brf-badge.svg)](https://melpa.org/#/brf) [![img](https://stable.melpa.org/packages/brf-badge.svg)](https://stable.melpa.org/#/brf)
 
-The easiest way is to install the `brf` package from MELPA, however Brf-mode can also be installed manually if desired:
 
--   Installation from MELPA
-    1.  Make sure [melpa is in your package archives list](https://melpa.org/#/getting-started).
-    2.  `M-x package-install brf`
-    3.  If `use-package` is installed you can automatically install & load the elisp package by adding the following form to your startup file:
-        
-        ```emacs-lisp
-        (use-package brf
-          :ensure t)
-        ```
+### Installation from MELPA
 
--   Manual Installation
-    1.  Download the package to a directory and add it to your `load-path`:
-        
-        ```emacs-lisp
-        (add-to-list 'load-path <install directory>)
-        ```
+The easiest way to install Brf-mode is to install the `brf` package from MELPA:
+
+1.  Make sure [melpa is in your package archives list](https://melpa.org/#/getting-started).
+2.  `M-x package-install brf`
+3.  If `use-package` is installed you can automatically install & load the elisp package by adding the following form to your startup file:
     
-    2.  Install the Info manual [optional].
-        
-        ```shell
-        $ cd <install directory>
-        $ install-info brf-mode.info
-        ```
-        
-        ```emacs-lisp
-        (add-to-list 'Info-directory-list <install directory>)
-        ```
+    ```emacs-lisp
+    (use-package brf
+      :ensure t)
+    ```
 
--   Enable Brf-mode
+
+<a id="manual-install"></a>
+
+### Manual Installation
+
+Brf-mode can be installed manually if desired:
+
+1.  Download the package to a directory and add it to your `load-path`:
     
-    This can be done via [Customize](#customisation) or adding code to your startup file:
+    ```emacs-lisp
+    (add-to-list 'load-path <install directory>)
+    ```
+
+2.  Install the Info manual:
+    
+    ```shell
+    $ cd <install directory>
+    $ install-info brf-mode.info
+    ```
+    
+    ```emacs-lisp
+    (add-to-list 'Info-directory-list <install directory>)
+    ```
+
+
+### Enable Brf-mode
+
+Enable Brf-mode by doing one of the following:
+
+-   Via [Customize](#customisation).
+
+-   Adding code to your startup file:
     
     ```emacs-lisp
     (brf-mode)
     ```
+
+-   As part of the `use-package` form:
     
-    Choosing "Enable Brf-mode" from the "Brf" menu, toggles the mode on or off for the current session.
+    ```emacs-lisp
+    (use-package brf
+      ...
+      :custom
+      (brf-mode t))
+    ```
+    
+    Or
+    
+    ```emacs-lisp
+    (use-package brf
+      ...
+      :init
+      (brf-mode))
+    ```
+
+-   Choosing "Enable Brf-mode" from the "Brf" menu, which toggles the mode on or off for the current session.
 
 
 <a id="customisation"></a>
@@ -111,7 +142,7 @@ The easiest way is to install the `brf` package from MELPA, however Brf-mode can
     
     ```emacs-lisp
     (use-package brf
-      :ensure t
+      ...
       :bind (:map brf-mode-map
     	      ("C-c m" . back-to-indentation)
     	      ("C-c l" . downcase-word)
@@ -140,7 +171,9 @@ Earlier versions of Brf-mode will however work on older versions of Gnu Emacs an
 -   Use "v1.16" for Gnu Emacs versions 21 -> 24.2.
 -   Use "v1.08" for XEmacs and Gnu Emacs 20 & earlier.
 
-These and any other version can be download from the [Brf-mode website](https://bitbucket.org/MikeWoolley/brf-mode/downloads/?tab=tags) and installed manually.
+These and any other versions can be download from the [Brf-mode website](https://bitbucket.org/MikeWoolley/brf-mode/downloads/?tab=tags) and installed [manually](#manual-install).
+
+Brf-mode is fully functional in text mode Emacs - bookmark numbers and tooltips are the only missing features.
 
 
 # Features
@@ -302,7 +335,7 @@ These and any other version can be download from the [Brf-mode website](https://
 
 -   Inclusive Mark (Alt-m)
     
-    "Inclusive" character marking in Brief includes the character under the cursor, whereas in Emacs the marked region stops on the character before the cursor. This behaviour is actually Brief's "Non-inclusive Mark" (Alt-a). "Inclusive Mark" is simulated in Brf-mode by moving point one more position to include the initial character.
+    "Inclusive" character marking in Brief includes the character under the cursor, whereas in Brf-mode (and Emacs in general) the marked region stops on the character before the cursor. This behaviour is actually Brief's "Non-inclusive Mark" (Alt-a) and is the only kind supported in Brf-mode. I don't think it makes any practical difference and so "Inclusive Mark" has not been implemented in Brf-mode.
 
 -   Window Resizing (F2)
     

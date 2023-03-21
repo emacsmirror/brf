@@ -1,4 +1,4 @@
-This is brf-mode.info, produced by makeinfo version 6.7 from
+This is brf-mode.info, produced by makeinfo version 7.0.2 from
 README.texi.
 
 INFO-DIR-SECTION Emacs
@@ -31,6 +31,12 @@ Setup
 * Dependencies::
 * Compatibility::
 
+Installation
+
+* Installation from MELPA::
+* Manual Installation::
+* Enable Brf-mode::
+
 Features
 
 * Line and Column Mode Cut and Paste::
@@ -56,11 +62,11 @@ Brf-mode adds functionality from the legendary programmer’s editor Brief
 already), but rather provides an accurate implementation in Emacs of
 specific features that I miss from Brief.
 
-   The emphasis is on accurately implementing these specific features in
-Emacs rather than doing what Brief emulations tend to do, which is
-mapping the Brief key-sequences to somewhat similar functions in Emacs.
+   The emphasis is on accurately implementing these features in Emacs
+rather than doing what Brief emulations tend to do, which is mapping the
+Brief key-sequences to somewhat similar functions in Emacs.
 
-   The features are:
+   The provided features are:
 
    • *note Line-mode cut and paste: Line and Column Mode Cut and Paste.
    • *note Column-mode cut and paste: Line and Column Mode Cut and
@@ -115,44 +121,80 @@ https://melpa.org/packages/brf-badge.svg (https://melpa.org/#/brf)
 https://stable.melpa.org/packages/brf-badge.svg
 (https://stable.melpa.org/#/brf)
 
-   The easiest way is to install the ‘brf’ package from MELPA, however
-Brf-mode can also be installed manually if desired:
+* Menu:
 
-   • Installation from MELPA
+* Installation from MELPA::
+* Manual Installation::
+* Enable Brf-mode::
 
-       1. Make sure melpa is in your package archives list
-          (https://melpa.org/#/getting-started).
-       2. ‘M-x package-install brf’
-       3. If ‘use-package’ is installed you can automatically install &
-          load the elisp package by adding the following form to your
-          startup file:
+
+File: brf-mode.info,  Node: Installation from MELPA,  Next: Manual Installation,  Up: Installation
 
-               (use-package brf
-                 :ensure t)
+2.1.1 Installation from MELPA
+-----------------------------
 
-   • Manual Installation
+The easiest way to install Brf-mode is to install the ‘brf’ package from
+MELPA:
 
-       1. Download the package to a directory and add it to your
-          ‘load-path’:
+  1. Make sure melpa is in your package archives list
+     (https://melpa.org/#/getting-started).
+  2. ‘M-x package-install brf’
+  3. If ‘use-package’ is installed you can automatically install & load
+     the elisp package by adding the following form to your startup
+     file:
 
-               (add-to-list 'load-path <install directory>)
+          (use-package brf
+            :ensure t)
 
-       2. Install the Info manual [optional].
+
+File: brf-mode.info,  Node: Manual Installation,  Next: Enable Brf-mode,  Prev: Installation from MELPA,  Up: Installation
 
-               $ cd <install directory>
-               $ install-info brf-mode.info
+2.1.2 Manual Installation
+-------------------------
 
-               (add-to-list 'Info-directory-list <install directory>)
+Brf-mode can be installed manually if desired:
 
-   • Enable Brf-mode
+  1. Download the package to a directory and add it to your ‘load-path’:
 
-     This can be done via *note Customize: Customisation. or adding code
-     to your startup file:
+          (add-to-list 'load-path <install directory>)
+
+  2. Install the Info manual:
+
+          $ cd <install directory>
+          $ install-info brf-mode.info
+
+          (add-to-list 'Info-directory-list <install directory>)
+
+
+File: brf-mode.info,  Node: Enable Brf-mode,  Prev: Manual Installation,  Up: Installation
+
+2.1.3 Enable Brf-mode
+---------------------
+
+Enable Brf-mode by doing one of the following:
+
+   • Via *note Customize: Customisation.
+
+   • Adding code to your startup file:
 
           (brf-mode)
 
-     Choosing "Enable Brf-mode" from the "Brf" menu, toggles the mode on
-     or off for the current session.
+   • As part of the ‘use-package’ form:
+
+          (use-package brf
+            ...
+            :custom
+            (brf-mode t))
+
+     Or
+
+          (use-package brf
+            ...
+            :init
+            (brf-mode))
+
+   • Choosing "Enable Brf-mode" from the "Brf" menu, which toggles the
+     mode on or off for the current session.
 
 
 File: brf-mode.info,  Node: Customisation,  Next: Dependencies,  Prev: Installation,  Up: Setup
@@ -192,7 +234,7 @@ File: brf-mode.info,  Node: Customisation,  Next: Dependencies,  Prev: Installat
      Alternatively with ‘use-package’:
 
           (use-package brf
-            :ensure t
+            ...
             :bind (:map brf-mode-map
                         ("C-c m" . back-to-indentation)
                         ("C-c l" . downcase-word)
@@ -231,9 +273,12 @@ Gnu Emacs and also on XEmacs:
    • Use "v1.16" for Gnu Emacs versions 21 -> 24.2.
    • Use "v1.08" for XEmacs and Gnu Emacs 20 & earlier.
 
-   These and any other version can be download from the Brf-mode website
-(https://bitbucket.org/MikeWoolley/brf-mode/downloads/?tab=tags) and
-installed manually.
+   These and any other versions can be download from the Brf-mode
+website (https://bitbucket.org/MikeWoolley/brf-mode/downloads/?tab=tags)
+and installed *note manually: Manual Installation.
+
+   Brf-mode is fully functional in text mode Emacs - bookmark numbers
+and tooltips are the only missing features.
 
 
 File: brf-mode.info,  Node: Features,  Prev: Setup,  Up: Top
@@ -427,11 +472,12 @@ File: brf-mode.info,  Node: Differences From Brief,  Next: Known Issues,  Prev: 
    • Inclusive Mark (Alt-m)
 
      "Inclusive" character marking in Brief includes the character under
-     the cursor, whereas in Emacs the marked region stops on the
-     character before the cursor.  This behaviour is actually Brief’s
-     "Non-inclusive Mark" (Alt-a).  "Inclusive Mark" is simulated in
-     Brf-mode by moving point one more position to include the initial
-     character.
+     the cursor, whereas in Brf-mode (and Emacs in general) the marked
+     region stops on the character before the cursor.  This behaviour is
+     actually Brief’s "Non-inclusive Mark" (Alt-a) and is the only kind
+     supported in Brf-mode.  I don’t think it makes any practical
+     difference and so "Inclusive Mark" has not been implemented in
+     Brf-mode.
 
    • Window Resizing (F2)
 
@@ -480,22 +526,25 @@ Please report any issues at the Brf-mode website bug tracker
 
 
 Tag Table:
-Node: Top309
-Node: Brf-mode775
-Node: Setup2799
-Node: Installation2977
-Node: Customisation4422
-Node: Dependencies5987
-Node: Compatibility6617
-Node: Features7238
-Node: Line and Column Mode Cut and Paste7547
-Node: Reversible Paging and Scrolling8880
-Node: Temporary Bookmarks9515
-Node: List Bookmarks11088
-Node: Cursor Motion Undo11787
-Node: Easy Window Management12583
-Node: Differences From Brief13381
-Node: Known Issues14745
+Node: Top311
+Node: Brf-mode864
+Node: Setup2888
+Node: Installation3066
+Node: Installation from MELPA3410
+Node: Manual Installation3998
+Node: Enable Brf-mode4531
+Node: Customisation5177
+Node: Dependencies6736
+Node: Compatibility7366
+Node: Features8130
+Node: Line and Column Mode Cut and Paste8439
+Node: Reversible Paging and Scrolling9772
+Node: Temporary Bookmarks10407
+Node: List Bookmarks11980
+Node: Cursor Motion Undo12679
+Node: Easy Window Management13475
+Node: Differences From Brief14273
+Node: Known Issues15713
 
 End Tag Table
 
