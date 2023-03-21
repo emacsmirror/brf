@@ -2,7 +2,7 @@
 
 ;; Copyright (C) 1999-2023 Mike Woolley
 ;; Author: Mike Woolley <mike@bulsara.com>
-;; Package-Version: 1.24
+;; Package-Version: 1.25
 ;; Package-Requires: ((fringe-helper "0.1.1") (emacs "24.3"))
 ;; Keywords: brief crisp emulations
 ;; URL: https://bitbucket.org/MikeWoolley/brf-mode
@@ -61,7 +61,7 @@ Set this to nil to conserve valuable mode line space."
 ;;;
 ;;; Version number
 ;;;
-(defconst brf-version "1.24"
+(defconst brf-version "1.25"
   "Version number of Brf mode.")
 
 (defun brf-version ()
@@ -198,7 +198,7 @@ Set this to nil to conserve valuable mode line space."
   '("Brf"
     ["Enable Brf-mode" brf-mode
      :style toggle :selected brf-mode
-     :Help "Enable Brf-mode"]
+     :help "Enable Brf-mode"]
     "---"
     ["Copy to Register" brf-copy-to-register
      :enable brf-mode
@@ -235,7 +235,14 @@ Set this to nil to conserve valuable mode line space."
 (easy-menu-add-item nil '("Edit") "---")
 
 ;; Make the menu available from the mode line "lighter"
-(define-key brf-mode-map [menu-bar edit brf] (cons "Brf" brf-mode-menu))
+;; Override `minor-mode-menu-from-indicator' otherwise it uses the Edit menu items that it finds
+;; in the `brf-mode' keymap, with the Brf menu as a sub-menu.
+(defadvice minor-mode-menu-from-indicator (around brf-menu-from-indicator)
+  "Use the `brf-mode' menu for the modeline menu."
+  (let ((indicator (ad-get-arg 0)))
+    (if (string= indicator brf-mode-modeline-string)
+	(popup-menu brf-mode-menu)
+      ad-do-it)))
 
 ;;;
 ;;; Brf minor mode
@@ -285,9 +292,17 @@ Set this to nil to conserve valuable mode line space."
 
 	 ;; Override "Select and Paste" menu item
 	 (ad-enable-advice 'menu-bar-select-yank 'around 'brf-menu-bar-select-yank)
-	 (ad-activate 'menu-bar-select-yank))
+	 (ad-activate 'menu-bar-select-yank)
+
+	 ;; Use the Brf menu as the modeline menu
+	 (ad-enable-advice 'minor-mode-menu-from-indicator 'around 'brf-menu-from-indicator)
+	 (ad-activate 'minor-mode-menu-from-indicator))
 
 	(t ; brf-mode off
+	 ;; Disable override of `minor-mode-menu-from-indicator'
+	 (ad-disable-advice 'minor-mode-menu-from-indicator 'around 'brf-menu-from-indicator)
+	 (ad-activate 'minor-mode-menu-from-indicator)
+
 	 ;; Disable override of "Select and Paste"
 	 (ad-disable-advice 'menu-bar-select-yank 'around 'brf-menu-bar-select-yank)
 	 (ad-activate 'menu-bar-select-yank)

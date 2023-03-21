@@ -1,3 +1,20 @@
+2023-03-21  Mike Woolley  <mike@bulsara.com>
+
+	* brf-marking.el (brf-mark): Reverted the simulation of "Inclusive Mark".
+	It didn't work well, so I've reverted the code so that Brf-mode
+	only uses non-inclusive marking again. A proper implementation
+	really needs the same kind of code that Line Marking uses, but
+	given the minor importance of this feature I don't think its worth it.
+	(brf-mark-column): Also reverted the code that moved Column &
+	Character marking forward 1 char by default. It now only moves if
+	a prefix arg is supplied.
+
+	* brf.el (brf-version): Increased version to 1.25.
+	(minor-mode-menu-from-indicator): Fixed problem where the Brf-mode
+	modeline "lighter" menu shows the Edit menu items that it finds in
+	the `brf-mode' keymap with the Brf menu as a sub-menu, rather than
+	just showing the Brf menu.
+
 2023-02-02  Mike Woolley  <mike@bulsara.com>
 
 	* brf.el (brf-mode-map): Keymap changes to reflect what it
