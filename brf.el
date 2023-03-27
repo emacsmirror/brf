@@ -46,6 +46,7 @@
 ;;; Code:
 
 (require 'easymenu)
+(eval-when-compile (require 'cl-lib))
 
 (defgroup brf nil
   "Add functionality from the editor Brief."
@@ -122,12 +123,15 @@ Set this to nil to conserve valuable mode line space."
 
     ;; Also put them on the original Emacs key-mappings
     (substitute-key-definition 'kill-ring-save 'brf-copy-region map (current-global-map))
-    (define-key map [menu-bar edit copy] '(menu-item "Copy" brf-copy-region)) ; Override the OS-specific "Copy" menu item.
     (substitute-key-definition 'kill-region 'brf-kill-region map (current-global-map))
     (substitute-key-definition 'yank 'brf-yank map (current-global-map))
     (substitute-key-definition 'yank-pop 'brf-yank-pop map (current-global-map))
     (substitute-key-definition 'beginning-of-line 'brf-home map (current-global-map))
     (substitute-key-definition 'end-of-line 'brf-end map (current-global-map))
+
+    ;; Override the macOS-specific "Copy" function `ns-copy-including-secondary'
+    (when (fboundp 'ns-copy-including-secondary)
+      (substitute-key-definition 'ns-copy-including-secondary 'brf-copy-region map (current-global-map)))
 
     ;; Also override the Cut & Paste commands on the toolbar
     (define-key map [tool-bar cut] 'brf-kill-region)
@@ -243,6 +247,42 @@ Set this to nil to conserve valuable mode line space."
     (if (string= indicator brf-mode-modeline-string)
 	(popup-menu brf-mode-menu)
       ad-do-it)))
+
+;;;
+;;; Allow the Cut & Copy menu & toolbar items to operate without a marked region
+;;;
+(defun brf-set-menu-item-property (map path name keyword value)
+  "Set KEYWORD to VALUE for menu item NAME at menu PATH in keymap MAP.
+Returns t if the menu item was found, nil otherwise.
+
+If the keyword already exists its value is replaced by the new value,
+otherwise the keyword is added.  If the menu item is not found
+then nothing is done.
+
+NOTE that NAME should be the menu item symbol rather than the string name
+and MAP and PATH are as defined in `easy-menu-add-item'."
+  (cl-assert (symbolp name))
+  (let ((item (easy-menu-item-present-p map path name)))
+    (when item
+      (let ((new-item (plist-put item keyword value)))
+	(easy-menu-add-item map path new-item))
+      t)))
+
+;; It looks like overriding a menu item in `brf-mode-map' only overrides the binding and not the menu item properties.
+;; I suspect this is because `lookup-key' for a menu item only returns the overridden binding and not the whole item.
+;; This means it's not possible to override menu item enablement with new definitions in `brf-mode-map'. Therefore the
+;; only option is to change the base settings (in a way that still works correctly when Brf-mode is off). Note also that
+;; the keyboard equivalents for the remapped commands do not appear in the menu for presumably the same reason...
+(let ((cut-enable '(and (or brf-mode mark-active) (not buffer-read-only)))
+      (copy-enable '(or brf-mode mark-active)))
+  (brf-set-menu-item-property global-map '(menu-bar edit) 'cut :enable cut-enable)
+  (brf-set-menu-item-property tool-bar-map '() 'cut :enable cut-enable)
+  (brf-set-menu-item-property global-map '(menu-bar edit) 'copy :enable copy-enable)
+  (brf-set-menu-item-property tool-bar-map '() 'copy :enable copy-enable))
+
+;; The base definition of Cut has an explicit :keys entry. This is unnecessary and causes the keyboard equivalent to
+;; show as "M-x ns-copy-including-secondary" in our case, so remove it...
+(brf-set-menu-item-property global-map '(menu-bar edit) 'copy :keys nil)
 
 ;;;
 ;;; Brf minor mode

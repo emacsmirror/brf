@@ -350,14 +350,10 @@ Brf-mode is fully functional in text mode Emacs - bookmark numbers and tooltips 
 
 Please report any issues at the [Brf-mode website bug tracker](https://bitbucket.org/MikeWoolley/brf-mode/issues).
 
-There are a couple of known minor issues:
+These are the known issues:
 
 -   XEmacs Compatibility
     
-    Brf-mode no longer works in XEmacs. It's likely to be fairly easy to fix the compatibility issues, but given the demise of XEmacs I don't have any current plans to do this.
+    Current versions of Brf-mode no longer work on XEmacs. It's likely to be possible to fix the compatibility issues, but given the demise of XEmacs I don't have any plans to do this.
     
-    Anyone wanting to run Brf-mode on XEmacs should install an older version, as described in [Compatibility](#compatibility).
-
--   Menu & Toolbar commands for Cut & Paste
-    
-    Brf-mode replaces the Cut & Paste menu and toolbar commands with versions that respect Line & Column Mode in the same way as the Brf-mode keyboard commands. However Emacs disables the menu and toolbar `Cut` & `Copy` items if there is no marked region, unlike the corresponding Brf-mode keyboard commands.
+    Anyone wanting to run Brf-mode on XEmacs should install an older version of Brf-mode, as described in [Compatibility](#compatibility).

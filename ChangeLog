@@ -1,3 +1,15 @@
+2023-03-27  Mike Woolley  <mike@bulsara.com>
+
+	* brf.el (brf-set-menu-item-property): Fixed problem with Emacs
+	disabling the menu and toolbar Cut & Copy items if there is no
+	marked region, unlike the corresponding Brf-mode keyboard
+	commands.
+	● Also map ⌘-c on macOS to `brf-copy-region' to be consistent with
+	the Copy menu item and ⌘-v binding.
+
+	* brf-marking.el (brf-mark-default):  Don't show the "Mark set"
+	message when copying the default marked region.
+	
 2023-03-21  Mike Woolley  <mike@bulsara.com>
 
 	* brf-marking.el (brf-mark): Reverted the simulation of "Inclusive Mark".

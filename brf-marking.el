@@ -230,7 +230,9 @@ Normally this is the current line, but in Lisp modes it is the containing sexp."
 	       (mark-sexp))
 	   (error (brf-mark-line))))
 	(t				; Non-lisp mode
-	 (brf-mark-line))))
+	 (brf-mark-line)))
+  ;; Clear the "Mark set" message
+  (message nil))
 
 (defun brf-emphasise-region (beg end &optional message-len)
   "Emphasise the region BEG END, like `kill-ring-save' does.
