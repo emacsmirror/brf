@@ -1,3 +1,13 @@
+2023-03-28  Mike Woolley  <mike@bulsara.com>
+
+	* brf.el (brf-set-menu-item-property): Modifying the Edit menu failed on Linux.
+	● Modifying the Edit menu failed because the builtin menus are in
+	pure storage, which is write protected on Linux (& maybe others,
+	but not on macOS).
+	
+	● So changed `brf-set-menu-item-property`to copy a menu item
+	before trying to modify it.
+	
 2023-03-27  Mike Woolley  <mike@bulsara.com>
 
 	* brf.el (brf-set-menu-item-property): Fixed problem with Emacs

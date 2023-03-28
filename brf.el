@@ -264,7 +264,7 @@ and MAP and PATH are as defined in `easy-menu-add-item'."
   (cl-assert (symbolp name))
   (let ((item (easy-menu-item-present-p map path name)))
     (when item
-      (let ((new-item (plist-put item keyword value)))
+      (let ((new-item (plist-put (copy-sequence item) keyword value))) ; Copy menu item as it may be in pure storage
 	(easy-menu-add-item map path new-item))
       t)))
 
