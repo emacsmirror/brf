@@ -1,13 +1,23 @@
+2023-04-28  Mike Woolley  <mike@bulsara.com>
+
+	* brf.el (set-undo/redo-keys): Configure the undo/redo keys
+	according to which functions are available.
+	● Unfortunately cursor motion redo doesn't yet work properly with
+	`undo-redo' from Emacs 28, so ignore its availability for now...
+
+	● Also fix previous toolbar change to use the default toolbar
+	rather than whichever toolbar is active when the mode is loaded.
+
 2023-03-28  Mike Woolley  <mike@bulsara.com>
 
 	* brf.el (brf-set-menu-item-property): Modifying the Edit menu failed on Linux.
 	● Modifying the Edit menu failed because the builtin menus are in
 	pure storage, which is write protected on Linux (& maybe others,
 	but not on macOS).
-	
+
 	● So changed `brf-set-menu-item-property`to copy a menu item
 	before trying to modify it.
-	
+
 2023-03-27  Mike Woolley  <mike@bulsara.com>
 
 	* brf.el (brf-set-menu-item-property): Fixed problem with Emacs
@@ -19,7 +29,7 @@
 
 	* brf-marking.el (brf-mark-default):  Don't show the "Mark set"
 	message when copying the default marked region.
-	
+
 2023-03-21  Mike Woolley  <mike@bulsara.com>
 
 	* brf-marking.el (brf-mark): Reverted the simulation of "Inclusive Mark".
