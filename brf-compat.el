@@ -24,6 +24,8 @@
 
 ;;; Code:
 
+(eval-when-compile (require 'cl-lib))
+
 (eval-and-compile
   (defconst brf-xemacs-flag (featurep 'xemacs)
     "Non-nil means this version of Emacs is XEmacs."))
@@ -33,7 +35,7 @@
   (require 'overlay))
 
 ;; Silence the byte compiler
-(eval-when-compile
+(cl-eval-when (compile)
   (cond (brf-xemacs-flag
 	 (defvar mark-active nil)
 	 (defvar transient-mark-mode nil))
@@ -60,7 +62,7 @@
 ;; Function to get the position of the end of the line
 (cond ((fboundp 'line-end-position)
        (defalias 'brf-eol-position #'line-end-position))
-      ((fboundp 'point-at-bol)
+      ((fboundp 'point-at-eol)
        (defalias 'brf-eol-position #'point-at-eol))
       (t ; Supply our own definition
        (defun brf-eol-position (&optional n)
