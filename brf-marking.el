@@ -35,6 +35,16 @@ default to the surrounding SEXP when in Lisp modes."
   :type 'boolean
   :group 'brf)
 
+(eval-and-compile
+  (if (fboundp 'rectangle-mark-mode)
+      (defcustom brf-use-new-line-marking nil
+	"Use new Line Marking implementation.
+New Line Marking uses Emacs' non-contiguous region support rather
+than `brf-mode's classic point-moving implementation."
+	:type 'boolean
+	:group 'brf)
+    (defconst brf-use-new-line-marking nil)))
+
 (defvar brf-line-mark-min nil
   "The minimum position of the mark in line marking mode.
 The mark is positioned here if point is below this line.")
@@ -83,10 +93,122 @@ line is terminated with a newline."
   (when (stringp string)
     (get-text-property 0 'brf-line-kill string)))
 
+(defun brf-bol-position-at (pos &optional n)
+  "Return the position of the first character on the line containing POS.
+With optional argument N, scan forward N - 1 lines first.
+If the scan reaches the end of the buffer, return that position."
+  (save-excursion
+    (goto-char pos)
+    (brf-bol-position n)))
+
+(defun brf-line-mode-region-beginning ()
+  "Return the position of the start of the line-mode region."
+  (brf-bol-position-at (min (mark) (point)) 1))
+
+(defun brf-line-mode-region-end ()
+  "Return the position of the end of the line-mode region."
+  (brf-bol-position-at (max (mark) (point)) 2))
+
+(defun brf-region-beginning ()
+  "Return the position of the beginning of the region."
+  (if (brf-line-marking-p:new)
+      (brf-line-mode-region-beginning)
+    (region-beginning)))
+
+(defun brf-region-end ()
+  "Return the position of the end of the region."
+  (if (brf-line-marking-p:new)
+      (brf-line-mode-region-end)
+    (region-end)))
+
 ;;
 ;; Line Marking Mode
 ;;
-(defun brf-start-line-marking ()
+(defun brf-line-marking-p ()
+  "Return non-nil if the buffer is in line marking mode."
+  (or (brf-line-marking-p:classic) (brf-line-marking-p:new)))
+
+(defun brf-stop-line-marking (&optional delete-flag)
+  "Stop line-marking mode.
+DELETE-FLAG indicates the line-marked region was deleted or killed."
+  (cl-assert (brf-line-marking-p))
+  (if (brf-line-marking-p:new)
+      (brf-stop-line-marking:new)
+    (brf-stop-line-marking:classic delete-flag)))
+
+(defun brf-abort-line-marking ()
+  "Stop line-marking mode without adjusting point."
+  (cl-assert (brf-line-marking-p))
+  (if (brf-line-marking-p:new)
+      (brf-stop-line-marking:new)
+    (brf-abort-line-marking:classic)))
+
+(defun brf-mark-line (&optional arg)
+  "Mark the current line from anywhere on the line.
+With ARG, do it that many times.
+Mark backwards if ARG is negative.
+If there is an active region, use that instead.
+Emulates the Brief \"Line Mark\" feature."
+  (interactive "P")
+  (let ((lines (prefix-numeric-value arg)))
+    (if brf-use-new-line-marking
+	(brf-mark-line:new lines)
+      (brf-mark-line:classic lines))))
+
+(defun brf-mark-default ()
+  "Mark the default unit in the buffer.
+Normally this is the current line, but in Lisp modes it is the
+containing sexp when `brf-default-mark-sexp' is non-nil."
+  (cond ((and (brf-lisp-mode-p)
+	      brf-default-mark-sexp)
+	 (condition-case nil
+	     (progn
+	       (unless (= (following-char) ?\()
+		 (backward-up-list))
+	       (mark-sexp))
+	   (error (brf-mark-line))))
+	(t				; Non-lisp mode
+	 (brf-mark-line)))
+  ;; Clear the "Mark set" message
+  (message nil))
+
+(defun brf-emphasise-region (beg end &optional message-len)
+  "Emphasise the region BEG END, like `kill-ring-save' does.
+
+If the mark lies outside the selected window, display an
+informative message containing a sample of the copied text.  The
+optional argument MESSAGE-LEN, if non-nil, specifies the length
+of this sample text; it defaults to 40."
+  ;; This is loosely based on code in `kill-ring-save' from simple.el in GNU Emacs
+  (let* ((mark (mark t))
+	 (point (point))
+	 (other-end (if (brf-line-marking-p:new)
+			(if (< point mark) (1- end) beg)
+		      mark))
+	 (inhibit-quit t))		; Inhibit quitting
+    (cond ((pos-visible-in-window-p other-end (selected-window))
+	   ;; Swap point and the other end of the region (mark unless Line Marking)
+	   (set-marker (mark-marker) point (current-buffer))
+	   (goto-char other-end)
+	   (sit-for (if (boundp 'copy-region-blink-delay)
+			copy-region-blink-delay
+		      blink-matching-delay))
+	   ;; Swap back
+	   (set-marker (mark-marker) mark (current-buffer))
+	   (goto-char point))
+	  (t ; Other end of region not visible
+	   (let ((len (min (abs (- other-end point))
+			   (or message-len 40))))
+	     (if (< point other-end)
+		 (message "Copied text until \"%s\""
+			  (buffer-substring-no-properties (- other-end len) other-end))
+	       (message "Copied text from \"%s\""
+			(buffer-substring-no-properties other-end (+ other-end len)))))))))
+
+;;
+;; Classic Line Marking Implementation
+;;
+(defun brf-start-line-marking:classic ()
   "Start line-marking mode."
   (when (and (fboundp 'make-local-hook)
 	     (or brf-xemacs-flag (< emacs-major-version 21)))
@@ -97,21 +219,21 @@ line is terminated with a newline."
   (setq brf-line-mark-prev-goal-column goal-column)
   (setq goal-column 0))
 
-(defun brf-stop-line-marking (&optional delete-flag)
+(defun brf-stop-line-marking:classic (&optional delete-flag)
   "Stop line-marking mode, restoring point to the original column.
 DELETE-FLAG indicates the line-marked region was deleted or killed."
-  (brf-abort-line-marking)
+  (brf-abort-line-marking:classic)
   (unless delete-flag
     (when (> (point) (mark))
       (forward-line -1)))
   (move-to-column brf-line-mark-col))
 
-(defun brf-abort-line-marking ()
+(defun brf-abort-line-marking:classic ()
   "Stop line-marking mode without adjusting point."
   (setq goal-column brf-line-mark-prev-goal-column)
   (remove-hook 'post-command-hook #'brf-mark-line-hook t))
 
-(defun brf-line-marking-p ()
+(defun brf-line-marking-p:classic ()
   "Return non-nil if the buffer is in line marking mode."
   (memq 'brf-mark-line-hook post-command-hook))
 
@@ -123,7 +245,7 @@ DELETE-FLAG indicates the line-marked region was deleted or killed."
 	       deactivate-mark	; The last command wants to deactivate the mark
 	       (and (brf-region-active-p)
 		    (/= (mark) brf-line-mark-old-mark)))
-	   (brf-abort-line-marking))
+	   (brf-abort-line-marking:classic))
 
 	  ;; Line-marking
 	  ;; Emulate Brief "line mode"
@@ -157,19 +279,17 @@ DELETE-FLAG indicates the line-marked region was deleted or killed."
 
 	  ;; Not marking
 	  (t
-	   (brf-stop-line-marking))))
+	   (brf-stop-line-marking:classic))))
 
   ;; Save point & mark for next time
   (setq brf-line-mark-old-point (point))
   (setq brf-line-mark-old-mark (mark)))
 
-(defun brf-mark-line (&optional arg)
-  "Mark the current line from anywhere on the line.
-With ARG, do it that many times.
-Mark backwards if ARG is negative.
+(defun brf-mark-line:classic (lines)
+  "Mark LINES forward from the current line.
+Mark backwards if LINES is negative.
 If there is an active region, use that instead.
 Emulates the Brief \"Line Mark\" feature."
-  (interactive "P")
   (cond ((brf-line-marking-p)
 	 ;; Stop line-marking
 	 (brf-stop-line-marking)
@@ -177,27 +297,26 @@ Emulates the Brief \"Line Mark\" feature."
 
 	(t ; Start line-marking
 	 (setq brf-line-mark-col (current-column))
-	 (let ((lines (prefix-numeric-value arg)))
-	   (when (brf-region-active-p)
-	     (when (brf-column-marking-p)
-	       (brf-stop-column-marking))
-	     ;; Use current region
-	     (setq lines (max (count-lines (mark) (point)) 1))
-	     (let ((backwards (< (point) (mark))))
-	       (goto-char (mark))
-	       (when backwards
-		 (when (bolp)
-		   (backward-char))	; When mark is at the beginning of the line, don't include this line
-		 (setq lines (- lines)))))
-	   ;; Mark lines forward from point
-	   (brf-mark-lines-at-point lines)))))
+	 (when (brf-region-active-p)
+	   (when (brf-column-marking-p)
+	     (brf-stop-column-marking))
+	   ;; Use current region
+	   (setq lines (max (count-lines (mark) (point)) 1))
+	   (let ((backwards (< (point) (mark))))
+	     (goto-char (mark))
+	     (when backwards
+	       (when (bolp)
+		 (backward-char))	; When mark is at the beginning of the line, don't include this line
+	       (setq lines (- lines)))))
+	 ;; Mark lines forward from point
+	 (brf-mark-lines-at-point lines))))
 
 (defun brf-mark-lines-at-point (lines)
   "Line mark LINES forwards from point.
 Mark backwards if LINES is negative.
 Do nothing if LINES is zero."
   (unless (= lines 0)
-    (brf-start-line-marking)
+    (brf-start-line-marking:classic)
     (beginning-of-line)
     (setq brf-line-mark-min (point))
     (forward-line)
@@ -218,49 +337,78 @@ Do nothing if LINES is zero."
 	   (push-mark brf-line-mark-max t t)))
     (message "Mark set (line mode)")))
 
-(defun brf-mark-default ()
-  "Mark the default unit in the buffer.
-Normally this is the current line, but in Lisp modes it is the containing sexp."
-  (cond ((and (brf-lisp-mode-p)
-	      brf-default-mark-sexp)
-	 (condition-case nil
-	     (progn
-	       (unless (= (following-char) ?\()
-		 (backward-up-list))
-	       (mark-sexp))
-	   (error (brf-mark-line))))
-	(t				; Non-lisp mode
-	 (brf-mark-line)))
-  ;; Clear the "Mark set" message
-  (message nil))
+;;
+;; New Line Marking Mode Implementation
+;;
+(defvar brf-line-mode nil
+  "Non-nil if the buffer is in Line Marking mode.")
 
-(defun brf-emphasise-region (beg end &optional message-len)
-  "Emphasise the region BEG END, like `kill-ring-save' does.
+(defun brf-line-marking-p:new ()
+  "Return non-nil if the buffer is in Line Marking mode."
+  brf-line-mode)
 
-If the mark lies outside the selected window, display an
-informative message containing a sample of the copied text.  The
-optional argument MESSAGE-LEN, if non-nil, specifies the length
-of this sample text; it defaults to 40."
-  ;; This is loosely based on code in `kill-ring-save' from simple.el in GNU Emacs
-  (let ((other-end (if (= (point) beg) end beg))
-	(opoint (point))
-	(inhibit-quit t))		; Inhibit quitting
-    (cond ((pos-visible-in-window-p other-end (selected-window))
-	   ;; Swap point and mark.
-	   (set-marker (mark-marker) (point) (current-buffer))
-	   (goto-char other-end)
-	   (sit-for blink-matching-delay)
-	   ;; Swap back.
-	   (set-marker (mark-marker) other-end (current-buffer))
-	   (goto-char opoint))
-	  (t ; Other end of region not visible
-	   (let ((len (min (abs (- other-end opoint))
-			   (or message-len 40))))
-	     (if (< opoint other-end)
-		 (message "Saved text until \"%s\""
-			  (buffer-substring-no-properties (- other-end len) other-end))
-	       (message "Saved text from \"%s\""
-			(buffer-substring-no-properties other-end (+ other-end len)))))))))
+(defun brf-start-line-marking:new (&optional no-mark)
+  "Start line-marking mode.
+Don't set the mark if NO-MARK is non-nil."
+  (unless no-mark
+    (push-mark (point) t t)
+    (message "Mark set (line mode)"))
+  (setq brf-line-mode t)
+  (add-hook 'deactivate-mark-hook #'brf-stop-line-marking:new))
+
+(defun brf-stop-line-marking:new ()
+  "Stop line-marking mode."
+  (remove-hook 'deactivate-mark-hook #'brf-stop-line-marking:new)
+  (setq brf-line-mode nil))
+
+;; Override region functions
+(add-function :around redisplay-highlight-region-function
+              #'brf-line-mode-highlight-for-redisplay)
+(add-function :around region-extract-function
+              #'brf-line-mode-extract-region)
+
+(defun brf-line-mode-highlight-for-redisplay (orig start end window rol)
+  "Move the region-highlight overlay ROL in WINDOW in range START-END."
+  (if (brf-line-marking-p:new)
+      (funcall orig (brf-line-mode-region-beginning) (brf-line-mode-region-end) window rol)
+    (funcall orig start end window rol)))
+
+(defun brf-line-mode-extract-region (orig &optional method)
+  "Get the region’s content for METHOD."
+  (cond
+   ((not (brf-line-marking-p:new))
+    (funcall orig method))
+   ((eq method 'bounds)
+    (list (cons (brf-line-mode-region-beginning) (brf-line-mode-region-end))))
+   ((eq method 'delete-only)
+    (delete-region (brf-line-mode-region-beginning) (brf-line-mode-region-end)))
+   (t
+    (filter-buffer-substring (brf-line-mode-region-beginning) (brf-line-mode-region-end) method))))
+
+(defun brf-mark-line:new (lines)
+  "Mark LINES forward from the current line.
+Mark backwards if LINES is negative.
+If there is an active region, use that instead.
+Emulates the Brief \"Line Mark\" feature."
+  (cond ((brf-line-marking-p)
+	 ;; Stop line-marking
+	 (brf-stop-line-marking)
+	 (brf-deactivate-region t))
+
+	(t ; Start line-marking
+	 (cond ((brf-region-active-p)
+		;; Use current region
+		(when (brf-column-marking-p)
+		  (brf-stop-column-marking))
+		(brf-start-line-marking:new t))
+	       (t ; No active region
+		;; Mark lines forward from point
+		(when (/= lines 0)
+		  (brf-start-line-marking:new)
+		  (when (> (abs lines) 1)
+		    (let ((col (current-column)))
+		      (forward-line (1- lines))
+		      (move-to-column col)))))))))
 
 ;;
 ;; Column Marking Mode
@@ -360,8 +508,8 @@ Emulates the Brief \"Copy to Scrap\" function."
   (interactive)
   (unless (brf-region-active-p)
     (brf-mark-default))
-  (let ((beg (region-beginning))
-	(end (region-end)))
+  (let ((beg (brf-region-beginning))
+	(end (brf-region-end)))
     (copy-region-as-kill beg end t)	; It seems rectangle-mode needs the t arg, to process the region as a rectangle
     (brf-emphasise-region beg end)	; Emphasise the region like `kill-ring-save' does
     (when (brf-line-marking-p)
@@ -377,8 +525,8 @@ If there is no active region then the current line is copied."
 		     current-prefix-arg))
   (unless (brf-region-active-p)
     (brf-mark-default))
-  (let ((beg (region-beginning))
-	(end (region-end)))
+  (let ((beg (brf-region-beginning))
+	(end (brf-region-end)))
     (if (brf-column-marking-p)
 	(copy-rectangle-to-register register beg end delete-flag)
       (copy-to-register register beg end delete-flag))
@@ -399,10 +547,14 @@ Emulates the Brief \"Cut to Scrap\" function."
   (interactive "*")
   (unless (brf-region-active-p)
     (brf-mark-default))
-  (kill-region (region-beginning) (region-end) t) ; Again rectangle-mode needs the t arg
-  (when (brf-line-marking-p)
-    (brf-set-line-kill (car kill-ring))
-    (brf-stop-line-marking t)))
+  (cond ((brf-line-marking-p)
+	 (let ((col (current-column)))
+	   (kill-region (brf-region-beginning) (brf-region-end) t)
+	   (move-to-column col))				    ; No-op in Line Mode classic
+	 (brf-set-line-kill (car kill-ring))
+	 (brf-stop-line-marking t))
+	(t
+	 (kill-region (brf-region-beginning) (brf-region-end) t)))) ; Again rectangle-mode needs the t arg
 
 ;;
 ;; Brief delete command
@@ -412,16 +564,20 @@ Emulates the Brief \"Cut to Scrap\" function."
 If there is no active region then ARG characters following point are deleted.
 Emulates the Brief \"Delete Block\" function."
   (interactive "*P")
-  (cond ((brf-region-active-p)
-	 ;; Delete the rectangle if one is active
-	 (if (brf-column-marking-p)
-	     (delete-rectangle (region-beginning) (region-end))
-	   ;; Otherwise delete the current region
-	   (delete-region (region-beginning) (region-end))
-	   (when (brf-line-marking-p)
-	     (brf-stop-line-marking t))))
-	(t				; No active region
-	 (delete-char (prefix-numeric-value arg)))))
+  (if (brf-region-active-p)
+      (cond ((brf-column-marking-p)
+	     ;; Delete the rectangle
+	     (delete-rectangle (brf-region-beginning) (brf-region-end)))
+	    ((brf-line-marking-p)
+	     ;; Delete the line-mode region
+	     (let ((col (current-column)))
+	       (delete-region (brf-region-beginning) (brf-region-end))
+	       (move-to-column col))				; No-op in Line Mode classic
+	     (brf-stop-line-marking t))
+	    (t ;; Otherwise delete the current region
+	     (delete-region (brf-region-beginning) (brf-region-end))))
+    ;; No active region - delete character
+    (delete-char (prefix-numeric-value arg))))
 
 ;;
 ;; Brief Yank & Yank-pop commands

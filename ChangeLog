@@ -1,3 +1,10 @@
+2024-06-29  Mike Woolley  <mike@bulsara.com>
+
+	* brf-marking.el: Merged in the `experimental-line-marking`
+	branch, while preserving the classic line marking implementation.
+	● Added a customisation option allowing the user to choose between
+	the new or classic line marking (defaulting to classic).
+
 2023-08-03  Mike Woolley  <mike@bulsara.com>
 
 	* brf-compat.el: Fixed compiler warnings on Emacs 29.
