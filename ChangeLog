@@ -1,6 +1,17 @@
+2024-07-01  Mike Woolley  <mike@bulsara.com>
+
+	* brf-marking.el: Changed new Line Marking to advise
+	`region-beginning' and `region-end' to return the line-mode
+	region so that general Emacs commands operating on the region (eg
+	`comment-dwim') work correctly.
+	● Removed `brf-line-mode-extract-region', as this is not necessary
+	now the region functions return the line-mode region.
+	● Add the region advice only when in line-mode.
+	● General cleanup of the new code.
+
 2024-06-29  Mike Woolley  <mike@bulsara.com>
 
-	* brf-marking.el: Merged in the `experimental-line-marking`
+	* brf-marking.el: Merged in the `experimental-line-marking'
 	branch, while preserving the classic line marking implementation.
 	● Added a customisation option allowing the user to choose between
 	the new or classic line marking (defaulting to classic).
@@ -8,7 +19,7 @@
 2023-08-03  Mike Woolley  <mike@bulsara.com>
 
 	* brf-compat.el: Fixed compiler warnings on Emacs 29.
-	● For some (unknown) reason the `eval-when-compile` around the
+	● For some (unknown) reason the `eval-when-compile' around the
 	XEmacs compatibility definitions does not work on Emacs 29 and the
 	compiler complains the functions are undefined. Changing to
 	`cl-eval-when' however works correctly.
