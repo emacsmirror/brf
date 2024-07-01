@@ -2,7 +2,7 @@
 
 ;; Copyright (C) 1999-2024 Mike Woolley
 ;; Author: Mike Woolley <mike@bulsara.com>
-;; Package-Version: 1.25
+;; Package-Version: 2.00
 ;; Package-Requires: ((fringe-helper "0.1.1") (emacs "24.3"))
 ;; Keywords: brief crisp emulations
 ;; URL: https://bitbucket.org/MikeWoolley/brf-mode
@@ -62,7 +62,7 @@ Set this to nil to conserve valuable mode line space."
 ;;;
 ;;; Version number
 ;;;
-(defconst brf-version "1.25"
+(defconst brf-version "2.00"
   "Version number of Brf mode.")
 
 (defun brf-version ()

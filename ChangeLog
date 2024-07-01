@@ -9,6 +9,8 @@
 	● Add the region advice only when in line-mode.
 	● General cleanup of the new code.
 
+	* brf.el (brf-version): Updated Brf Mode version to 2.00.
+
 	* *.el: Updated Copyright years.
 
 2024-06-29  Mike Woolley  <mike@bulsara.com>
