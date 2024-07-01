@@ -403,7 +403,7 @@ There are a few small, deliberate differences from the original Brief behaviour,
 #+TEXINFO_HEADER: @ifinfo
 #+TEXINFO_HEADER: This is the manual for Brf-mode.@*
 #+TEXINFO_HEADER: @*
-#+TEXINFO_HEADER: Copyright @copyright{} 1999-2023 Mike Woolley
+#+TEXINFO_HEADER: Copyright @copyright{} 1999-2024 Mike Woolley
 #+TEXINFO_HEADER: @end ifinfo
 #+TEXINFO_DIR_CATEGORY: Emacs
 #+TEXINFO_DIR_TITLE: Brf-mode: (brf-mode)

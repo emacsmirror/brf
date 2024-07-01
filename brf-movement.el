@@ -1,6 +1,6 @@
 ;;; brf-movement.el --- Paging & Scrolling features of brf-mode -*- lexical-binding: t -*-
 
-;; Copyright (C) 1999-2023 Mike Woolley
+;; Copyright (C) 1999-2024 Mike Woolley
 ;; Author: Mike Woolley <mike@bulsara.com>
 
 ;; This file is not part of GNU Emacs
