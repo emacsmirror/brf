@@ -8,6 +8,8 @@
 	now the region functions return the line-mode region.
 	● Add the region advice only when in line-mode.
 	● General cleanup of the new code.
+	● Only provide new Line Marking option if non-contiguous region
+	support is available.
 
 	* brf.el (brf-version): Updated Brf Mode version to 2.00.
 
