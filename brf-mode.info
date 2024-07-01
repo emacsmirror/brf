@@ -1,28 +1,29 @@
-This is brf-mode.info, produced by makeinfo version 7.0.2 from
+This is brf-mode.info, produced by makeinfo version 7.1 from
 README.texi.
 
 INFO-DIR-SECTION Emacs
 START-INFO-DIR-ENTRY
-* Brf-mode: (brf-mode). Brf-mode provides features from the legendary programmer’s editor Brief.
+* Brf-mode: (brf-mode). Brf-mode provides features from the legendary programmer's editor Brief.
 END-INFO-DIR-ENTRY
 
 This is the manual for Brf-mode.
 
-Copyright © 1999-2023 Mike Woolley
+Copyright © 1999-2024 Mike Woolley
 
 
-File: brf-mode.info,  Node: Top,  Next: Brf-mode,  Up: (dir)
+File: brf-mode.info,  Node: Top,  Next: News,  Up: (dir)
 
 Brf Mode
 ********
 
 * Menu:
 
+* News::
 * Brf-mode::
 * Setup::
 * Features::
 
-— The Detailed Node Listing —
+-- The Detailed Node Listing --
 
 Setup
 
@@ -50,12 +51,34 @@ Features
 
 
 
-File: brf-mode.info,  Node: Brf-mode,  Next: Setup,  Prev: Top,  Up: Top
+File: brf-mode.info,  Node: News,  Next: Brf-mode,  Prev: Top,  Up: Top
 
-1 Brf-mode
+1 News
+******
+
+To commemorate 25 years of Brf-mode, Line Marking has been
+re-implemented using Emacs' non-contiguous region support rather than
+using Brf-mode's classic point-moving implementation.
+
+   This has the advantage of more closely matching Brief's behaviour,
+whereas the classic method has the advantage of working in all versions
+of Emacs and all commands that work with the region behave correctly (as
+the Line Marked region is the real region).  The new implementation
+requires Gnu Emacs 24.4 and there may be some Emacs commands that don't
+treat the Line Marked region correctly (although I haven't found any so
+far).
+
+   The classic implementation is currently the default, but the new
+method can be enabled via *note Customize: Customisation.  The new
+method will probably be the default in future.
+
+
+File: brf-mode.info,  Node: Brf-mode,  Next: Setup,  Prev: News,  Up: Top
+
+2 Brf-mode
 **********
 
-Brf-mode adds functionality from the legendary programmer’s editor Brief
+Brf-mode adds functionality from the legendary programmer's editor Brief
 (https://en.wikipedia.org/wiki/Brief_%28text_editor%29) to Emacs.
 
    This package is not an emulation of Brief (there are plenty of those
@@ -90,7 +113,7 @@ column-mode can be saved/recalled in registers.
 *note List Bookmarks::) and the mode generally uses the prefix ‘C-c C-b’
 for such commands.
 
-   Brf-mode puts a ‘Brf’ sub-menu under ‘Edit’.  In keeping with Brief’s
+   Brf-mode puts a ‘Brf’ sub-menu under ‘Edit’.  In keeping with Brief's
 minimalist ethos, the menu only houses these more difficult to access
 commands and also has links to preferences, help, the manual and project
 website.
@@ -101,7 +124,7 @@ behaviour, which are discussed here: *note Differences From Brief::.
 
 File: brf-mode.info,  Node: Setup,  Next: Features,  Prev: Brf-mode,  Up: Top
 
-2 Setup
+3 Setup
 *******
 
 * Menu:
@@ -114,7 +137,7 @@ File: brf-mode.info,  Node: Setup,  Next: Features,  Prev: Brf-mode,  Up: Top
 
 File: brf-mode.info,  Node: Installation,  Next: Customisation,  Up: Setup
 
-2.1 Installation
+3.1 Installation
 ================
 
 https://melpa.org/packages/brf-badge.svg (https://melpa.org/#/brf)
@@ -130,7 +153,7 @@ https://stable.melpa.org/packages/brf-badge.svg
 
 File: brf-mode.info,  Node: Installation from MELPA,  Next: Manual Installation,  Up: Installation
 
-2.1.1 Installation from MELPA
+3.1.1 Installation from MELPA
 -----------------------------
 
 The easiest way to install Brf-mode is to install the ‘brf’ package from
@@ -149,7 +172,7 @@ MELPA:
 
 File: brf-mode.info,  Node: Manual Installation,  Next: Enable Brf-mode,  Prev: Installation from MELPA,  Up: Installation
 
-2.1.2 Manual Installation
+3.1.2 Manual Installation
 -------------------------
 
 Brf-mode can be installed manually if desired:
@@ -168,7 +191,7 @@ Brf-mode can be installed manually if desired:
 
 File: brf-mode.info,  Node: Enable Brf-mode,  Prev: Manual Installation,  Up: Installation
 
-2.1.3 Enable Brf-mode
+3.1.3 Enable Brf-mode
 ---------------------
 
 Enable Brf-mode by doing one of the following:
@@ -199,7 +222,7 @@ Enable Brf-mode by doing one of the following:
 
 File: brf-mode.info,  Node: Customisation,  Next: Dependencies,  Prev: Installation,  Up: Setup
 
-2.2 Customisation
+3.2 Customisation
 =================
 
 ‘M-x customize-group brf’
@@ -208,20 +231,21 @@ File: brf-mode.info,  Node: Customisation,  Next: Dependencies,  Prev: Installat
 
      Customisable options are:
 
-       1. Enable Brf-mode
-       2. Enable *note Cursor Motion Undo::
-       3. Bookmark Face
-       4. Bookmark Number face (when shown in Fringe)
-       5. Mode-line string (including hiding)
+       1. Enable Brf-mode.
+       2. Enable *note Cursor Motion Undo::.
+       3. Bookmark Face.
+       4. Bookmark Number face (when shown in Fringe).
+       5. Mode-line string (including hiding).
        6. Mark enclosing SEXP by default in Lisp modes rather than the
           current line.
+       7. Use new Line Marking implementation.
 
    • Key mapping
 
      Default key mappings can be changed by modifying ‘brf-mode-map’ in
      the mode hook.
 
-     As an example, here’s what I’m using myself:
+     As an example, here's what I'm using myself:
 
           ;; Adjust the brf-mode keymap to put the otherwise shadowed M-<letter> keys on a C-c prefix
           (add-hook 'brf-mode-hook
@@ -244,10 +268,10 @@ File: brf-mode.info,  Node: Customisation,  Next: Dependencies,  Prev: Installat
 
 File: brf-mode.info,  Node: Dependencies,  Next: Compatibility,  Prev: Customisation,  Up: Setup
 
-2.3 Dependencies
+3.3 Dependencies
 ================
 
-Brf-mode doesn’t have any hard dependencies, but installing the
+Brf-mode doesn't have any hard dependencies, but installing the
 following optional packages enables some extra capabilities:
 
    • fringe-helper (https://melpa.org/#/fringe-helper): When installed,
@@ -261,7 +285,7 @@ following optional packages enables some extra capabilities:
 
 File: brf-mode.info,  Node: Compatibility,  Prev: Dependencies,  Up: Setup
 
-2.4 Compatibility
+3.4 Compatibility
 =================
 
 The MELPA package (Brf-mode version "v1.16-MELPA" onward) requires Gnu
@@ -283,7 +307,7 @@ and tooltips are the only missing features.
 
 File: brf-mode.info,  Node: Features,  Prev: Setup,  Up: Top
 
-3 Features
+4 Features
 **********
 
 * Menu:
@@ -300,13 +324,13 @@ File: brf-mode.info,  Node: Features,  Prev: Setup,  Up: Top
 
 File: brf-mode.info,  Node: Line and Column Mode Cut and Paste,  Next: Reversible Paging and Scrolling,  Up: Features
 
-3.1 Line and Column Mode Cut and Paste
+4.1 Line and Column Mode Cut and Paste
 ======================================
 
    • Mark regions by whole line or column.
    • If no region is marked, the copy and kill commands operate on the
      current line.
-   • Yanked text is inserted in line or column mode, if that’s how it
+   • Yanked text is inserted in line or column mode, if that's how it
      was marked.
    • Text in Line or Column mode can be stored and recalled from
      registers, as well as the kill-ring.
@@ -340,7 +364,7 @@ Tab           Indent
 
 File: brf-mode.info,  Node: Reversible Paging and Scrolling,  Next: Temporary Bookmarks,  Prev: Line and Column Mode Cut and Paste,  Up: Features
 
-3.2 Reversible Paging and Scrolling
+4.2 Reversible Paging and Scrolling
 ===================================
 
    • Paging and scrolling respect relative screen row and absolute
@@ -362,12 +386,12 @@ end      End of Line/Page/Buffer
 
 File: brf-mode.info,  Node: Temporary Bookmarks,  Next: List Bookmarks,  Prev: Reversible Paging and Scrolling,  Up: Features
 
-3.3 Temporary Bookmarks
+4.3 Temporary Bookmarks
 =======================
 
    • 10 bookmarks can be set and navigated between.
    • They can also be moved and deleted.
-   • They are temporary in the sense they don’t persist between
+   • They are temporary in the sense they don't persist between
      invocations of Emacs.
    • As an extension to Brief, bookmark lines are highlighted in colour.
      This is *note customisable: Customisation.
@@ -387,7 +411,7 @@ With prefix arg C-u   Removes bookmark.
 M-=                   Goto Next Bookmark
 M-kp-add              Goto Next Bookmark
 M-kp-subtract         Goto Previous Bookmark
-M–                    Goto Previous Bookmark
+M-                    Goto Previous Bookmark
 M-j                   Jump-to-Bookmark
 C-c C-b C-k           Delete All Bookmarks
 C-c C-b C-l           List Bookmarks
@@ -398,7 +422,7 @@ C-c C-b =             Allocate Next Free Bookmark at Point
 
 File: brf-mode.info,  Node: List Bookmarks,  Next: Cursor Motion Undo,  Prev: Temporary Bookmarks,  Up: Features
 
-3.4 List Bookmarks
+4.4 List Bookmarks
 ==================
 
    • Invoke the List Bookmarks menu with ‘C-c C-b C-l’.
@@ -423,13 +447,13 @@ q      Quit
 
 File: brf-mode.info,  Node: Cursor Motion Undo,  Next: Easy Window Management,  Prev: List Bookmarks,  Up: Features
 
-3.5 Cursor Motion Undo
+4.5 Cursor Motion Undo
 ======================
 
    • Cursor motion, without any buffer changes, is recorded as an
      undo-able (& redo-able) action.
    • This works with both built-in Emacs Undo and also with the
-     ‘Redo.el’ & ‘Redo+.el’ packages.  I haven’t tested it with the
+     ‘Redo.el’ & ‘Redo+.el’ packages.  I haven't tested it with the
      plethora of other Undo packages - it should work, but you never
      know!
    • It is turned off by default (unlike in Brief), but can be enabled
@@ -444,7 +468,7 @@ M-r           Redo (if ‘redo’ or ‘redo+’ installed).
 
 File: brf-mode.info,  Node: Easy Window Management,  Next: Differences From Brief,  Prev: Cursor Motion Undo,  Up: Features
 
-3.6 Easy Window Management
+4.6 Easy Window Management
 ==========================
 
    • Create, Switch, Resize and Delete arbitrary windows with simple
@@ -464,7 +488,7 @@ S-f4                         Delete Other Windows
 
 File: brf-mode.info,  Node: Differences From Brief,  Next: Known Issues,  Prev: Easy Window Management,  Up: Features
 
-3.7 Differences From Brief
+4.7 Differences From Brief
 ==========================
 
 <https://bitbucket.org/MikeWoolley/brf-mode/raw/master/images/BRIEF-Screenshot.png>
@@ -474,8 +498,8 @@ File: brf-mode.info,  Node: Differences From Brief,  Next: Known Issues,  Prev: 
      "Inclusive" character marking in Brief includes the character under
      the cursor, whereas in Brf-mode (and Emacs in general) the marked
      region stops on the character before the cursor.  This behaviour is
-     actually Brief’s "Non-inclusive Mark" (Alt-a) and is the only kind
-     supported in Brf-mode.  I don’t think it makes any practical
+     actually Brief's "Non-inclusive Mark" (Alt-a) and is the only kind
+     supported in Brf-mode.  I don't think it makes any practical
      difference and so "Inclusive Mark" has not been implemented in
      Brf-mode.
 
@@ -498,7 +522,7 @@ File: brf-mode.info,  Node: Differences From Brief,  Next: Known Issues,  Prev: 
 
 File: brf-mode.info,  Node: Known Issues,  Prev: Differences From Brief,  Up: Features
 
-3.8 Known Issues
+4.8 Known Issues
 ================
 
 Please report any issues at the Brf-mode website bug tracker
@@ -508,9 +532,9 @@ Please report any issues at the Brf-mode website bug tracker
 
    • XEmacs Compatibility
 
-     Current versions of Brf-mode no longer work on XEmacs.  It’s likely
+     Current versions of Brf-mode no longer work on XEmacs.  It's likely
      to be possible to fix the compatibility issues, but given the
-     demise of XEmacs I don’t have any plans to do this.
+     demise of XEmacs I don't have any plans to do this.
 
      Anyone wanting to run Brf-mode on XEmacs should install an older
      version of Brf-mode, as described in *note Compatibility::.
@@ -518,25 +542,26 @@ Please report any issues at the Brf-mode website bug tracker
 
 
 Tag Table:
-Node: Top311
-Node: Brf-mode864
-Node: Setup2888
-Node: Installation3066
-Node: Installation from MELPA3410
-Node: Manual Installation3998
-Node: Enable Brf-mode4531
-Node: Customisation5177
-Node: Dependencies6736
-Node: Compatibility7366
-Node: Features8130
-Node: Line and Column Mode Cut and Paste8439
-Node: Reversible Paging and Scrolling9772
-Node: Temporary Bookmarks10407
-Node: List Bookmarks11980
-Node: Cursor Motion Undo12679
-Node: Easy Window Management13475
-Node: Differences From Brief14273
-Node: Known Issues15713
+Node: Top307
+Node: News863
+Node: Brf-mode1754
+Node: Setup3775
+Node: Installation3953
+Node: Installation from MELPA4297
+Node: Manual Installation4885
+Node: Enable Brf-mode5418
+Node: Customisation6064
+Node: Dependencies7671
+Node: Compatibility8299
+Node: Features9063
+Node: Line and Column Mode Cut and Paste9372
+Node: Reversible Paging and Scrolling10703
+Node: Temporary Bookmarks11338
+Node: List Bookmarks12907
+Node: Cursor Motion Undo13606
+Node: Easy Window Management14400
+Node: Differences From Brief15198
+Node: Known Issues16634
 
 End Tag Table
 

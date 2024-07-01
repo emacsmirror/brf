@@ -1,3 +1,12 @@
+# News
+
+To commemorate 25 years of Brf-mode, Line Marking has been re-implemented using Emacs' non-contiguous region support rather than using Brf-mode's classic point-moving implementation.
+
+This has the advantage of more closely matching Brief's behaviour, whereas the classic method has the advantage of working in all versions of Emacs and all commands that work with the region behave correctly (as the Line Marked region is the real region). The new implementation requires Gnu Emacs 24.4 and there may be some Emacs commands that don't treat the Line Marked region correctly (although I haven't found any so far).
+
+The classic implementation is currently the default, but the new method can be enabled via [Customize](#customisation). The new method will probably be the default in future.
+
+
 # Brf-mode
 
 Brf-mode adds functionality from the legendary programmer's editor [Brief](https://en.wikipedia.org/wiki/Brief_%28text_editor%29) to Emacs.
@@ -115,12 +124,13 @@ Enable Brf-mode by doing one of the following:
     
     Customisable options are:
     
-    1.  Enable Brf-mode
-    2.  Enable [Cursor Motion Undo](#cursor-motion-undo)
-    3.  Bookmark Face
-    4.  Bookmark Number face (when shown in Fringe)
-    5.  Mode-line string (including hiding)
+    1.  Enable Brf-mode.
+    2.  Enable [Cursor Motion Undo](#cursor-motion-undo).
+    3.  Bookmark Face.
+    4.  Bookmark Number face (when shown in Fringe).
+    5.  Mode-line string (including hiding).
     6.  Mark enclosing SEXP by default in Lisp modes rather than the current line.
+    7.  Use new Line Marking implementation.
 
 -   Key mapping
     
@@ -131,11 +141,11 @@ Enable Brf-mode by doing one of the following:
     ```emacs-lisp
     ;; Adjust the brf-mode keymap to put the otherwise shadowed M-<letter> keys on a C-c prefix
     (add-hook 'brf-mode-hook
-    	  (lambda ()
-    	    (define-key brf-mode-map "\C-cm" 'back-to-indentation) ; Shadowed by M-m
-    	    (define-key brf-mode-map "\C-cl" 'downcase-word)       ; Shadowed by M-l
-    	    (define-key brf-mode-map "\C-cu" 'upcase-word)         ; Shadowed by M-u
-    	    (define-key brf-mode-map "\C-cc" 'capitalize-word)))   ; Shadowed by M-c
+              (lambda ()
+                (define-key brf-mode-map "\C-cm" 'back-to-indentation) ; Shadowed by M-m
+                (define-key brf-mode-map "\C-cl" 'downcase-word)       ; Shadowed by M-l
+                (define-key brf-mode-map "\C-cu" 'upcase-word)         ; Shadowed by M-u
+                (define-key brf-mode-map "\C-cc" 'capitalize-word)))   ; Shadowed by M-c
     ```
     
     Alternatively with `use-package`:
@@ -144,10 +154,10 @@ Enable Brf-mode by doing one of the following:
     (use-package brf
       ...
       :bind (:map brf-mode-map
-    	      ("C-c m" . back-to-indentation)
-    	      ("C-c l" . downcase-word)
-    	      ("C-c u" . upcase-word)
-    	      ("C-c c" . capitalize-word)))
+                  ("C-c m" . back-to-indentation)
+                  ("C-c l" . downcase-word)
+                  ("C-c u" . upcase-word)
+                  ("C-c c" . capitalize-word)))
     ```
 
 

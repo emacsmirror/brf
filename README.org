@@ -3,6 +3,19 @@
 #+EMAIL: mike@bulsara.com
 #+OPTIONS: toc:nil
 
+* News
+
+To commemorate 25 years of Brf-mode, Line Marking has been re-implemented using Emacs' non-contiguous region support
+rather than using Brf-mode's classic point-moving implementation.
+
+This has the advantage of more closely matching Brief's behaviour, whereas the classic method has the advantage of
+working in all versions of Emacs and all commands that work with the region behave correctly (as the Line Marked region
+is the real region). The new implementation requires Gnu Emacs 24.4 and there may be some Emacs commands that don't
+treat the Line Marked region correctly (although I haven't found any so far).
+
+The classic implementation is currently the default, but the new method can be enabled via [[#customisation][Customize]]. The new method
+will probably be the default in future.
+
 * Brf-mode
 :PROPERTIES:
 :CUSTOM_ID: brf-mode
@@ -133,12 +146,13 @@ There are a few small, deliberate differences from the original Brief behaviour,
 
      Customisable options are:
 
-     1. Enable Brf-mode
-     2. Enable [[#cursor-motion-undo][Cursor Motion Undo]]
-     3. Bookmark Face
-     4. Bookmark Number face (when shown in Fringe)
-     5. Mode-line string (including hiding)
-     6. Mark enclosing SEXP by default in Lisp modes rather than the current line. 
+     1. Enable Brf-mode.
+     2. Enable [[#cursor-motion-undo][Cursor Motion Undo]].
+     3. Bookmark Face.
+     4. Bookmark Number face (when shown in Fringe).
+     5. Mode-line string (including hiding).
+     6. Mark enclosing SEXP by default in Lisp modes rather than the current line.
+     7. Use new Line Marking implementation.
 
    - Key mapping
 
