@@ -1,10 +1,10 @@
 # News
 
-To commemorate 25 years of Brf-mode, Line Marking has been re-implemented using Emacs' non-contiguous region support rather than using Brf-mode's classic point-moving implementation.
+To commemorate a quarter century of Brf-mode, Line Marking has been re-implemented using Emacs' non-contiguous region support rather than using Brf-mode's classic point-moving implementation. This allows more precise matching of Brief's Line Marking behaviour.
 
-This has the advantage of more closely matching Brief's behaviour, whereas the classic method has the advantage of working in all versions of Emacs and all commands that work with the region behave correctly (as the Line Marked region is the real region). The new implementation requires Gnu Emacs 24.4 and there may be some Emacs commands that don't treat the Line Marked region correctly (although I haven't found any so far).
+The new implementation requires Gnu Emacs 24.4 and there may be some Emacs commands that don't treat the Line Marked region correctly (although I haven't found any so far). The classic method has the advantage of working in all versions of Emacs and all commands that work with the region behave correctly (as the Line Marked region is the real region).
 
-The classic implementation is currently the default, but the new method can be enabled via [Customize](#customisation). The new method will probably be the default in future.
+The classic implementation is currently the default, but the new method can be enabled via [Customize](#customisation). The new method will likely become the default in future.
 
 
 # Brf-mode

@@ -56,21 +56,21 @@ File: brf-mode.info,  Node: News,  Next: Brf-mode,  Prev: Top,  Up: Top
 1 News
 ******
 
-To commemorate 25 years of Brf-mode, Line Marking has been
+To commemorate a quarter century of Brf-mode, Line Marking has been
 re-implemented using Emacs' non-contiguous region support rather than
-using Brf-mode's classic point-moving implementation.
+using Brf-mode's classic point-moving implementation.  This allows more
+precise matching of Brief's Line Marking behaviour.
 
-   This has the advantage of more closely matching Brief's behaviour,
-whereas the classic method has the advantage of working in all versions
-of Emacs and all commands that work with the region behave correctly (as
-the Line Marked region is the real region).  The new implementation
-requires Gnu Emacs 24.4 and there may be some Emacs commands that don't
-treat the Line Marked region correctly (although I haven't found any so
-far).
+   The new implementation requires Gnu Emacs 24.4 and there may be some
+Emacs commands that don't treat the Line Marked region correctly
+(although I haven't found any so far).  The classic method has the
+advantage of working in all versions of Emacs and all commands that work
+with the region behave correctly (as the Line Marked region is the real
+region).
 
    The classic implementation is currently the default, but the new
 method can be enabled via *note Customize: Customisation.  The new
-method will probably be the default in future.
+method will likely become the default in future.
 
 
 File: brf-mode.info,  Node: Brf-mode,  Next: Setup,  Prev: News,  Up: Top
@@ -544,24 +544,24 @@ Please report any issues at the Brf-mode website bug tracker
 Tag Table:
 Node: Top307
 Node: News863
-Node: Brf-mode1754
-Node: Setup3775
-Node: Installation3953
-Node: Installation from MELPA4297
-Node: Manual Installation4885
-Node: Enable Brf-mode5418
-Node: Customisation6064
-Node: Dependencies7671
-Node: Compatibility8299
-Node: Features9063
-Node: Line and Column Mode Cut and Paste9372
-Node: Reversible Paging and Scrolling10703
-Node: Temporary Bookmarks11338
-Node: List Bookmarks12907
-Node: Cursor Motion Undo13606
-Node: Easy Window Management14400
-Node: Differences From Brief15198
-Node: Known Issues16634
+Node: Brf-mode1760
+Node: Setup3781
+Node: Installation3959
+Node: Installation from MELPA4303
+Node: Manual Installation4891
+Node: Enable Brf-mode5424
+Node: Customisation6070
+Node: Dependencies7677
+Node: Compatibility8305
+Node: Features9069
+Node: Line and Column Mode Cut and Paste9378
+Node: Reversible Paging and Scrolling10709
+Node: Temporary Bookmarks11344
+Node: List Bookmarks12913
+Node: Cursor Motion Undo13612
+Node: Easy Window Management14406
+Node: Differences From Brief15204
+Node: Known Issues16640
 
 End Tag Table
 
