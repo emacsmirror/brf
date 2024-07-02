@@ -318,6 +318,7 @@ Do nothing if LINES is zero."
 ;;
 (defvar brf-line-mode nil
   "Non-nil if the buffer is in Line Marking mode.")
+(make-variable-buffer-local 'brf-line-mode)
 
 (defun brf-line-marking-p:new ()
   "Return non-nil if the buffer is in Line Marking mode."
@@ -346,19 +347,28 @@ If the scan reaches the end of the buffer, return that position."
     (push-mark (point) t t)
     (message "Mark set (line mode)"))
   (setq brf-line-mode t)
-  (advice-add 'region-beginning :around #'brf-region-beginning-advice)
-  (advice-add 'region-end :around #'brf-region-end-advice)
-  (add-function :around redisplay-highlight-region-function #'brf-highlight-region-advice)
   (add-hook 'deactivate-mark-hook #'brf-stop-line-marking:new))
 
 (defun brf-stop-line-marking:new ()
   "Stop line-marking mode."
   (cl-assert (brf-line-marking-p:new) && (region-active-p))
   (remove-hook 'deactivate-mark-hook #'brf-stop-line-marking:new)
-  (remove-function redisplay-highlight-region-function #'brf-highlight-region-advice)
-  (advice-remove 'region-end #'brf-region-end-advice)
-  (advice-remove 'region-beginning #'brf-region-beginning-advice)
   (setq brf-line-mode nil))
+
+(defun brf-install-line-marking-advice ()
+  "Install New Line Marking advice when `brf-mode' is enabled.
+Remove when the mode is disabled."
+  (eval-when-compile (require 'brf)) ; Silence compiler warning
+  (cond (brf-mode
+	 ;; Install advice
+	 (advice-add 'region-beginning :around #'brf-region-beginning-advice)
+	 (advice-add 'region-end :around #'brf-region-end-advice)
+	 (add-function :around redisplay-highlight-region-function #'brf-highlight-region-advice))
+	(t ; Remove advice
+	 (remove-function redisplay-highlight-region-function #'brf-highlight-region-advice)
+	 (advice-remove 'region-end #'brf-region-end-advice)
+	 (advice-remove 'region-beginning #'brf-region-beginning-advice))))
+(add-hook 'brf-mode-hook #'brf-install-line-marking-advice)
 
 (defun brf-region-beginning-advice (orig)
   "Advise ORIG to return the position of the start of the line-mode region."
