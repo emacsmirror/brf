@@ -358,7 +358,7 @@ If the scan reaches the end of the buffer, return that position."
 (defun brf-install-line-marking-advice ()
   "Install New Line Marking advice when `brf-mode' is enabled.
 Remove when the mode is disabled."
-  (eval-when-compile (require 'brf)) ; Silence compiler warning
+  (eval-when-compile (defvar brf-mode)) ; Silence compiler warning
   (cond (brf-mode
 	 ;; Install advice
 	 (advice-add 'region-beginning :around #'brf-region-beginning-advice)
