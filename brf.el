@@ -2,7 +2,7 @@
 
 ;; Copyright (C) 1999-2024 Mike Woolley
 ;; Author: Mike Woolley <mike@bulsara.com>
-;; Package-Version: 2.00
+;; Package-Version: 2.01
 ;; Package-Requires: ((fringe-helper "0.1.1") (emacs "24.3"))
 ;; Keywords: brief crisp emulations
 ;; URL: https://bitbucket.org/MikeWoolley/brf-mode
@@ -62,16 +62,20 @@ Set this to nil to conserve valuable mode line space."
 ;;;
 ;;; Version number
 ;;;
-(defconst brf-version "2.00"
+(defconst brf-version "2.01"
   "Version number of Brf mode.")
 
 (defun brf-version ()
   "Display version number of Brf mode."
   (interactive)
-  (let ((version (if (fboundp 'pkg-info-version-info)
-		     (pkg-info-version-info 'brf)
-		   brf-version)))
-    (message "Brf version %s" version)))
+  ;; Get the package version, if the loaded version of `brf' is from a package and `pkg-info' is available
+  (let ((pkg-version (when (fboundp 'pkg-info-version-info)
+		       (eval-and-compile (require 'find-func))
+		       (let ((pkg-dir (expand-file-name package-user-dir))
+			     (brf-file (find-library-name "brf")))
+			 (when (string-prefix-p pkg-dir brf-file t)
+			   (pkg-info-version-info 'brf))))))
+    (message "Brf version %s" (or pkg-version brf-version))))
 
 ;;;
 ;;; Load the different features

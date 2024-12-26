@@ -4,7 +4,7 @@ To commemorate a quarter century of Brf-mode, Line Marking has been re-implement
 
 The new implementation requires Gnu Emacs 24.4 and there may be some Emacs commands that don't treat the Line Marked region correctly (although I haven't found any so far). The classic method has the advantage of working in all versions of Emacs and all commands that work with the region behave correctly (as the Line Marked region is the real region).
 
-The classic implementation is currently the default, but the new method can be enabled via [Customize](#customisation). The new method will likely become the default in future.
+The new implementation is the default when available, but the classic method can be enabled via [Customize](#customisation).
 
 
 # Brf-mode

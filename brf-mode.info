@@ -68,9 +68,8 @@ advantage of working in all versions of Emacs and all commands that work
 with the region behave correctly (as the Line Marked region is the real
 region).
 
-   The classic implementation is currently the default, but the new
-method can be enabled via *note Customize: Customisation.  The new
-method will likely become the default in future.
+   The new implementation is the default when available, but the classic
+method can be enabled via *note Customize: Customisation.
 
 
 File: brf-mode.info,  Node: Brf-mode,  Next: Setup,  Prev: News,  Up: Top
@@ -544,24 +543,24 @@ Please report any issues at the Brf-mode website bug tracker
 Tag Table:
 Node: Top307
 Node: News863
-Node: Brf-mode1760
-Node: Setup3781
-Node: Installation3959
-Node: Installation from MELPA4303
-Node: Manual Installation4891
-Node: Enable Brf-mode5424
-Node: Customisation6070
-Node: Dependencies7677
-Node: Compatibility8305
-Node: Features9069
-Node: Line and Column Mode Cut and Paste9378
-Node: Reversible Paging and Scrolling10709
-Node: Temporary Bookmarks11344
-Node: List Bookmarks12913
-Node: Cursor Motion Undo13612
-Node: Easy Window Management14406
-Node: Differences From Brief15204
-Node: Known Issues16640
+Node: Brf-mode1707
+Node: Setup3728
+Node: Installation3906
+Node: Installation from MELPA4250
+Node: Manual Installation4838
+Node: Enable Brf-mode5371
+Node: Customisation6017
+Node: Dependencies7624
+Node: Compatibility8252
+Node: Features9016
+Node: Line and Column Mode Cut and Paste9325
+Node: Reversible Paging and Scrolling10656
+Node: Temporary Bookmarks11291
+Node: List Bookmarks12860
+Node: Cursor Motion Undo13559
+Node: Easy Window Management14353
+Node: Differences From Brief15151
+Node: Known Issues16587
 
 End Tag Table
 

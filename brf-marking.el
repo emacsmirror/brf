@@ -38,7 +38,7 @@ default to the surrounding SEXP when in Lisp modes."
 ;; Only provide new Line Marking option if non-contiguous region support is available
 (eval-and-compile
   (if (fboundp 'rectangle-mark-mode)
-      (defcustom brf-use-new-line-marking nil
+      (defcustom brf-use-new-line-marking t
 	"Use new Line Marking implementation.
 New Line Marking uses Emacs' non-contiguous region support rather
 than `brf-mode's classic point-moving implementation."

@@ -1,3 +1,14 @@
+2024-12-26  Mike Woolley  <mike@bulsara.com>
+
+	* brf-marking.el (brf-use-new-line-marking): New Line Marking is
+	now the default, when available.
+
+	* brf.el (brf-version): Show the package version only if the
+	loaded version of `brf' is from a package and `pkg-info' is
+	available.
+
+	* brf.el (brf-version): Updated Brf Mode version to 2.01.
+
 2024-07-01  Mike Woolley  <mike@bulsara.com>
 
 	* brf-marking.el: Changed new Line Marking to advise
