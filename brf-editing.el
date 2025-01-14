@@ -1,6 +1,6 @@
 ;;; brf-editing.el --- Editing commands of brf-mode -*- lexical-binding: t -*-
 
-;; Copyright (C) 1999-2024 Mike Woolley
+;; Copyright (C) 1999-2025 Mike Woolley
 ;; Author: Mike Woolley <mike@bulsara.com>
 
 ;; This file is not part of GNU Emacs

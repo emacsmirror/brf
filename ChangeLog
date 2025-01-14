@@ -1,3 +1,11 @@
+2025-01-14  Mike Woolley  <mike@bulsara.com>
+
+	* brf.el: Updated the package description with text from the intro
+	in the manual.
+	(brf-version): Updated Brf Mode version to 2.02.
+
+	* *.el: Updated Copyright years.
+
 2024-12-26  Mike Woolley  <mike@bulsara.com>
 
 	* brf-marking.el (brf-use-new-line-marking): New Line Marking is

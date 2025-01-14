@@ -1,10 +1,10 @@
 # News
 
-To commemorate a quarter century of Brf-mode, Line Marking has been re-implemented using Emacs' non-contiguous region support rather than using Brf-mode's classic point-moving implementation. This allows more precise matching of Brief's Line Marking behaviour.
+To commemorate a quarter of a century of Brf-mode, Line Marking has been re-implemented using Emacs' non-contiguous region support rather than using Brf-mode's classic point-moving implementation. This allows more precise matching of Brief's Line Marking behaviour.
 
-The new implementation requires Gnu Emacs 24.4 and there may be some Emacs commands that don't treat the Line Marked region correctly (although I haven't found any so far). The classic method has the advantage of working in all versions of Emacs and all commands that work with the region behave correctly (as the Line Marked region is the real region).
+The new implementation requires Gnu Emacs 24.4 and there may be some obscure commands that don't treat the Line Marked region correctly (although none found so far). The classic method has the advantage of working in all versions of Emacs and all commands that work with the region behave correctly, as the Line Marked region is the real region.
 
-The new implementation is the default when available, but the classic method can be enabled via [Customize](#customisation).
+The new implementation is the default on Gnu Emacs >= 24.4, but the classic method can be re-enabled via [Customize](#customisation).
 
 
 # Brf-mode
@@ -13,7 +13,7 @@ Brf-mode adds functionality from the legendary programmer's editor [Brief](https
 
 This package is not an emulation of Brief (there are plenty of those already), but rather provides an accurate implementation in Emacs of specific features that I miss from Brief.
 
-The emphasis is on accurately implementing these features in Emacs rather than doing what Brief emulations tend to do, which is mapping the Brief key-sequences to somewhat similar functions in Emacs.
+The emphasis is on **accurately** implementing these features in Emacs rather than doing what Brief emulations tend to do, which is mapping the Brief key-sequences to somewhat similar functions in Emacs.
 
 The provided features are:
 
