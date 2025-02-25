@@ -45,7 +45,7 @@ If PARAMS is non-nil, use that instead of `brf-menu-parameters-alist'."
   (let ((pair (assoc name (or params brf-menu-parameters-alist))))
     (cdr pair)))
 
-(defvar brf-menu-mode-map
+(defvar brf-menu-mode-default-map
   ;; Default keymap
   (let ((map (make-sparse-keymap)))
     (define-key map " "       'brf-menu-select)
@@ -59,6 +59,9 @@ If PARAMS is non-nil, use that instead of `brf-menu-parameters-alist'."
     (define-key map "\C-g"    'brf-menu-abort)
     (define-key map "q"       'brf-menu-quit)
     map)
+  "Default keymap for `brf-menu-mode'.")
+
+(defvar-local brf-menu-mode-map brf-menu-mode-default-map
   "Keymap for `brf-menu-mode'.")
 
 ;; Define a new Major Mode for the menu
@@ -124,11 +127,10 @@ Available keywords:
       ;; This needs to go after setting the Major Mode because it clears all local variables
       (setq brf-menu-parameters-alist params)
 
-      ;; Merge the supplied keymap and the major mode's keymap
+      ;; Use the supplied keymap as the mode's keymap, inheriting from the default `brf-menu' keymap
       (let ((keymap (brf-menu-parameter :keymap)))
 	(when keymap
-	  (require 'derived)
-	  (derived-mode-merge-keymaps brf-menu-mode-map keymap)
+	  (set-keymap-parent keymap brf-menu-mode-default-map)
 	  (setq brf-menu-mode-map keymap)
 	  (use-local-map brf-menu-mode-map)))
 
@@ -208,7 +210,7 @@ arguments or `:regexp-start-position', a regular expression.
     (cl-loop for item in items
 	     for i from 1 to (brf-menu-num-items)
 	     do (insert (funcall insert-fun item) "\n"))
-    (backward-delete-char 1)
+    (delete-char -1)
 
     (when (brf-menu-parameter :font-lock-keywords)
       (font-lock-fontify-region (point-min) (point-max)))

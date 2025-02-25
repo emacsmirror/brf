@@ -1,3 +1,12 @@
+2025-02-25  Mike Woolley  <mike@bulsara.com>
+
+	* brf-menu.el (brf-menu): Emacs 30 has removed
+	`derived-mode-merge-keymaps'. So rather than merging keymaps, I've
+	changed the code to use the supplied keymap as the mode's keymap,
+	inheriting from the default `brf-menu' keymap.
+	(brf-menu-display): `backward-delete-char' generates a compiler
+	warning in Emacs 30, so changed the code to use `delete-char' instead.
+
 2025-01-14  Mike Woolley  <mike@bulsara.com>
 
 	* brf.el: Updated the package description with text from the intro
