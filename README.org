@@ -74,9 +74,9 @@ There are a few small, deliberate differences from the original Brief behaviour,
         to your startup file:
 
         #+BEGIN_SRC emacs-lisp
-	  (use-package brf
-	    :ensure t)
-	#+END_SRC
+          (use-package brf
+            :ensure t)
+        #+END_SRC
 
 *** Manual Installation
     :PROPERTIES:
@@ -88,18 +88,18 @@ There are a few small, deliberate differences from the original Brief behaviour,
      1. Download the package to a directory and add it to your ~load-path~:
 
         #+BEGIN_SRC emacs-lisp
-	  (add-to-list 'load-path <install directory>)
-	#+END_SRC
+          (add-to-list 'load-path <install directory>)
+        #+END_SRC
 
      2. Install the Info manual:
 
         #+BEGIN_SRC shell
-	  $ cd <install directory>
-	  $ install-info brf-mode.info
+          $ cd <install directory>
+          $ install-info brf-mode.info
         #+END_SRC
 
         #+BEGIN_SRC emacs-lisp
-	  (add-to-list 'Info-directory-list <install directory>)
+          (add-to-list 'Info-directory-list <install directory>)
         #+END_SRC
 
 *** Enable Brf-mode
@@ -111,25 +111,25 @@ There are a few small, deliberate differences from the original Brief behaviour,
      - Adding code to your startup file:
 
         #+BEGIN_SRC emacs-lisp
-	  (brf-mode)
+          (brf-mode)
         #+END_SRC
 
      - As part of the ~use-package~ form:
      
         #+BEGIN_SRC emacs-lisp
-	  (use-package brf
-	    ...
-	    :custom
-	    (brf-mode t))
+          (use-package brf
+            ...
+            :custom
+            (brf-mode t))
         #+END_SRC
 
 	Or
 
         #+BEGIN_SRC emacs-lisp
-	  (use-package brf
-	    ...
-	    :init
-	    (brf-mode))
+          (use-package brf
+            ...
+            :init
+            (brf-mode))
         #+END_SRC
 	
      - Choosing "Enable Brf-mode" from the "Brf" menu, which toggles the mode on or off for the current session.
@@ -162,23 +162,23 @@ There are a few small, deliberate differences from the original Brief behaviour,
      #+BEGIN_SRC emacs-lisp
        ;; Adjust the brf-mode keymap to put the otherwise shadowed M-<letter> keys on a C-c prefix
        (add-hook 'brf-mode-hook
-		 (lambda ()
-		   (define-key brf-mode-map "\C-cm" 'back-to-indentation) ; Shadowed by M-m
-		   (define-key brf-mode-map "\C-cl" 'downcase-word)       ; Shadowed by M-l
-		   (define-key brf-mode-map "\C-cu" 'upcase-word)         ; Shadowed by M-u
-		   (define-key brf-mode-map "\C-cc" 'capitalize-word)))   ; Shadowed by M-c
+                 (lambda ()
+                   (define-key brf-mode-map "\C-cm" 'back-to-indentation) ; Shadowed by M-m
+                   (define-key brf-mode-map "\C-cl" 'downcase-word)       ; Shadowed by M-l
+                   (define-key brf-mode-map "\C-cu" 'upcase-word)         ; Shadowed by M-u
+                   (define-key brf-mode-map "\C-cc" 'capitalize-word)))   ; Shadowed by M-c
      #+END_SRC
 
      Alternatively with ~use-package~:
      
      #+BEGIN_SRC emacs-lisp
        (use-package brf
-	 ...
-	 :bind (:map brf-mode-map
-		     ("C-c m" . back-to-indentation)
-		     ("C-c l" . downcase-word)
-		     ("C-c u" . upcase-word)
-		     ("C-c c" . capitalize-word)))
+         ...
+         :bind (:map brf-mode-map
+                     ("C-c m" . back-to-indentation)
+                     ("C-c l" . downcase-word)
+                     ("C-c u" . upcase-word)
+                     ("C-c c" . capitalize-word)))
      #+END_SRC
      
 ** Dependencies

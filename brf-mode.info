@@ -246,21 +246,21 @@ File: brf-mode.info,  Node: Customisation,  Next: Dependencies,  Prev: Installat
 
           ;; Adjust the brf-mode keymap to put the otherwise shadowed M-<letter> keys on a C-c prefix
           (add-hook 'brf-mode-hook
-                           (lambda ()
-                             (define-key brf-mode-map "\C-cm" 'back-to-indentation) ; Shadowed by M-m
-                             (define-key brf-mode-map "\C-cl" 'downcase-word)       ; Shadowed by M-l
-                             (define-key brf-mode-map "\C-cu" 'upcase-word)         ; Shadowed by M-u
-                             (define-key brf-mode-map "\C-cc" 'capitalize-word)))   ; Shadowed by M-c
+                    (lambda ()
+                      (define-key brf-mode-map "\C-cm" 'back-to-indentation) ; Shadowed by M-m
+                      (define-key brf-mode-map "\C-cl" 'downcase-word)       ; Shadowed by M-l
+                      (define-key brf-mode-map "\C-cu" 'upcase-word)         ; Shadowed by M-u
+                      (define-key brf-mode-map "\C-cc" 'capitalize-word)))   ; Shadowed by M-c
 
      Alternatively with ‘use-package’:
 
           (use-package brf
-                   ...
-                   :bind (:map brf-mode-map
-                               ("C-c m" . back-to-indentation)
-                               ("C-c l" . downcase-word)
-                               ("C-c u" . upcase-word)
-                               ("C-c c" . capitalize-word)))
+            ...
+            :bind (:map brf-mode-map
+                        ("C-c m" . back-to-indentation)
+                        ("C-c l" . downcase-word)
+                        ("C-c u" . upcase-word)
+                        ("C-c c" . capitalize-word)))
 
 
 File: brf-mode.info,  Node: Dependencies,  Next: Compatibility,  Prev: Customisation,  Up: Setup
@@ -547,17 +547,17 @@ Node: Installation from MELPA4236
 Node: Manual Installation4824
 Node: Enable Brf-mode5357
 Node: Customisation6003
-Node: Dependencies7687
-Node: Compatibility8315
-Node: Features9042
-Node: Line and Column Mode Cut and Paste9351
-Node: Reversible Paging and Scrolling10682
-Node: Temporary Bookmarks11317
-Node: List Bookmarks12886
-Node: Cursor Motion Undo13585
-Node: Easy Window Management14379
-Node: Differences From Brief15177
-Node: Known Issues16613
+Node: Dependencies7610
+Node: Compatibility8238
+Node: Features8965
+Node: Line and Column Mode Cut and Paste9274
+Node: Reversible Paging and Scrolling10605
+Node: Temporary Bookmarks11240
+Node: List Bookmarks12809
+Node: Cursor Motion Undo13508
+Node: Easy Window Management14302
+Node: Differences From Brief15100
+Node: Known Issues16536
 
 End Tag Table
 

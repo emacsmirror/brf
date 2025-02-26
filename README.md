@@ -141,23 +141,23 @@ Enable Brf-mode by doing one of the following:
     ```emacs-lisp
     ;; Adjust the brf-mode keymap to put the otherwise shadowed M-<letter> keys on a C-c prefix
     (add-hook 'brf-mode-hook
-                     (lambda ()
-                       (define-key brf-mode-map "\C-cm" 'back-to-indentation) ; Shadowed by M-m
-                       (define-key brf-mode-map "\C-cl" 'downcase-word)       ; Shadowed by M-l
-                       (define-key brf-mode-map "\C-cu" 'upcase-word)         ; Shadowed by M-u
-                       (define-key brf-mode-map "\C-cc" 'capitalize-word)))   ; Shadowed by M-c
+              (lambda ()
+                (define-key brf-mode-map "\C-cm" 'back-to-indentation) ; Shadowed by M-m
+                (define-key brf-mode-map "\C-cl" 'downcase-word)       ; Shadowed by M-l
+                (define-key brf-mode-map "\C-cu" 'upcase-word)         ; Shadowed by M-u
+                (define-key brf-mode-map "\C-cc" 'capitalize-word)))   ; Shadowed by M-c
     ```
     
     Alternatively with `use-package`:
     
     ```emacs-lisp
     (use-package brf
-             ...
-             :bind (:map brf-mode-map
-                         ("C-c m" . back-to-indentation)
-                         ("C-c l" . downcase-word)
-                         ("C-c u" . upcase-word)
-                         ("C-c c" . capitalize-word)))
+      ...
+      :bind (:map brf-mode-map
+                  ("C-c m" . back-to-indentation)
+                  ("C-c l" . downcase-word)
+                  ("C-c u" . upcase-word)
+                  ("C-c c" . capitalize-word)))
     ```
 
 
