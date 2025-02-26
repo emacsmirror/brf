@@ -2,8 +2,8 @@
 
 ;; Copyright (C) 1999-2025 Mike Woolley
 ;; Author: Mike Woolley <mike@bulsara.com>
-;; Package-Version: 2.02
-;; Package-Requires: ((fringe-helper "0.1.1") (emacs "24.3"))
+;; Package-Version: 2.03
+;; Package-Requires: ((fringe-helper "0.1.1") (emacs "24.4"))
 ;; Keywords: brief crisp emulations
 ;; URL: https://bitbucket.org/MikeWoolley/brf-mode
 
@@ -75,7 +75,7 @@ Set this to nil to conserve valuable mode line space."
 ;;;
 ;;; Version number
 ;;;
-(defconst brf-version "2.02"
+(defconst brf-version "2.03"
   "Version number of Brf mode.")
 
 (defun brf-version ()
@@ -281,12 +281,15 @@ Set this to nil to conserve valuable mode line space."
 ;; Make the menu available from the mode line "lighter"
 ;; Override `minor-mode-menu-from-indicator' otherwise it uses the Edit menu items that it finds
 ;; in the `brf-mode' keymap, with the Brf menu as a sub-menu.
-(defadvice minor-mode-menu-from-indicator (around brf-menu-from-indicator)
-  "Use the `brf-mode' menu for the modeline menu."
-  (let ((indicator (ad-get-arg 0)))
-    (if (string= indicator brf-mode-modeline-string)
+(defun brf-menu-from-indicator (orig-fun indicator &rest args)
+  "Advice to use the `brf-mode' menu as the modeline menu.
+Calls ORIG-FUN with INDICATOR and ARGS otherwise."
+  (let ((name (if (consp indicator)
+		  (car indicator)
+		indicator)))
+    (if (and (stringp name) (string= name brf-mode-modeline-string))
 	(popup-menu brf-mode-menu)
-      ad-do-it)))
+      (apply orig-fun indicator args))))
 
 ;;;
 ;;; Allow the Cut & Copy menu & toolbar items to operate without a marked region
@@ -372,21 +375,17 @@ and MAP and PATH are as defined in `easy-menu-add-item'."
 	 (global-set-key "\C-j" 'newline)
 
 	 ;; Override "Select and Paste" menu item
-	 (ad-enable-advice 'menu-bar-select-yank 'around 'brf-menu-bar-select-yank)
-	 (ad-activate 'menu-bar-select-yank)
+	 (advice-add 'menu-bar-select-yank :around #'brf-menu-bar-select-yank)
 
 	 ;; Use the Brf menu as the modeline menu
-	 (ad-enable-advice 'minor-mode-menu-from-indicator 'around 'brf-menu-from-indicator)
-	 (ad-activate 'minor-mode-menu-from-indicator))
+	 (advice-add 'minor-mode-menu-from-indicator :around #'brf-menu-from-indicator))
 
 	(t ; brf-mode off
 	 ;; Disable override of `minor-mode-menu-from-indicator'
-	 (ad-disable-advice 'minor-mode-menu-from-indicator 'around 'brf-menu-from-indicator)
-	 (ad-activate 'minor-mode-menu-from-indicator)
+	 (advice-remove 'minor-mode-menu-from-indicator #'brf-menu-from-indicator)
 
 	 ;; Disable override of "Select and Paste"
-	 (ad-disable-advice 'menu-bar-select-yank 'around 'brf-menu-bar-select-yank)
-	 (ad-activate 'menu-bar-select-yank)
+	 (advice-remove 'menu-bar-select-yank #'brf-menu-bar-select-yank)
 
 	 ;; Restore old settings
 	 (global-set-key "\C-j" brf-prev-c-j)

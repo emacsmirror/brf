@@ -1,3 +1,15 @@
+2025-02-26  Mike Woolley  <mike@bulsara.com>
+
+	* brf.el (brf-menu-from-indicator): The indicator is not
+	necessarily a string in Emacs 30, which broke this function and
+	thus Brf's mode-line menu.
+	(brf-mode): Emacs 30 generates compiler warnings for Old Advice,
+	so changed the code to use New Advice. This also means increasing
+	the minimum Emacs version to 24.4.
+	(brf-version): Increased Brf Mode version to 2.03.
+
+	* brf-marking.el (brf-menu-bar-select-yank): Changed to New Advice.
+
 2025-02-25  Mike Woolley  <mike@bulsara.com>
 
 	* brf-menu.el (brf-menu): Emacs 30 has removed

@@ -670,12 +670,13 @@ also indent it."
     (get-register register)
     (insert-register register (not current-prefix-arg))))
 
-(defadvice menu-bar-select-yank (around brf-menu-bar-select-yank)
-  "Override `menu-bar-select-yank' command to correctly handle line-mode text."
+(defun brf-menu-bar-select-yank (orig-fun)
+  "Advice to override `menu-bar-select-yank' command to handle line-mode text.
+Text is inserted with ORIG-FUN."
   (interactive "*")
   (brf-insert-text
     last-command-event
-    ad-do-it))
+    (funcall orig-fun)))
 
 ;;
 ;; Utilities

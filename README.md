@@ -4,7 +4,7 @@ To commemorate a quarter of a century of Brf-mode, Line Marking has been re-impl
 
 The new implementation requires Gnu Emacs 24.4 and there may be some obscure commands that don't treat the Line Marked region correctly (although none found so far). The classic method has the advantage of working in all versions of Emacs and all commands that work with the region behave correctly, as the Line Marked region is the real region.
 
-The new implementation is the default on Gnu Emacs >= 24.4, but the classic method can be re-enabled via [Customize](#customisation).
+The new implementation is the default, but the classic method can be re-enabled via [Customize](#customisation).
 
 
 # Brf-mode
@@ -141,23 +141,23 @@ Enable Brf-mode by doing one of the following:
     ```emacs-lisp
     ;; Adjust the brf-mode keymap to put the otherwise shadowed M-<letter> keys on a C-c prefix
     (add-hook 'brf-mode-hook
-              (lambda ()
-                (define-key brf-mode-map "\C-cm" 'back-to-indentation) ; Shadowed by M-m
-                (define-key brf-mode-map "\C-cl" 'downcase-word)       ; Shadowed by M-l
-                (define-key brf-mode-map "\C-cu" 'upcase-word)         ; Shadowed by M-u
-                (define-key brf-mode-map "\C-cc" 'capitalize-word)))   ; Shadowed by M-c
+                     (lambda ()
+                       (define-key brf-mode-map "\C-cm" 'back-to-indentation) ; Shadowed by M-m
+                       (define-key brf-mode-map "\C-cl" 'downcase-word)       ; Shadowed by M-l
+                       (define-key brf-mode-map "\C-cu" 'upcase-word)         ; Shadowed by M-u
+                       (define-key brf-mode-map "\C-cc" 'capitalize-word)))   ; Shadowed by M-c
     ```
     
     Alternatively with `use-package`:
     
     ```emacs-lisp
     (use-package brf
-      ...
-      :bind (:map brf-mode-map
-                  ("C-c m" . back-to-indentation)
-                  ("C-c l" . downcase-word)
-                  ("C-c u" . upcase-word)
-                  ("C-c c" . capitalize-word)))
+             ...
+             :bind (:map brf-mode-map
+                         ("C-c m" . back-to-indentation)
+                         ("C-c l" . downcase-word)
+                         ("C-c u" . upcase-word)
+                         ("C-c c" . capitalize-word)))
     ```
 
 
@@ -174,10 +174,11 @@ Brf-mode doesn't have any hard dependencies, but installing the following option
 
 ## Compatibility
 
-The MELPA package (Brf-mode version "v1.16-MELPA" onward) requires Gnu Emacs 24.3, due to the requirements of being a package.
+The MELPA package requires Gnu Emacs 24.4.
 
 Earlier versions of Brf-mode will however work on older versions of Gnu Emacs and also on XEmacs:
 
+-   Use "v2.02" for Gnu Emacs version 24.3.
 -   Use "v1.16" for Gnu Emacs versions 21 -> 24.2.
 -   Use "v1.08" for XEmacs and Gnu Emacs 20 & earlier.
 

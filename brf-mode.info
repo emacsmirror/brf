@@ -1,4 +1,4 @@
-This is brf-mode.info, produced by makeinfo version 7.1 from
+This is brf-mode.info, produced by makeinfo version 7.2 from
 README.texi.
 
 INFO-DIR-SECTION Emacs
@@ -49,7 +49,6 @@ Features
 * Differences From Brief::
 * Known Issues::
 
-
 
 File: brf-mode.info,  Node: News,  Next: Brf-mode,  Prev: Top,  Up: Top
 
@@ -67,8 +66,8 @@ obscure commands that don't treat the Line Marked region correctly
 working in all versions of Emacs and all commands that work with the
 region behave correctly, as the Line Marked region is the real region.
 
-   The new implementation is the default on Gnu Emacs >= 24.4, but the
-classic method can be re-enabled via *note Customize: Customisation.
+   The new implementation is the default, but the classic method can be
+re-enabled via *note Customize: Customisation.
 
 
 File: brf-mode.info,  Node: Brf-mode,  Next: Setup,  Prev: News,  Up: Top
@@ -247,21 +246,21 @@ File: brf-mode.info,  Node: Customisation,  Next: Dependencies,  Prev: Installat
 
           ;; Adjust the brf-mode keymap to put the otherwise shadowed M-<letter> keys on a C-c prefix
           (add-hook 'brf-mode-hook
-                    (lambda ()
-                      (define-key brf-mode-map "\C-cm" 'back-to-indentation) ; Shadowed by M-m
-                      (define-key brf-mode-map "\C-cl" 'downcase-word)       ; Shadowed by M-l
-                      (define-key brf-mode-map "\C-cu" 'upcase-word)         ; Shadowed by M-u
-                      (define-key brf-mode-map "\C-cc" 'capitalize-word)))   ; Shadowed by M-c
+                           (lambda ()
+                             (define-key brf-mode-map "\C-cm" 'back-to-indentation) ; Shadowed by M-m
+                             (define-key brf-mode-map "\C-cl" 'downcase-word)       ; Shadowed by M-l
+                             (define-key brf-mode-map "\C-cu" 'upcase-word)         ; Shadowed by M-u
+                             (define-key brf-mode-map "\C-cc" 'capitalize-word)))   ; Shadowed by M-c
 
      Alternatively with ‘use-package’:
 
           (use-package brf
-            ...
-            :bind (:map brf-mode-map
-                        ("C-c m" . back-to-indentation)
-                        ("C-c l" . downcase-word)
-                        ("C-c u" . upcase-word)
-                        ("C-c c" . capitalize-word)))
+                   ...
+                   :bind (:map brf-mode-map
+                               ("C-c m" . back-to-indentation)
+                               ("C-c l" . downcase-word)
+                               ("C-c u" . upcase-word)
+                               ("C-c c" . capitalize-word)))
 
 
 File: brf-mode.info,  Node: Dependencies,  Next: Compatibility,  Prev: Customisation,  Up: Setup
@@ -286,12 +285,12 @@ File: brf-mode.info,  Node: Compatibility,  Prev: Dependencies,  Up: Setup
 3.4 Compatibility
 =================
 
-The MELPA package (Brf-mode version "v1.16-MELPA" onward) requires Gnu
-Emacs 24.3, due to the requirements of being a package.
+The MELPA package requires Gnu Emacs 24.4.
 
    Earlier versions of Brf-mode will however work on older versions of
 Gnu Emacs and also on XEmacs:
 
+   • Use "v2.02" for Gnu Emacs version 24.3.
    • Use "v1.16" for Gnu Emacs versions 21 -> 24.2.
    • Use "v1.08" for XEmacs and Gnu Emacs 20 & earlier.
 
@@ -537,33 +536,33 @@ Please report any issues at the Brf-mode website bug tracker
      Anyone wanting to run Brf-mode on XEmacs should install an older
      version of Brf-mode, as described in *note Compatibility::.
 
-
 
 Tag Table:
 Node: Top307
-Node: News863
-Node: Brf-mode1713
-Node: Setup3736
-Node: Installation3914
-Node: Installation from MELPA4258
-Node: Manual Installation4846
-Node: Enable Brf-mode5379
-Node: Customisation6025
-Node: Dependencies7632
-Node: Compatibility8260
-Node: Features9024
-Node: Line and Column Mode Cut and Paste9333
-Node: Reversible Paging and Scrolling10664
-Node: Temporary Bookmarks11299
-Node: List Bookmarks12868
-Node: Cursor Motion Undo13567
-Node: Easy Window Management14361
-Node: Differences From Brief15159
-Node: Known Issues16595
+Node: News862
+Node: Brf-mode1691
+Node: Setup3714
+Node: Installation3892
+Node: Installation from MELPA4236
+Node: Manual Installation4824
+Node: Enable Brf-mode5357
+Node: Customisation6003
+Node: Dependencies7687
+Node: Compatibility8315
+Node: Features9042
+Node: Line and Column Mode Cut and Paste9351
+Node: Reversible Paging and Scrolling10682
+Node: Temporary Bookmarks11317
+Node: List Bookmarks12886
+Node: Cursor Motion Undo13585
+Node: Easy Window Management14379
+Node: Differences From Brief15177
+Node: Known Issues16613
 
 End Tag Table
 
 
 Local Variables:
 coding: utf-8
+Info-documentlanguage: en
 End:

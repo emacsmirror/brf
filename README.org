@@ -13,7 +13,7 @@ The new implementation requires Gnu Emacs 24.4 and there may be some obscure com
 region correctly (although none found so far). The classic method has the advantage of working in all versions of Emacs
 and all commands that work with the region behave correctly, as the Line Marked region is the real region.
 
-The new implementation is the default on Gnu Emacs >= 24.4, but the classic method can be re-enabled via [[#customisation][Customize]].
+The new implementation is the default, but the classic method can be re-enabled via [[#customisation][Customize]].
 
 * Brf-mode
 :PROPERTIES:
@@ -199,10 +199,11 @@ There are a few small, deliberate differences from the original Brief behaviour,
    :CUSTOM_ID: compatibility
    :END:
 
-   The MELPA package (Brf-mode version "v1.16-MELPA" onward) requires Gnu Emacs 24.3, due to the requirements of being a package.
+   The MELPA package requires Gnu Emacs 24.4.
 
    Earlier versions of Brf-mode will however work on older versions of Gnu Emacs and also on XEmacs:
-   
+
+   - Use "v2.02" for Gnu Emacs version 24.3.
    - Use "v1.16" for Gnu Emacs versions 21 -> 24.2.
    - Use "v1.08" for XEmacs and Gnu Emacs 20 & earlier.
 
