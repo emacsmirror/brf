@@ -1,3 +1,13 @@
+2025-03-01  Mike Woolley  <mike@bulsara.com>
+
+	* brf.el (brf-mode): Added a custom, *user-oriented* doc string to
+	the `brf-mode' command rather than use the default. In recent
+	Emacs versions, the default doc string and the output of
+	`describe-function' is no longer particularly useful for mode
+	users and no longer includes the keymap. This matters because the
+	Brf Mode "Help" menu item just runs `describe-function'.
+	(brf-version): Increased Brf Mode version to 2.04.
+
 2025-02-26  Mike Woolley  <mike@bulsara.com>
 
 	* brf.el (brf-menu-from-indicator): The indicator is not

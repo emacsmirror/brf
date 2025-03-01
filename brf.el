@@ -2,7 +2,7 @@
 
 ;; Copyright (C) 1999-2025 Mike Woolley
 ;; Author: Mike Woolley <mike@bulsara.com>
-;; Package-Version: 2.03
+;; Package-Version: 2.04
 ;; Package-Requires: ((fringe-helper "0.1.1") (emacs "24.4"))
 ;; Keywords: brief crisp emulations
 ;; URL: https://bitbucket.org/MikeWoolley/brf-mode
@@ -31,7 +31,7 @@
 ;; from `Brief'.
 ;;
 ;; The emphasis is on *accurately* implementing these features in Emacs rather than doing
-;; what Brief emulations tend to do, which is mapping the Brief key-sequences to somewhat
+;; what `Brief' emulations tend to do, which is mapping the `Brief' key-sequences to somewhat
 ;; similar functions in Emacs.
 ;;
 ;; The provided features are:
@@ -45,12 +45,12 @@
 ;;
 ;; They have been implemented in an Emacs-style. This means the functions respond to prefix
 ;; args and where they override Emacs functions, they live on the Emacs key bindings as well
-;; as the original Brief keys.
+;; as the original `Brief' keys.
 ;;
-;; Moreover, functionality has been extended to those parts of Emacs that were never part of Brief.
+;; Moreover, functionality has been extended to those parts of Emacs that were never part of `Brief'.
 ;; For example, text cut/copied in line or column-mode can be saved/recalled in registers.
 ;;
-;; See the website, Info manual or README.org for further details.
+;; See the Info manual, Website or README.org for further details.
 
 ;;; Change Log:
 ;;
@@ -75,7 +75,7 @@ Set this to nil to conserve valuable mode line space."
 ;;;
 ;;; Version number
 ;;;
-(defconst brf-version "2.03"
+(defconst brf-version "2.04"
   "Version number of Brf mode.")
 
 (defun brf-version ()
@@ -348,7 +348,37 @@ and MAP and PATH are as defined in `easy-menu-add-item'."
 
 ;;;###autoload
 (define-minor-mode brf-mode
-  nil ; Use default doc string
+  "Brf-mode adds functionality from the legendary programmer's editor Brief.
+
+It is not an emulation of Brief (there are plenty of those already),
+but rather provides an accurate implementation in Emacs of specific
+features that I miss from Brief.
+
+The emphasis is on *accurately* implementing these features in Emacs
+rather than doing what Brief emulations tend to do, which is mapping the
+Brief key-sequences to somewhat similar functions in Emacs.
+
+The provided features are:
+
+* Line-mode cut and paste.
+* Column-mode cut and paste.
+* Fully reversible paging and scrolling.
+* Temporary bookmarks.
+* Cursor motion undo.
+* Easy window management.
+
+They have been implemented in an Emacs-style. This means the functions
+respond to prefix args and where they override Emacs functions, they
+live on the Emacs key bindings as well as the original Brief keys.
+
+Moreover, functionality has been extended to those parts of Emacs that
+were never part of Brief. For example, text cut/copied in line or
+column-mode can be saved/recalled in registers.
+
+See the Info manual or README.org for further details.
+
+Key bindings:
+\\{brf-mode-map}"
   :lighter brf-mode-modeline-string
   :keymap brf-mode-map
   :global t
